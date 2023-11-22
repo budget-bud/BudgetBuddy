@@ -1,10 +1,9 @@
 ---
 name: Design
 about: Default template for new architecture or design discussions.
-title: ''
+title: ""
 labels: type/arch
-assignees: ''
-
+assignees: ""
 ---
 
 ## New Architecture Or Design Description
