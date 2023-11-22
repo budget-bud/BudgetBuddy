@@ -44,7 +44,7 @@ module.exports = {
         warning_100: "#ffff00",
         warning_200: "#ffff4d",
         warning_300: "#ffff80",
-        
+
         error_100: "#ff0000",
         error_200: "#ff4d4d",
         error_300: "#ff8080",
