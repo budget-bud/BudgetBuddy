@@ -1,5 +1,5 @@
 ---
-name: Custom issue template
+name: Design
 about: Default template for new architecture or design discussions.
 title: ''
 labels: type/arch
