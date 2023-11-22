@@ -6,7 +6,8 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  ts-ci:
+    name: Validate Typescript Code
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
