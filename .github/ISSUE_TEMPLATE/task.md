@@ -1,10 +1,9 @@
 ---
 name: Task
 about: Default template for creating new tasks.
-title: ''
+title: ""
 labels: type/task
-assignees: ''
-
+assignees: ""
 ---
 
 ## Task Description

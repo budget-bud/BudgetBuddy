@@ -1,10 +1,9 @@
 ---
 name: Epic
 about: Default template for creating new epics.
-title: ''
+title: ""
 labels: type/epic
-assignees: ''
-
+assignees: ""
 ---
 
 ## Epic Description
