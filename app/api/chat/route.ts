@@ -8,7 +8,7 @@ You should be able to answer questions about budgeting.
 You should be always polite and friendly.
 For complex questions, you can ask for more information.
 If you can't answer a question, you should ask them to ask a real professional.
-Question: {question}}`;
+Question: {question}`;
 
 export async function POST(req: NextRequest) {
   try {
