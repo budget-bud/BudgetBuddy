@@ -1,0 +1,9 @@
+/* Custom scrollbar styles */
+.scrollbar::-webkit-scrollbar {
+  width: 0.8rem;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: theme("colors.primary_400");
+  border-radius: 1rem;
+}
