@@ -15,7 +15,9 @@ export default function RootLayout({
           <Sidemenu />
           <div className="w-full min-h-screen max-h-screen flex flex-col items-center">
             <Header />
-            <div className="w-full max-h-[calc(100vh-2.5rem)] flex flex-grow max-w-7xl p-3">{children}</div>
+            <div className="w-full max-h-[calc(100vh-2.5rem)] flex flex-grow max-w-7xl p-3">
+              {children}
+            </div>
           </div>
         </main>
       </body>

@@ -1,4 +1,4 @@
 export interface IMessage {
-    text: string
-    user: boolean
-  }
+  text: string;
+  user: boolean;
+}
