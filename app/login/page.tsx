@@ -2,6 +2,7 @@ import Link from "next/link";
 import { headers, cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
+import { Provider } from "@supabase/supabase-js";
 
 export default function Login({
   searchParams,
@@ -26,6 +27,27 @@ export default function Login({
     }
 
     return redirect("/");
+  };
+
+  const signInWithOAuth = async (provider: Provider) => {
+    "use server";
+
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
+
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: provider,
+      options: {
+        scopes: "openid profile email",
+        redirectTo: `http://localhost:3000/auth/callback`,
+      },
+    });
+
+    if (error) {
+      return redirect("/login?message=Could not authenticate user");
+    }
+
+    return redirect(data.url);
   };
 
   const signUp = async (formData: FormData) => {
@@ -112,6 +134,12 @@ export default function Login({
             {searchParams.message}
           </p>
         )}
+      </form>
+
+      <form action={() => signInWithOAuth("github")}>
+        <button className="bg-blue-700 rounded-md px-4 py-2 text-foreground mb-2">
+          Sign In With Github
+        </button>
       </form>
     </div>
   );
