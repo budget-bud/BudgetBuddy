@@ -27,6 +27,7 @@ const Sidemenu = () => {
       <div className="w-full mt-[2rem]">
         <SidemenuButton button_type={"spendings"} />
         <SidemenuButton button_type={"tracker"} />
+        <SidemenuButton button_type={"categories"} />
       </div>
       <div className="w-[80%] my-[2rem] flex flex-row items-center">
         <div className="w-[50%] ">Chat history</div>
