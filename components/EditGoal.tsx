@@ -21,11 +21,7 @@ const style = {
   overflow: "hidden",
 };
 
-const EditGoal: React.FC<IEditGoalProps> = ({
-    goalId,
-    goals,
-  setGoals,
-}) => {
+const EditGoal: React.FC<IEditGoalProps> = ({ goalId, goals, setGoals }) => {
   const [editedData, setEditedData] = useState({
     title: "",
     goal_amount: 0,
@@ -52,7 +48,8 @@ const EditGoal: React.FC<IEditGoalProps> = ({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     key: string,
   ) => {
-    const value = key === "goal_amount" ? Number(e.target.value) : e.target.value;
+    const value =
+      key === "goal_amount" ? Number(e.target.value) : e.target.value;
     setEditedData((prevData) => ({
       ...prevData,
       [key]: value,
@@ -62,8 +59,12 @@ const EditGoal: React.FC<IEditGoalProps> = ({
   const handleEdit = () => {
     setGoals((prevGoals) =>
       prevGoals.map((goal) =>
-      goal.id === goalId
-          ? { ...goal, title: editedData.title, goal_amount: editedData.goal_amount }
+        goal.id === goalId
+          ? {
+              ...goal,
+              title: editedData.title,
+              goal_amount: editedData.goal_amount,
+            }
           : goal,
       ),
     );
