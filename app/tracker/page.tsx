@@ -13,6 +13,9 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { Doughnut } from "react-chartjs-2";
+import { Chart, ArcElement } from "chart.js";
+Chart.register(ArcElement);
 
 // MUI ICONS
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -151,6 +154,13 @@ const TrackerPage = () => {
     );
   };
 
+  const calculateProgress = (current: number, total: number) => {
+    if (current > total) {
+      return [current, 0];
+    }
+    return [current, total - current];
+  };
+
   return (
     <div className="w-full flex flex-col space-y-10">
       <div className="mt-4 flex flex-row bg-slate-100 items-center justify-between px-3 py-4 rounded-sm">
@@ -228,7 +238,28 @@ const TrackerPage = () => {
                 </button>
               </div>
               {/* Read the value from the database, where goal.id = the desired id of the goal*/}
-              <div className="w-1/4"> 1000 Ft / {goal.goal_amount} Ft</div>
+              <div className="w-1/4 flex flex-col">
+                <div className="w-1/2">
+                  <Doughnut
+                    data={{
+                      labels: ["Progress", "Remaining"],
+                      datasets: [
+                        {
+                          // here also % should be calculated based on the amount that is currently replaced by 1000
+                          // current, total
+                          data: calculateProgress(1000, goal.goal_amount),
+                          backgroundColor: ["#003366", "#d1d1d1"],
+                        },
+                      ],
+                    }}
+                    options={{
+                      responsive: true,
+                      maintainAspectRatio: false,
+                    }}
+                  />
+                </div>
+                <div className="font-bold">1000 Ft / {goal.goal_amount} Ft</div>
+              </div>
               <div className="flex flex-row justify-end w-1/4">
                 <EditGoal goalId={goal.id} goals={goals} setGoals={setGoals} />
                 <Tooltip arrow title={"Delete goal"}>
