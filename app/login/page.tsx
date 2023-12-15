@@ -1,8 +1,9 @@
-import Link from "next/link";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import GoogleIcon from "@mui/icons-material/Google";
+import MicrosoftIcon from "@mui/icons-material/Microsoft";
 import { headers, cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import { Provider } from "@supabase/supabase-js";
 
 export default function Login({
   searchParams,
@@ -29,16 +30,56 @@ export default function Login({
     return redirect("/");
   };
 
-  const signInWithOAuth = async (provider: Provider) => {
+  const signInWithAzure = async () => {
     "use server";
 
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
 
     const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: provider,
+      provider: "azure",
       options: {
         scopes: "openid profile email",
+        redirectTo: `http://localhost:3000/auth/callback`,
+      },
+    });
+
+    if (error) {
+      return redirect("/login?message=Could not authenticate user");
+    }
+
+    return redirect(data.url);
+  };
+
+  const signInWithGoogle = async () => {
+    "use server";
+
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
+
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `http://localhost:3000/auth/callback`,
+      },
+    });
+
+    if (error) {
+      return redirect("/login?message=Could not authenticate user");
+    }
+
+    return redirect(data.url);
+  };
+
+  const signInWithGitHub = async () => {
+    "use server";
+
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
+
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "github",
+      options: {
         redirectTo: `http://localhost:3000/auth/callback`,
       },
     });
@@ -64,57 +105,45 @@ export default function Login({
       password,
       options: {
         emailRedirectTo: `${origin}/auth/callback`,
+        data: {
+          full_name: formData.get("name"),
+        },
       },
     });
 
     if (error) {
-      return redirect("/login?message=Could not authenticate user");
+      return redirect("/login?message=" + error.message);
     }
 
-    return redirect("/login?message=Check email to continue sign in process");
+    return redirect("/");
   };
 
   return (
-    <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
-      <Link
-        href="/"
-        className="absolute left-8 top-8 py-2 px-4 rounded-md no-underline text-foreground bg-btn-background hover:bg-btn-background-hover flex items-center group text-sm"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1"
-        >
-          <polyline points="15 18 9 12 15 6" />
-        </svg>{" "}
-        Back
-      </Link>
-
-      <form
-        className="animate-in flex-1 flex flex-col w-full justify-center gap-2 text-foreground"
-        action={signIn}
-      >
-        <label className="text-md" htmlFor="email">
+    <div className="animate-in flex-1 flex flex-col rounded max-h-fit mx-auto container max-w-2xl gap-2 text-black bg-secondary_900 p-6">
+      <form className="flex flex-col gap-2" action={signIn}>
+        <label className="text-xl" htmlFor="name">
+          How should we call you?
+        </label>
+        <input
+          className="rounded-md px-4 py-2 bg-inherit border border-gray-900 mb-6"
+          name="name"
+          placeholder="John Doe"
+          required
+        />
+        <label className="text-xl" htmlFor="email">
           Email
         </label>
         <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6"
+          className="rounded-md px-4 py-2 bg-inherit border border-gray-900 mb-6"
           name="email"
-          placeholder="you@example.com"
+          placeholder="username@example.com"
           required
         />
-        <label className="text-md" htmlFor="password">
+        <label className="text-xl" htmlFor="password">
           Password
         </label>
         <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6"
+          className="rounded-md px-4 py-2 bg-inherit border border-gray-900 mb-6"
           type="password"
           name="password"
           placeholder="••••••••"
@@ -125,21 +154,38 @@ export default function Login({
         </button>
         <button
           formAction={signUp}
-          className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
+          className="border border-gray-800 rounded-md px-4 py-2 mb-2"
         >
           Sign Up
         </button>
+
         {searchParams?.message && (
-          <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
+          <p className="p-4 bg-error_200 rounded text-secondary_900 text-center">
             {searchParams.message}
           </p>
         )}
       </form>
-
-      <form action={() => signInWithOAuth("github")}>
-        <button className="bg-blue-700 rounded-md px-4 py-2 text-foreground mb-2">
-          Sign In With Github
-        </button>
+      <form>
+        <div className="flex gap-2 mt-2">
+          <button
+            className="flex-1 p-2 border rounded border-gray-800"
+            formAction={signInWithGoogle}
+          >
+            <GoogleIcon />
+          </button>
+          <button
+            className="flex-1 p-2 border rounded border-gray-800"
+            formAction={signInWithAzure}
+          >
+            <MicrosoftIcon />
+          </button>
+          <button
+            className="flex-1 p-2 border rounded border-gray-800"
+            formAction={signInWithGitHub}
+          >
+            <GitHubIcon />
+          </button>
+        </div>
       </form>
     </div>
   );
