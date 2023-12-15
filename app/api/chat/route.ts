@@ -16,7 +16,6 @@ export async function POST(req: NextRequest) {
     const chat = new ChatOpenAI({});
     const prompt = PromptTemplate.fromTemplate(PROMPT_TEMPLATE);
     const runnable = prompt.pipe(chat);
-    console.log(body.question);
     const response = await runnable.invoke({
       question: body.question,
     });
