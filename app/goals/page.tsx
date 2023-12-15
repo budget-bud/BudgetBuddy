@@ -20,7 +20,7 @@ Chart.register(ArcElement);
 // MUI ICONS
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const TrackerPage = () => {
+const GoalsPage = () => {
   const [goals, setGoals] = useState<IGoal[]>([]);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [inputForm, setInputForm] = useState({
@@ -278,4 +278,4 @@ const TrackerPage = () => {
   );
 };
 
-export default TrackerPage;
+export default GoalsPage;
