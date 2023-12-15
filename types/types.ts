@@ -24,3 +24,9 @@ export interface IEditCategoryProps {
   categories: ICategory[];
   setCategories: React.Dispatch<React.SetStateAction<ICategory[]>>;
 }
+
+export interface IEditGoalProps {
+  goalId: string;
+  goals: IGoal[];
+  setGoals: React.Dispatch<React.SetStateAction<IGoal[]>>;
+}
