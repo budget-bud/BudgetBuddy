@@ -2,7 +2,7 @@
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import { Tooltip, Modal, Box } from "@mui/material";
-import { EditCategoryProps } from "@/types/types";
+import { IEditCategoryProps } from "@/types/types";
 
 // MUI ICONS
 import EditIcon from "@mui/icons-material/Edit";
@@ -21,7 +21,7 @@ const style = {
   overflow: "hidden",
 };
 
-const EditCategory: React.FC<EditCategoryProps> = ({
+const EditCategory: React.FC<IEditCategoryProps> = ({
   categoryId,
   categories,
   setCategories,

@@ -3,15 +3,15 @@ export interface IMessage {
   user: boolean;
 }
 
-export interface Category {
+export interface ICategory {
   id: string;
   created_at: string;
   title: string;
   limit: number;
 }
 
-export interface EditCategoryProps {
+export interface IEditCategoryProps {
   categoryId: string;
-  categories: Category[];
-  setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
+  categories: ICategory[];
+  setCategories: React.Dispatch<React.SetStateAction<ICategory[]>>;
 }

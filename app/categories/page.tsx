@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import EditCategory from "@/components/EditCategory";
-import { Category } from "@/types/types";
+import { ICategory } from "@/types/types";
 
 // COMPONENTS
 import TextField from "@mui/material/TextField";
@@ -14,7 +14,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const CategoriesPage = () => {
-  const [categories, setCategories] = useState<Category[]>([
+  const [categories, setCategories] = useState<ICategory[]>([
     {
       id: "1",
       created_at: "Mon Aug 31 2020",
