@@ -40,7 +40,13 @@ const ManualExpenseModal = () => {
   });
   const [isCashExpense, setIsCashExpense] = useState(true);
 
-  const categoryOptions = ["category_cash", "category_bank", "Category1", "Category2", "Category3"];
+  const categoryOptions = [
+    "category_cash",
+    "category_bank",
+    "Category1",
+    "Category2",
+    "Category3",
+  ];
   const goalOptions = ["Goal1", "Goal2", "Goal3"]; // Dummy data
 
   const openManualModal = () => {
@@ -56,17 +62,16 @@ const ManualExpenseModal = () => {
     handleClose();
   };
 
-  const handleInputChange = (name: string) => (
-    e: React.ChangeEvent<HTMLInputElement | { value: unknown }>
-  ) => {
-    setExpenseForm((prev) => ({ ...prev, [name]: e.target.value as string }));
-  };
+  const handleInputChange =
+    (name: string) =>
+    (e: React.ChangeEvent<HTMLInputElement | { value: unknown }>) => {
+      setExpenseForm((prev) => ({ ...prev, [name]: e.target.value as string }));
+    };
 
-  const handleSelectChange = (name: string) => (
-    e: SelectChangeEvent<string | unknown>
-  ) => {
-    setExpenseForm((prev) => ({ ...prev, [name]: e.target.value as string }));
-  };
+  const handleSelectChange =
+    (name: string) => (e: SelectChangeEvent<string | unknown>) => {
+      setExpenseForm((prev) => ({ ...prev, [name]: e.target.value as string }));
+    };
 
   const handleToggleExpenseType = () => {
     setIsCashExpense((prev) => !prev);
@@ -74,7 +79,8 @@ const ManualExpenseModal = () => {
     // Automatically select category based on expense type
     setExpenseForm((prev) => ({
       ...prev,
-      category: prev.category === "category_cash" ? "category_bank" : "category_cash",
+      category:
+        prev.category === "category_cash" ? "category_bank" : "category_cash",
     }));
   };
 
@@ -91,8 +97,15 @@ const ManualExpenseModal = () => {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <label>Expense Type:</label>
-              <Switch checked={isCashExpense} onChange={handleToggleExpenseType} />
-              {isCashExpense ? <span>Cash Expense</span> : <span>Bank Transaction</span>}
+              <Switch
+                checked={isCashExpense}
+                onChange={handleToggleExpenseType}
+              />
+              {isCashExpense ? (
+                <span>Cash Expense</span>
+              ) : (
+                <span>Bank Transaction</span>
+              )}
             </Grid>
             {Object.keys(expenseForm).map((fieldName) => (
               <Grid item xs={6} key={fieldName}>
