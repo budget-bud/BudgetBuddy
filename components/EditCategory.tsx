@@ -21,11 +21,26 @@ const style = {
   overflow: "hidden",
 };
 
-const EditCategory: React.FC<EditCategoryProps> = ({ categoryId,categories}) => {
+const EditCategory: React.FC<EditCategoryProps> = ({
+  categoryId,
+  categories,
+  setCategories,
+}) => {
+  const [editedData, setEditedData] = useState({
+    title: "",
+    limit: 0,
+  });
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openEditModal = () => {
-    console.log(categoryId);
+    const category = categories.find((category) => category.id === categoryId);
+    if (category) {
+      setEditedData({
+        title: category.title,
+        limit: category.limit,
+      });
+    }
     setIsModalOpen(true);
   };
 
@@ -33,8 +48,26 @@ const EditCategory: React.FC<EditCategoryProps> = ({ categoryId,categories}) => 
     setIsModalOpen(false);
   };
 
-  const handleTitleChange = () => {
-    
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    key: string,
+  ) => {
+    const value = key === "limit" ? Number(e.target.value) : e.target.value;
+    setEditedData((prevData) => ({
+      ...prevData,
+      [key]: value,
+    }));
+  };
+
+  const handleEdit = () => {
+    setCategories((prevCategories) =>
+      prevCategories.map((category) =>
+        category.id === categoryId
+          ? { ...category, title: editedData.title, limit: editedData.limit }
+          : category,
+      ),
+    );
+    setIsModalOpen(false);
   };
 
   return (
@@ -47,9 +80,9 @@ const EditCategory: React.FC<EditCategoryProps> = ({ categoryId,categories}) => 
       <Modal open={isModalOpen} onClose={handleClose}>
         <Box sx={style}>
           <h1 className="bg-slate-500 font-semibold pl-4 text-gray-50 flex flex-row items-center justify-between">
-            <div className="">Add new expense</div>
+            <div className="">Edit category</div>
             <Tooltip arrow title={"Close"}>
-              <IconButton onClick={() => handleClose()} sx={{ color: "white" }}>
+              <IconButton onClick={handleClose} sx={{ color: "white" }}>
                 <CloseIcon />
               </IconButton>
             </Tooltip>
@@ -59,24 +92,22 @@ const EditCategory: React.FC<EditCategoryProps> = ({ categoryId,categories}) => 
               required
               name="title"
               label="Title"
-              onChange={handleTitleChange}
-              value={
-                categories.find((category) => category.id === categoryId)
-                  ?.title || ""
-              }
+              onChange={(e) => handleInputChange(e, "title")}
+              value={editedData.title}
             />
             <TextField
               required
+              type="number"
               name="limit"
               label="Limit"
-              //onChange={handleFormChange}
-              //value={expenseForm.place}
+              onChange={(e) => handleInputChange(e, "limit")}
+              value={editedData.limit}
             />
           </div>
           <div className="flex justify-end pb-3 mt-[0.5rem] w-full">
             <button
               className="text-slate-300 h-[35px] w-[80px] font-bold hover:text-slate-600  bg-slate-500 hover:bg-slate-400 rounded-sm mr-4 px-4"
-              //onClick={handleAdd}
+              onClick={handleEdit}
             >
               Edit
             </button>

@@ -7,6 +7,8 @@ import { Category } from "@/types/types";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import { Tooltip } from "@mui/material";
+import Box from "@mui/material/Box";
+import LinearProgress from "@mui/material/LinearProgress";
 
 // MUI ICONS
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -73,23 +75,35 @@ const CategoriesPage = () => {
       prevCat.filter((category) => category.id !== id),
     );
   };
+
+  const calculateProgress = (limit: number) => {
+    // Change 1000 to the value read from the db.
+    if (limit < 1000) {
+      return 100;
+    } else {
+      return (1000 / limit) * 100;
+    }
+  };
+
   return (
     <div className="w-full flex flex-col space-y-10">
-      <div className="mt-4 flex flex-row bg-slate-100 items-center justify-center px-2 py-4 rounded-sm space-x-3">
-        <TextField
-          name="title"
-          label="Title"
-          onChange={handleFormChange}
-          value={inputForm.title}
-        />
-        <TextField
-          type="number"
-          InputProps={{ inputProps: { min: 0 } }}
-          name="limit"
-          label="Limit"
-          onChange={handleFormChange}
-          value={inputForm.limit}
-        />
+      <div className="mt-4 flex flex-row bg-slate-100 items-center justify-between px-3 py-4 rounded-sm">
+        <div className=" space-x-10">
+          <TextField
+            name="title"
+            label="Title"
+            onChange={handleFormChange}
+            value={inputForm.title}
+          />
+          <TextField
+            type="number"
+            InputProps={{ inputProps: { min: 0 } }}
+            name="limit"
+            label="Limit"
+            onChange={handleFormChange}
+            value={inputForm.limit}
+          />
+        </div>
         <button
           type="button"
           onClick={handleAdd}
@@ -100,17 +114,30 @@ const CategoriesPage = () => {
           Add
         </button>
       </div>
-      <div className="w-full space-y-3">
+      <div className="w-full space-y-5">
         {categories.map((category) => (
           <div
             key={category.id}
             className="flex flex-row rounded-sm bg-white text-black py-2 px-3 hover:bg-slate-300 justify-between items-center"
           >
             <div className="font-bold w-1/4">{category.title}</div>
-            <div className="w-1/4"> 1000 Ft / {category.limit} Ft</div>
-            <div className="w-1/4 flex justify-center">csík</div>
+            {/* Read the value from the database, where category.id = the desired id of the category*/}
+            <div className="w-1/4"> 1000 Ft / {category.limit} Ft</div>{" "}
+            <div className="w-1/4 flex justify-center">
+              <Box sx={{ width: "100%" }}>
+                <LinearProgress
+                  variant="determinate"
+                  //Pass to the function the value, read from the database
+                  value={calculateProgress(category.limit)}
+                />
+              </Box>
+            </div>
             <div className="flex flex-row justify-end w-1/4">
-              <EditCategory categoryId={category.id} categories={categories} />
+              <EditCategory
+                categoryId={category.id}
+                categories={categories}
+                setCategories={setCategories}
+              />
               <Tooltip arrow title={"Delete category"}>
                 <IconButton onClick={() => deleteCategory(category.id)}>
                   <DeleteIcon />

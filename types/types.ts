@@ -13,4 +13,5 @@ export interface Category {
 export interface EditCategoryProps {
   categoryId: string;
   categories: Category[];
+  setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
 }
