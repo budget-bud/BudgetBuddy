@@ -50,6 +50,7 @@ const Sidemenu = () => {
         <SidemenuButton button_type={"spendings"} balance={data.balance} />
         <SidemenuButton button_type={"goals"} />
         <SidemenuButton button_type={"categories"} />
+        <SidemenuButton button_type={"plots"} />
       </div>
       <div className="w-[80%] my-[2rem] flex flex-row items-center">
         <div className="w-[50%] ">Chat history</div>
