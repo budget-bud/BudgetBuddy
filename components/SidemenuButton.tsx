@@ -22,8 +22,8 @@ const SidemenuButton: React.FC<SidemenuButtonProps> = ({
                 text-black 
                 rounded-md font-bold"
         href={
-          button_type == "tracker"
-            ? "/tracker"
+          button_type == "goals"
+            ? "/goals"
             : button_type == "categories"
               ? "categories"
               : "/"
@@ -31,7 +31,7 @@ const SidemenuButton: React.FC<SidemenuButtonProps> = ({
       >
         {button_type == "spendings" ? (
           <AccountBalanceWalletIcon className="ml-3" />
-        ) : button_type == "tracker" ? (
+        ) : button_type == "goals" ? (
           <AnalyticsIcon className="ml-3" />
         ) : (
           <CategoryIcon className="ml-3" />
@@ -39,8 +39,8 @@ const SidemenuButton: React.FC<SidemenuButtonProps> = ({
         <div className="w-full ml-[1rem] text-xs sm:text-base">
           {button_type == "spendings"
             ? "420 000 Ft"
-            : button_type == "tracker"
-              ? "Tracker"
+            : button_type == "goals"
+              ? "Goals"
               : "Categories"}
         </div>
       </Link>
