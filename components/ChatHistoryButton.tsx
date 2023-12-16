@@ -2,21 +2,23 @@
 import Link from "next/link";
 
 type ChatHistoryButtonProps = {
-  chat_id: number;
+  id: string;
+  name: string;
 };
 
 const ChatHistoryButton: React.FC<ChatHistoryButtonProps> = ({
-  chat_id,
+  id,
+  name,
 }: ChatHistoryButtonProps) => {
   return (
     <div className="w-full flex justify-center">
       <Link
         className="flex w-3/4  h-[2rem] cursor-pointer  justify-center items-center
           bg-secondary_700 hover:bg-secondary_500 text-black rounded-md font-bold"
-        href={"/chat"}
+        href={`/chat/${id}`}
       >
         <div className="w-full flex justify-center text-xs sm:text-base ">
-          Chat history {chat_id}
+          {name}
         </div>
       </Link>
     </div>
