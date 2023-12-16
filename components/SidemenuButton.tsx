@@ -8,10 +8,12 @@ import Link from "next/link";
 
 type SidemenuButtonProps = {
   button_type: string;
+  balance?: number;
 };
 
 const SidemenuButton: React.FC<SidemenuButtonProps> = ({
   button_type,
+  balance,
 }: SidemenuButtonProps) => {
   return (
     <div className="w-full flex justify-center">
@@ -38,7 +40,7 @@ const SidemenuButton: React.FC<SidemenuButtonProps> = ({
         )}
         <div className="w-full ml-[1rem] text-xs sm:text-base">
           {button_type == "spendings"
-            ? "420 000 Ft"
+            ? `${balance} Ft`
             : button_type == "goals"
               ? "Goals"
               : "Categories"}

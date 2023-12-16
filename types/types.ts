@@ -39,3 +39,13 @@ export interface IExpenseForm {
   movement: string;
   description: string;
 }
+
+export interface ISidemenuParams {
+  name: string;
+  profileImage?: string;
+  balance: number;
+  chats: {
+    name: string;
+    id: string;
+  }[];
+}
