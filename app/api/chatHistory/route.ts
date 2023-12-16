@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
     if (body.chatId === null) {
       //TODO: create a new chat
     }
-    
+
     return NextResponse.json(
       {
         messages: [...msgs],
