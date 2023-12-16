@@ -18,19 +18,11 @@ import {
   InputAdornment,
 } from "@mui/material";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-
-interface ExpenseForm {
-  goal: string;
-  category: string;
-  origin: string;
-  place: string;
-  movement: string;
-  description: string;
-}
+import { IExpenseForm } from "@/types/types";
 
 const ManualExpenseModal = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [expenseForm, setExpenseForm] = useState<ExpenseForm>({
+  const [expenseForm, setExpenseForm] = useState<IExpenseForm>({
     goal: "",
     category: "category_cash",
     origin: "",
@@ -135,7 +127,7 @@ const ManualExpenseModal = () => {
                     name={fieldName}
                     label={fieldName.replace(/_/g, " ")}
                     onChange={handleInputChange(fieldName)}
-                    value={expenseForm[fieldName as keyof ExpenseForm]}
+                    value={expenseForm[fieldName as keyof IExpenseForm]}
                     fullWidth
                     InputProps={{
                       startAdornment: (
@@ -153,7 +145,7 @@ const ManualExpenseModal = () => {
                     name={fieldName}
                     label={fieldName.replace(/_/g, " ")}
                     onChange={handleInputChange(fieldName)}
-                    value={expenseForm[fieldName as keyof ExpenseForm]}
+                    value={expenseForm[fieldName as keyof IExpenseForm]}
                     fullWidth
                     multiline={fieldName === "description"}
                     rows={fieldName === "description" ? 4 : 1}
