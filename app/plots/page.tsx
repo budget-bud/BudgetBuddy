@@ -220,7 +220,6 @@ const FinancialDashboard = () => {
           label: {
             content: goal.title,
             position: "end",
-            enabled: true,
             backgroundColor: "rgba(0, 0, 0, 0.8)",
             color: "white",
             yAdjust: -6,
@@ -233,14 +232,14 @@ const FinancialDashboard = () => {
   };
 
   const testGoals = createGoalAnnotations(data.goals);
-  let delayed;
+  let delayed: boolean = false;
   const options = {
     responsive: true,
     animation: {
       onComplete: () => {
         delayed = true;
       },
-      delay: (context) => {
+      delay: (context: { type: string; mode: string; dataIndex: number; datasetIndex: number; }) => {
         let delay = 0;
         if (context.type === "data" && context.mode === "default" && !delayed) {
           delay = context.dataIndex * 300 + context.datasetIndex * 100;
