@@ -28,7 +28,7 @@ const SidemenuButton: React.FC<SidemenuButtonProps> = ({
             ? "/goals"
             : button_type == "categories"
               ? "categories"
-              : "/"
+              : "/transactions"
         }
       >
         {button_type == "spendings" ? (
