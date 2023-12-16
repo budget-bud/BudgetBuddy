@@ -2,6 +2,11 @@ import "./globals.css";
 import "../styles/styles.css";
 import Header from "@/components/Header";
 import Sidemenu from "@/components/Sidemenu";
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  manifest: "/manifest.json",
+  title: "BudgetBuddy",
+};
 
 export default function RootLayout({
   children,
