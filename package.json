@@ -18,6 +18,8 @@
     "@supabase/supabase-js": "^2.39.0",
     "autoprefixer": "10.4.15",
     "chart.js": "^4.4.1",
+    "chartjs-plugin-annotation": "^3.0.1",
+    "date-fns": "^2.30.0",
     "geist": "^1.0.0",
     "langchain": "^0.0.198",
     "next": "latest",
