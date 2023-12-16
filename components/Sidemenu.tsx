@@ -61,6 +61,9 @@ const Sidemenu = () => {
           <ChatHistoryButton key={chat.id} id={chat.id} name={chat.name} />
         ))}
       </div>
+      <div className="w-full mt-[2rem]">
+        <SidemenuButton button_type={"kpi"} />
+      </div>
     </div>
   );
 };

@@ -2,12 +2,12 @@
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import AnalyticsIcon from "@mui/icons-material/Analytics";
 import CategoryIcon from "@mui/icons-material/Category";
-
+import BarChartIcon from "@mui/icons-material/BarChart";
 // COMPONENTS
 import Link from "next/link";
 
 type SidemenuButtonProps = {
-  button_type: "spendings" | "goals" | "categories" | "plots";
+  button_type: "spendings" | "goals" | "categories" | "plots" | "kpi";
   balance?: number;
 };
 
@@ -30,7 +30,9 @@ const SidemenuButton: React.FC<SidemenuButtonProps> = ({
               ? "/goals"
               : button_type === "categories"
                 ? "/categories"
-                : "/plots"
+                : button_type === "plots"
+                  ? "/plots"
+                  : "/kpi"
         }
       >
         {button_type === "spendings" && (
@@ -59,6 +61,12 @@ const SidemenuButton: React.FC<SidemenuButtonProps> = ({
           <>
             <CategoryIcon className="ml-3" />
             <div className="w-full ml-[1rem] text-xs sm:text-base">Plots</div>
+          </>
+        )}
+        {button_type === "kpi" && (
+          <>
+            <BarChartIcon className="ml-3" />
+            <div className="w-full ml-[1rem] text-xs sm:text-base">KPI</div>
           </>
         )}
       </Link>
