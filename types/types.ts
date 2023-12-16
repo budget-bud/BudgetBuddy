@@ -30,3 +30,12 @@ export interface IEditGoalProps {
   goals: IGoal[];
   setGoals: React.Dispatch<React.SetStateAction<IGoal[]>>;
 }
+
+export interface IExpenseForm {
+  goal: string;
+  category: string;
+  origin: string;
+  place: string;
+  movement: string;
+  description: string;
+}
