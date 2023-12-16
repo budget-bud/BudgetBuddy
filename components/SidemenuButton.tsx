@@ -7,7 +7,7 @@ import CategoryIcon from "@mui/icons-material/Category";
 import Link from "next/link";
 
 type SidemenuButtonProps = {
-  button_type: string;
+  button_type: "spendings" | "goals" | "categories" | "plots";
   balance?: number;
 };
 
@@ -24,27 +24,43 @@ const SidemenuButton: React.FC<SidemenuButtonProps> = ({
                 text-black 
                 rounded-md font-bold"
         href={
-          button_type == "goals"
-            ? "/goals"
-            : button_type == "categories"
-              ? "categories"
-              : "/"
+          button_type === "spendings"
+            ? "/"
+            : button_type === "goals"
+              ? "/goals"
+              : button_type === "categories"
+                ? "/categories"
+                : "/plots"
         }
       >
-        {button_type == "spendings" ? (
-          <AccountBalanceWalletIcon className="ml-3" />
-        ) : button_type == "goals" ? (
-          <AnalyticsIcon className="ml-3" />
-        ) : (
-          <CategoryIcon className="ml-3" />
+        {button_type === "spendings" && (
+          <>
+            <AccountBalanceWalletIcon className="ml-3" />
+            <div className="w-full ml-[1rem] text-xs sm:text-base">
+              {`${balance} Ft`}
+            </div>
+          </>
         )}
-        <div className="w-full ml-[1rem] text-xs sm:text-base">
-          {button_type == "spendings"
-            ? `${balance} Ft`
-            : button_type == "goals"
-              ? "Goals"
-              : "Categories"}
-        </div>
+        {button_type === "goals" && (
+          <>
+            <AnalyticsIcon className="ml-3" />
+            <div className="w-full ml-[1rem] text-xs sm:text-base">Goals</div>
+          </>
+        )}
+        {button_type === "categories" && (
+          <>
+            <CategoryIcon className="ml-3" />
+            <div className="w-full ml-[1rem] text-xs sm:text-base">
+              Categories
+            </div>
+          </>
+        )}
+        {button_type === "plots" && (
+          <>
+            <CategoryIcon className="ml-3" />
+            <div className="w-full ml-[1rem] text-xs sm:text-base">Plots</div>
+          </>
+        )}
       </Link>
     </div>
   );
