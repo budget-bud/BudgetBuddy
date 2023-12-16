@@ -1,0 +1,44 @@
+{
+  "id": "com.budgetbuddy.pwa",
+  "name": "BudgetBuddy",
+  "short_name": "BB",
+  "description": "Master your finances with BudgetBuddy - your personal financial companion. Effortlessly track expenses, visualize savings, and achieve your financial goals. With natural language processing, automatic bank syncs, and comprehensive budgeting tools, managing your money has never been easier.",
+  "icons": [
+    {
+      "src": "./BB_72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./BB_144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./BB_192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./BB_384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./BB_512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "theme_color": "#FFFFFF",
+  "background_color": "#FFFFFF",
+  "start_url": "/",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait"
+}
