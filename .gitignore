@@ -35,4 +35,13 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# dotenv
 .env
+
+# next-pwa
+sw.*
+workbox-*
+swe-worker-*
+
+# vscode
+.vscode/*

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import EditCategory from "@/components/EditCategory";
 import { ICategory } from "@/types/types";
 
@@ -14,33 +14,38 @@ import LinearProgress from "@mui/material/LinearProgress";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const CategoriesPage = () => {
-  const [categories, setCategories] = useState<ICategory[]>([
-    {
-      id: "1",
-      created_at: "Mon Aug 31 2020",
-      title: "Test1",
-      limit: 15000,
-      //description: "",
-      //type: "",
-    },
-    {
-      id: "2",
-      created_at: "Tue Sep 01 2020",
-      title: "Test2",
-      limit: 8500,
-    },
-    {
-      id: "3",
-      created_at: "Wed Sep 01 2020",
-      title: "Test3",
-      limit: 3000,
-    },
-  ]);
-
+  const [categories, setCategories] = useState<ICategory[]>([]);
   const [inputForm, setInputForm] = useState({
     title: "",
     limit: 0,
   });
+
+  // In the useEffect get these data and fill the array with them
+  useEffect(() => {
+    const cats = [
+      {
+        id: "1",
+        created_at: "Mon Aug 31 2020",
+        title: "TestCat1",
+        limit: 15000,
+        //description: "",
+        //type: "",
+      },
+      {
+        id: "2",
+        created_at: "Tue Sep 01 2020",
+        title: "TestCat2",
+        limit: 8500,
+      },
+      {
+        id: "3",
+        created_at: "Wed Sep 01 2020",
+        title: "TestCat3",
+        limit: 3000,
+      },
+    ];
+    setCategories(cats);
+  }, []);
 
   const handleAdd = () => {
     if (String(inputForm.limit)[0] != "-") {
@@ -114,7 +119,7 @@ const CategoriesPage = () => {
           Add
         </button>
       </div>
-      <div className="w-full space-y-5">
+      <div className="w-full space-y-5 h-full overflow-auto">
         {categories.map((category) => (
           <div
             key={category.id}
