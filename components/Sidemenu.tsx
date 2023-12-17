@@ -14,11 +14,17 @@ const Sidemenu = () => {
   const [data, setData] = useState<ISidemenuParams>(
     null as unknown as ISidemenuParams,
   );
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const getData = async (): Promise<void> => {
     const response = await fetch(`/api/sidemenu`, {
       method: "GET",
     }).then((res) => res.json());
+    setIsLoading(false);
+    if (response.error) {
+      console.error(response.error);
+      return;
+    }
 
     setData(response);
   };
@@ -30,7 +36,9 @@ const Sidemenu = () => {
   if (isNullOrUndefined(data)) {
     return (
       <div
-        className={`animate-pulse md:min-w-[300px] min-w-[100vw] absolute md:relative z-30 transition-all h-screen bg-black flex flex-col items-center md:flex${
+        className={`${
+          isLoading ? "animate-pulse" : ""
+        } md:min-w-[300px] min-w-[100vw] absolute md:relative z-30 transition-all h-screen bg-black flex flex-col items-center md:flex${
           isSidemenuOpen ? "" : " hidden"
         }`}
       >
@@ -42,7 +50,6 @@ const Sidemenu = () => {
             <span className="w-1/2">
               <div className="w-[40px] sm:w-[50px] h-[40px] sm:h-[50px] bg-primary_200 rounded-full ml-3">
                 <div className="flex w-full h-full justify-center items-center text-white text-2xl font-bold">
-                  {}
                 </div>
               </div>
             </span>

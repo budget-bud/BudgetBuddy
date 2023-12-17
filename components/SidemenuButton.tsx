@@ -41,7 +41,13 @@ const SidemenuButton: React.FC<SidemenuButtonProps> = ({
                   ? "/plots"
                   : button_type === "new_chat"
                     ? "/chat"
-                    : "/kpi"
+                    : button_type === "login"
+                      ? "/login"
+                      : button_type === "logout"
+                        ? "/logout"
+                        : button_type === "kpi"
+                          ? "/kpi"
+                          : "/"
         }
       >
         {button_type === "spendings" && (
@@ -84,6 +90,18 @@ const SidemenuButton: React.FC<SidemenuButtonProps> = ({
             <div className="w-full ml-[1rem] text-xs sm:text-base">
               New Chat
             </div>
+          </>
+        )}
+        {button_type === "login" && (
+          <>
+            <ChatIcon className="ml-3" />
+            <div className="w-full ml-[1rem] text-xs sm:text-base">Login</div>
+          </>
+        )}
+        {button_type === "logout" && (
+          <>
+            <ChatIcon className="ml-3" />
+            <div className="w-full ml-[1rem] text-xs sm:text-base">Logout</div>
           </>
         )}
       </Link>

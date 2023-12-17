@@ -33,6 +33,8 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(`${origin}/login`);
     }
 
+    if (!user) return response;
+
     const formattedDate = new Date().toISOString().split("T")[0];
     const url = new URL(request.nextUrl);
     if (url.pathname.includes("_next") || url.pathname.includes("/api"))
