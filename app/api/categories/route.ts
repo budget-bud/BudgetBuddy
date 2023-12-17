@@ -35,12 +35,20 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    const userId = user?.id;
+    if (!userId) {
+      return NextResponse.json({ error: "User not found" }, { status: 500 });
+    }
 
     const { data: categories, error } = await supabase
       .from("Categories")
       .insert([
         {
-          user_id: body.user_id,
+          user_id: userId,
           title: body.title,
           description: body.description,
           type: body.type,
