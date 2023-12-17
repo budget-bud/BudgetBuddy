@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
         ],
       };
       console.log(conversation);
-      const { data, error } = await supabase.from("Chats").insert({
+      const { error } = await supabase.from("Chats").insert({
         user_id: user?.id,
         title: body.question.substring(0, 20),
         conversation: conversation,
@@ -89,6 +89,18 @@ export async function POST(req: NextRequest) {
         .select("*")
         .eq("id", body.chatId);
       console.log("chat exists");
+
+      if (chatError) {
+        return NextResponse.json({ error: chatError.message }, { status: 500 });
+      }
+
+      if (chatData === null) {
+        return NextResponse.json(
+          { error: "Chat does not exist" },
+          { status: 400 },
+        );
+      }
+
       const conversation = {
         messages: [
           ...chatData[0].conversation.messages,
@@ -103,17 +115,13 @@ export async function POST(req: NextRequest) {
         ],
       };
 
-      const { data, error } = await supabase.from("Chats").upsert({
+      const { error } = await supabase.from("Chats").upsert({
         id: body.chatId,
         user_id: user?.id,
         title: chatData[0].title,
         conversation: conversation,
       });
 
-      if (chatError) {
-        console.log(chatError);
-        return NextResponse.json({ error: chatError.message }, { status: 500 });
-      }
       console.log("chat", chatData);
 
       if (error) {
