@@ -1,7 +1,7 @@
 "use client";
 
 import { Menu } from "@mui/icons-material";
-import ManualExpenseModal from "./ManualExpenseModal";
+// import ManualExpenseModal from "./ManualExpenseModal";
 import { useSidemenuContext } from "./ContextProvider";
 
 export default function Header() {

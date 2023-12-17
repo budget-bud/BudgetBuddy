@@ -49,8 +49,7 @@ const Sidemenu = () => {
           <div className="flex w-3/4  h-[4rem] justify-center items-center bg-secondary_700 text-black rounded-md ">
             <span className="w-1/2">
               <div className="w-[40px] sm:w-[50px] h-[40px] sm:h-[50px] bg-primary_200 rounded-full ml-3">
-                <div className="flex w-full h-full justify-center items-center text-white text-2xl font-bold">
-                </div>
+                <div className="flex w-full h-full justify-center items-center text-white text-2xl font-bold"></div>
               </div>
             </span>
             <span className="w-1/2 font-semibold text-sm sm:text-base"></span>
