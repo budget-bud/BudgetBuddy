@@ -35,8 +35,6 @@ const KPIPage = () => {
       });
   }, []);
 
-
-
   return (
     <div className="animate-pulse">
       <Grid container spacing={3}>
@@ -70,13 +68,12 @@ const KPIPage = () => {
                 All Users
               </Typography>
               <Typography variant="h4" style={{ color: "#FFFFFF" }}>
-              {isLoading == false  ? data.allUsersCount : 0}
+                {isLoading == false ? data.allUsersCount : 0}
               </Typography>
             </CardContent>
           </Card>
         </Grid>
 
- 
         <Grid item xs={12} md={4}>
           <Card style={{ backgroundColor: "#53b5ed" }}>
             <CardContent>
@@ -89,7 +86,7 @@ const KPIPage = () => {
                 All Chats Started
               </Typography>
               <Typography variant="h4" style={{ color: "#FFFFFF" }}>
-              {isLoading == false  ? data.allChatsCount : 0}
+                {isLoading == false ? data.allChatsCount : 0}
               </Typography>
             </CardContent>
           </Card>
@@ -106,7 +103,7 @@ const KPIPage = () => {
                 Active Users In The Last 7 Days
               </Typography>
               <Typography variant="h4" style={{ color: "#FFFFFF" }}>
-              {isLoading == false  ? data.weeklyKPI[0].active_users_count : 0}
+                {isLoading == false ? data.weeklyKPI[0].active_users_count : 0}
               </Typography>
             </CardContent>
           </Card>
@@ -123,7 +120,7 @@ const KPIPage = () => {
                 Average Actions In The Last 7 Days
               </Typography>
               <Typography variant="h4" style={{ color: "#FFFFFF" }}>
-              {isLoading == false  ? data.weeklyKPI[0].average_actions : 0}
+                {isLoading == false ? data.weeklyKPI[0].average_actions : 0}
               </Typography>
             </CardContent>
           </Card>
