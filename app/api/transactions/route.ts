@@ -44,6 +44,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 500 });
     }
 
+    const { data: balance, error: balanceError } = await supabase
+      .from("Transactions")
+      .select("base_balance")
+      .eq("user_id", userId);
+
+    if (balanceError) {
+      return NextResponse.json(
+        { error: balanceError.message },
+        { status: 500 },
+      );
+    }
+
     const { data: transactions, error } = await supabase
       .from("Transactions")
       .insert([
@@ -56,6 +68,9 @@ export async function POST(req: NextRequest) {
           place: body.place,
           movement: body.movement,
           description: body.description,
+          base_balance: balance[0].base_balance
+            ? balance[0].base_balance + body.movement
+            : body.movement,
         },
       ]);
 
