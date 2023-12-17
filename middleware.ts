@@ -11,6 +11,32 @@ export async function middleware(request: NextRequest) {
     // https://supabase.com/docs/guides/auth/auth-helpers/nextjs#managing-session-with-middleware
     await supabase.auth.getSession();
 
+    const formattedDate = new Date().toISOString().split("T")[0];
+    const url = new URL(request.nextUrl);
+    if (url.pathname.includes("_next") || url.pathname.includes("/api"))
+      return response;
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      return response;
+    }
+
+    const { error } = await supabase
+      .from("UserActivity")
+      .insert({
+        userId: user?.id,
+        event_date: formattedDate,
+        event_type: "visited: " + url.pathname,
+      })
+      .select();
+
+    if (error) {
+      console.error("Activity registration failed:", error);
+      return response;
+    }
+
     return response;
   } catch (e) {
     // If you are here, a Supabase client could not be created!
