@@ -39,7 +39,7 @@ export default function Login({
       provider: "azure",
       options: {
         scopes: "openid profile email",
-        redirectTo: `$/auth/callback`,
+        redirectTo: `https://budgetbuddy-ai.netlify.app/auth/callback`,
       },
     });
 
@@ -58,7 +58,7 @@ export default function Login({
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `/auth/callback`,
+        redirectTo: `https://budgetbuddy-ai.netlify.app/auth/callback`,
       },
     });
 
@@ -77,7 +77,7 @@ export default function Login({
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
-        redirectTo: `/auth/callback`,
+        redirectTo: `https://budgetbuddy-ai.netlify.app/auth/callback`,
       },
     });
 
@@ -100,7 +100,7 @@ export default function Login({
       email,
       password,
       options: {
-        emailRedirectTo: `/auth/callback`,
+        emailRedirectTo: `https://budgetbuddy-ai.netlify.app/auth/callback`,
         data: {
           full_name: formData.get("name"),
         },
