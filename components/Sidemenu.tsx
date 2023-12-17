@@ -57,9 +57,9 @@ const Sidemenu = () => {
         <SidemenuButton button_type={"categories"} />
         <SidemenuButton button_type={"plots"} />
       </div>
-      <div className="w-[80%] my-[2rem] flex flex-row items-center">
-        <div className="w-[50%] ">Chat history</div>
-        <div className="w-[70%] bg-secondary_500 h-0.5"></div>
+      <div className="w-[75%] my-[2rem] flex flex-row items-center">
+        <div className="w-fit whitespace-nowrap mr-3">Chat history</div>
+        <div className="w-full bg-secondary_500 h-0.5"></div>
       </div>
       <div className="space-y-[1rem] w-full flex flex-col items-center">
         {data.chats.map((chat) => (
