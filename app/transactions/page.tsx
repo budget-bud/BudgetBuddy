@@ -1,12 +1,12 @@
 "use client";
-import { ICategory, IGoal, ITransaction } from "@/types/types";
+import { ICategory, IGoal, ITransactionWithFK } from "@/types/types";
 import React, { useEffect, useState } from "react";
 const TransactionsPage = () => {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedGoal, setSelectedGoal] = useState("");
   const [transactions, setTransactions] = useState<{
-    transactions: [ITransaction];
+    transactions: [ITransactionWithFK];
   }>();
   const [categories, setCategories] = useState<{ categories: [ICategory] }>();
   const [goals, setGoals] = useState<{ goals: [IGoal] }>();
@@ -104,7 +104,7 @@ const TransactionsPage = () => {
         </thead>
         <tbody className="bg-secondary_900 divide-y divide-gray-200">
           {transactions?.transactions
-            .filter((transaction: ITransaction) => {
+            .filter((transaction: ITransactionWithFK) => {
               return (
                 (transaction.movement.toString().includes(search) ||
                   (transaction.description &&
@@ -138,7 +138,7 @@ const TransactionsPage = () => {
                     transaction.goal_id.title === selectedGoal))
               );
             })
-            .map((transaction: ITransaction, index: number) => (
+            .map((transaction: ITransactionWithFK, index: number) => (
               <tr key={index}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
                   {transaction.origin}

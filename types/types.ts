@@ -37,11 +37,22 @@ export interface ICategory2 {
   created_at: string;
 }
 
-export interface ITransaction {
+export interface ITransactionWithFK {
   id: number;
   user_id: number;
   category_id: ICategory;
   goal_id: IGoal;
+  origin: string;
+  place: string;
+  movement: number;
+  description: string;
+  created_at: string;
+}
+export interface ITransaction {
+  id: number;
+  user_id: number;
+  category_id: number;
+  goal_id: number;
   origin: string;
   place: string;
   movement: number;
