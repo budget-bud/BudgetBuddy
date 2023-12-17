@@ -20,34 +20,7 @@ const CategoriesPage = () => {
     limit: 0,
   });
 
-  // In the useEffect get these data and fill the array with them
-  useEffect(() => {
-    const cats = [
-      {
-        id: "1",
-        created_at: "Mon Aug 31 2020",
-        title: "TestCat1",
-        limit: 15000,
-        //description: "",
-        //type: "",
-      },
-      {
-        id: "2",
-        created_at: "Tue Sep 01 2020",
-        title: "TestCat2",
-        limit: 8500,
-      },
-      {
-        id: "3",
-        created_at: "Wed Sep 01 2020",
-        title: "TestCat3",
-        limit: 3000,
-      },
-    ];
-    setCategories(cats);
-  }, []);
-
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (String(inputForm.limit)[0] != "-") {
       if (inputForm.title !== "" && inputForm.limit !== 0) {
         const newCategory = {
@@ -55,8 +28,16 @@ const CategoriesPage = () => {
           created_at: new Date().toDateString(),
           title: inputForm.title,
           limit: inputForm.limit,
+          type: "cash",
         };
-
+        const response = await fetch(`/api/categories`, {
+          method: "POST",
+          body: JSON.stringify(newCategory),
+        }).then((res) => res.json());
+        if (response.error) {
+          window.alert(response.error);
+          return;
+        }
         setCategories((prevCat) => [...prevCat, newCategory]);
 
         setInputForm({
@@ -89,6 +70,16 @@ const CategoriesPage = () => {
       return (1000 / limit) * 100;
     }
   };
+
+  useEffect(() => {
+    fetch(`/api/categories`, {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setCategories(res.categories);
+      });
+  }, []);
 
   return (
     <div className="w-full flex flex-col space-y-10">
