@@ -1,7 +1,9 @@
 import { isNullOrUndefined } from "@/utils/isNullOrUndefined";
+import { createClient } from "@/utils/supabase/server";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { AIMessage } from "langchain/dist/schema";
 import { PromptTemplate } from "langchain/prompts";
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 const PROMPT_TEMPLATE = `You are a budgeting helper chatbot.
@@ -14,6 +16,13 @@ Question: {question}`;
 
 export async function POST(req: NextRequest) {
   try {
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
     const body = await req.json();
     if (isNullOrUndefined(body.question)) {
       return NextResponse.json(
@@ -38,7 +47,88 @@ export async function POST(req: NextRequest) {
 
     const answer = response.lc_kwargs.content;
 
-    console.log(response.lc_kwargs.content);
+    // console.log(response.lc_kwargs.content);
+
+    // check if chat exists
+    if (!body.chatId) {
+      console.log("chat does not exist");
+      const conversation = {
+        messages: [
+          {
+            text: body.question,
+            user: true,
+          },
+          {
+            text: answer,
+            user: false,
+          },
+        ],
+      };
+      console.log(conversation);
+      const { error } = await supabase.from("Chats").insert({
+        user_id: user?.id,
+        title: body.question.substring(0, 20),
+        conversation: conversation,
+      });
+
+      if (error) {
+        console.log(error);
+        return NextResponse.json({ error: error.message }, { status: 500 });
+      }
+
+      return NextResponse.json(
+        {
+          answer,
+          chatId: body.chatId,
+        },
+        { status: 200 },
+      );
+    } else {
+      const { data: chatData, error: chatError } = await supabase
+        .from("Chats")
+        .select("*")
+        .eq("id", body.chatId);
+      console.log("chat exists");
+
+      if (chatError) {
+        return NextResponse.json({ error: chatError.message }, { status: 500 });
+      }
+
+      if (chatData === null) {
+        return NextResponse.json(
+          { error: "Chat does not exist" },
+          { status: 400 },
+        );
+      }
+
+      const conversation = {
+        messages: [
+          ...chatData[0].conversation.messages,
+          {
+            text: body.question,
+            user: true,
+          },
+          {
+            text: answer,
+            user: false,
+          },
+        ],
+      };
+
+      const { error } = await supabase.from("Chats").upsert({
+        id: body.chatId,
+        user_id: user?.id,
+        title: chatData[0].title,
+        conversation: conversation,
+      });
+
+      console.log("chat", chatData);
+
+      if (error) {
+        console.log(error);
+        return NextResponse.json({ error: error.message }, { status: 500 });
+      }
+    }
 
     return NextResponse.json(
       {

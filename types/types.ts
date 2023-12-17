@@ -86,7 +86,7 @@ export interface ISidemenuParams {
   profileImage?: string;
   balance: number;
   chats: {
-    name: string;
+    title: string;
     id: string;
   }[];
 }

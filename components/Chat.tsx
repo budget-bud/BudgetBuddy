@@ -23,7 +23,6 @@ const Chat = () => {
         chatId: chatId === undefined ? null : chatId,
       }),
     }).then((res) => res.json());
-    console.log(response.answer);
 
     setMessages([
       ...messages,
@@ -31,7 +30,6 @@ const Chat = () => {
       { text: response.answer, user: false },
     ]);
   };
-
   const getMessageHistory = async (): Promise<void> => {
     if (chatId === undefined) return;
     const response = await fetch(`/api/chatHistory`, {
