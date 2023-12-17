@@ -336,32 +336,34 @@ const FinancialDashboard = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Financial dashboard</h1>
-      <div className="grid md:grid-cols-2 gap-4">
-        <div className="flex flex-col">
-          <h2 className="text-xl font-semibold mb-2 text-center">
+    <div className="flex max-h-full w-full flex-grow flex-col gap-4 rounded-lg bg-secondary-800 p-4">
+      <h1 className="mb-4 text-2xl font-bold text-text-100">
+        Financial dashboard
+      </h1>
+      <div className="scrollbar flex flex-col gap-4 overflow-y-scroll rounded-[18px]">
+        <div className="flex flex-col rounded-[18px] bg-secondary-200">
+          <h2 className="mt-2 text-center text-xl font-semibold text-background-950">
             Reaching the goals
           </h2>
-          <div className="flex-grow p-4 border rounded-lg shadow flex justify-center items-center">
+          <div className="m-4 flex items-center justify-center rounded-[18px] bg-text-100 p-4 shadow">
             <Bar data={goalsData} options={options} />
           </div>
         </div>
-        <div className="flex flex-col">
-          <h2 className="text-xl font-semibold mb-2 text-center">
+
+        <div className="flex flex-col rounded-[18px] bg-secondary-200">
+          <h2 className="mt-2 text-center text-xl font-semibold text-background-950">
             Transactions in the last two weeks
           </h2>
-          <div className="flex-grow p-4 border rounded-lg shadow flex justify-center items-center">
+          <div className="m-4 flex items-center justify-center rounded-[18px] bg-text-100 p-4 shadow">
             <Line data={spendingData} options={{ responsive: true }} />
           </div>
         </div>
-      </div>
-      <div className="grid md:grid-cols-1 gap-4 mt-4 justify-items-center">
-        <div className="flex flex-col items-center">
-          <h2 className="text-xl font-semibold mb-2 text-center">
+
+        <div className="flex flex-col items-center rounded-[18px] bg-secondary-200">
+          <h2 className="mt-2 text-center text-xl font-semibold text-background-950">
             Transactions per category in the last two weeks
           </h2>
-          <div className="p-4 border rounded-lg shadow">
+          <div className="m-4 flex items-center justify-center rounded-[18px] bg-text-100 p-4 shadow">
             <Doughnut
               data={categorySpendingData}
               options={{ responsive: true }}

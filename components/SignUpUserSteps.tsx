@@ -58,7 +58,7 @@ export default function SignUpUserSteps() {
           Head over to the{" "}
           <Link
             href="/login"
-            className="font-bold hover:underline text-foreground/80"
+            className="font-bold text-foreground/80 hover:underline"
           >
             Login
           </Link>{" "}
@@ -72,7 +72,7 @@ export default function SignUpUserSteps() {
           Head over to the{" "}
           <a
             href="https://supabase.com/dashboard/project/_/editor"
-            className="font-bold hover:underline text-foreground/80"
+            className="font-bold text-foreground/80 hover:underline"
             target="_blank"
             rel="noreferrer"
           >
@@ -83,7 +83,7 @@ export default function SignUpUserSteps() {
           following into the{" "}
           <a
             href="https://supabase.com/dashboard/project/_/sql/new"
-            className="font-bold hover:underline text-foreground/80"
+            className="font-bold text-foreground/80 hover:underline"
             target="_blank"
             rel="noreferrer"
           >
@@ -98,7 +98,7 @@ export default function SignUpUserSteps() {
         <p>
           To create a Supabase client and query data from an Async Server
           Component, create a new page.tsx file at{" "}
-          <span className="px-2 py-1 rounded-md bg-foreground/20 text-foreground/80">
+          <span className="rounded-md bg-foreground/20 px-2 py-1 text-foreground/80">
             /app/notes/page.tsx
           </span>{" "}
           and add the following.

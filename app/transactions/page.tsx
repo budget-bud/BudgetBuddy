@@ -1,6 +1,7 @@
 "use client";
 import { ICategory, IGoal, ITransactionWithFK } from "@/types/types";
 import React, { useEffect, useState } from "react";
+
 const TransactionsPage = () => {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -8,7 +9,7 @@ const TransactionsPage = () => {
   const [transactions, setTransactions] = useState<{
     transactions: [ITransactionWithFK];
   }>();
-  const [categories, setCategories] = useState<{ categories: [ICategory] }>();
+  const [categories, setCategories] = useState<ICategory[]>([]);
   const [goals, setGoals] = useState<{ goals: [IGoal] }>();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -22,7 +23,7 @@ const TransactionsPage = () => {
     fetch("/api/categories")
       .then((res) => res.json())
       .then((data) => {
-        setCategories(data);
+        setCategories(data.categories);
       });
 
     fetch("/api/goals")
@@ -35,35 +36,35 @@ const TransactionsPage = () => {
 
   return (
     <div
-      className={`flex-1 flex flex-col gap-6 ${
+      className={`flex max-h-full w-full flex-grow flex-col gap-4 rounded-lg bg-secondary-800 p-4 ${
         isLoading ? "animate-pulse" : ""
       }`}
     >
-      <div className="flex max-w-full gap-4">
+      <div className="flex max-w-full flex-wrap gap-4">
         <input
           id="searchInput"
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 max-h-12 text-black p-6 rounded-lg"
+          className="max-h-12 flex-1 rounded-lg bg-primary-600 p-6 text-background-950 max-lg:min-w-full"
           placeholder="Search for transactions here..."
         />
         <select
-          className="max-h-12 max-w-24 text-black p-6 rounded-lg"
+          className="max-w-24 max-h-12 flex-1 rounded-lg bg-primary-600 p-6 text-background-950"
           id="categorySelect"
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
         >
           <option value="">Select a category</option>
 
-          {categories?.categories.map((category: ICategory) => (
-            <option value={category.title} key={category.title}>
+          {categories.map((category: ICategory) => (
+            <option value={category.id} key={category.id}>
               {category.title}
             </option>
           ))}
         </select>
         <select
-          className="max-h-12 max-w-24 text-black p-6 rounded-lg"
+          className="max-w-24 max-h-12 flex-1 rounded-lg bg-primary-600 p-6 text-background-950"
           id="goalSelect"
           value={selectedGoal}
           onChange={(e) => setSelectedGoal(e.target.value)}
@@ -76,33 +77,33 @@ const TransactionsPage = () => {
           ))}
         </select>
       </div>
-      <table className="min-w-full divide-y divide-gray-200 rounded overflow-hidden">
-        <thead className="bg-secondary_700">
+      <table className="min-w-full divide-y divide-gray-200 overflow-hidden rounded">
+        <thead className="bg-secondary-300">
           <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-background-950">
               Origin
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-background-950">
               Movement
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-background-950 max-lg:hidden">
               Description
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-background-950">
               Place
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-background-950 max-md:hidden">
               Category
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-background-950 max-md:hidden">
               Goal
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-background-950">
               Date
             </th>
           </tr>
         </thead>
-        <tbody className="bg-secondary_900 divide-y divide-gray-200">
+        <tbody className="divide-y divide-gray-200 bg-secondary-200">
           {transactions?.transactions
             .filter((transaction: ITransactionWithFK) => {
               return (
@@ -140,25 +141,25 @@ const TransactionsPage = () => {
             })
             .map((transaction: ITransactionWithFK, index: number) => (
               <tr key={index}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                <td className="whitespace-nowrap px-6 py-4 text-sm text-background-950">
                   {transaction.origin}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                <td className="whitespace-nowrap px-6 py-4 text-sm text-background-950">
                   {transaction.movement}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                <td className="whitespace-nowrap px-6 py-4 text-sm text-background-950">
                   {transaction.description}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                <td className="whitespace-nowrap px-6 py-4 text-sm text-background-950">
                   {transaction.place}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                <td className="whitespace-nowrap px-6 py-4 text-sm text-background-950">
                   {transaction.category_id.title}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                <td className="whitespace-nowrap px-6 py-4 text-sm text-background-950">
                   {transaction.goal_id.title}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                <td className="whitespace-nowrap px-6 py-4 text-sm text-background-950">
                   {transaction.created_at.split("T")[0]}
                 </td>
               </tr>

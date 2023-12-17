@@ -16,13 +16,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="max-w-full w-screen bg-primary_100 text-tertiary_900">
-        <main className="min-h-screen flex flex-row items-start w-full w-max-[1020px]">
+      <body className="w-screen max-w-full bg-secondary-950 text-text-100">
+        <main className="w-max-[1020px] flex min-h-screen w-full flex-row items-start">
           <ContextProvider>
             <Sidemenu />
-            <div className="w-full min-h-screen max-h-screen flex flex-col items-center">
+            <div className="flex max-h-screen min-h-screen w-full flex-col items-center">
               <Header />
-              <div className="w-full max-h-[calc(100vh-2.5rem)] flex flex-grow max-w-7xl p-3">
+              <div className="flex max-h-[calc(100vh-2.5rem)] w-full max-w-7xl flex-grow p-3 md:max-h-screen">
                 {children}
               </div>
             </div>

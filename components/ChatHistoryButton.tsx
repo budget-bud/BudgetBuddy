@@ -11,15 +11,13 @@ const ChatHistoryButton: React.FC<ChatHistoryButtonProps> = ({
   name,
 }: ChatHistoryButtonProps) => {
   return (
-    <div className="w-full flex justify-center">
+    <div className="flex w-full justify-center">
       <Link
-        className="flex w-3/4  h-[2rem] cursor-pointer  justify-center items-center
-          bg-secondary_700 hover:bg-secondary_500 text-black rounded-md font-bold"
+        className="flex h-[2rem]  w-3/4 cursor-pointer  items-center justify-center
+          rounded-md bg-secondary-700 font-bold text-background-50 hover:bg-secondary-600"
         href={`/chat/${id}`}
       >
-        <div className="w-full flex justify-center text-xs sm:text-base ">
-          {name}
-        </div>
+        <div className="flex w-full justify-center text-base ">{name}</div>
       </Link>
     </div>
   );

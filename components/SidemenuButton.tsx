@@ -23,13 +23,13 @@ const SidemenuButton: React.FC<SidemenuButtonProps> = ({
   balance,
 }: SidemenuButtonProps) => {
   return (
-    <div className="w-full flex justify-center">
+    <div className="flex w-full justify-center">
       <Link
-        className="flex w-3/4 h-[2rem] mt-[1rem] 
+        className="mt-[1rem] flex h-[2rem] w-3/4 
                 cursor-pointer items-center 
-                bg-secondary_700 hover:bg-secondary_500 
-                text-black 
-                rounded-md font-bold"
+                rounded-md bg-secondary-300 
+                font-bold 
+                text-background-950 hover:bg-secondary-200"
         href={
           button_type === "spendings"
             ? "/transactions"
@@ -47,43 +47,37 @@ const SidemenuButton: React.FC<SidemenuButtonProps> = ({
         {button_type === "spendings" && (
           <>
             <AccountBalanceWalletIcon className="ml-3" />
-            <div className="w-full ml-[1rem] text-xs sm:text-base">
-              {`${balance} Ft`}
-            </div>
+            <div className="ml-[1rem] w-full text-base">{`${balance} Ft`}</div>
           </>
         )}
         {button_type === "goals" && (
           <>
             <AnalyticsIcon className="ml-3" />
-            <div className="w-full ml-[1rem] text-xs sm:text-base">Goals</div>
+            <div className="ml-[1rem] w-full text-base">Goals</div>
           </>
         )}
         {button_type === "categories" && (
           <>
             <CategoryIcon className="ml-3" />
-            <div className="w-full ml-[1rem] text-xs sm:text-base">
-              Categories
-            </div>
+            <div className="ml-[1rem] w-full text-base">Categories</div>
           </>
         )}
         {button_type === "plots" && (
           <>
             <BarChartIcon className="ml-3" />
-            <div className="w-full ml-[1rem] text-xs sm:text-base">Plots</div>
+            <div className="ml-[1rem] w-full text-base">Plots</div>
           </>
         )}
         {button_type === "kpi" && (
           <>
             <BarChartIcon className="ml-3" />
-            <div className="w-full ml-[1rem] text-xs sm:text-base">KPI</div>
+            <div className="ml-[1rem] w-full text-base">KPI</div>
           </>
         )}
         {button_type === "new_chat" && (
           <>
             <ChatIcon className="ml-3" />
-            <div className="w-full ml-[1rem] text-xs sm:text-base">
-              New Chat
-            </div>
+            <div className="ml-[1rem] w-full text-base">New Chat</div>
           </>
         )}
       </Link>

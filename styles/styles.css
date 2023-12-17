@@ -4,6 +4,6 @@
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-  background-color: theme("colors.primary_400");
+  background-color: theme("colors.primary.950");
   border-radius: 1rem;
 }
