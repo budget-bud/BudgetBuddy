@@ -37,13 +37,12 @@ const Chat = () => {
       body: JSON.stringify({ chatId: chatId }),
     }).then((res) => res.json());
 
-        setMessages(response.messages);
+    setMessages(response.messages);
   };
 
   useEffect(() => {
     getMessageHistory();
   }, [chatId]);
-
 
   return (
     <section className="w-full max-h-full p-4 bg-primary_200 rounded-lg flex flex-col flex-grow gap-4">

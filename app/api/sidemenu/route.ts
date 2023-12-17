@@ -30,18 +30,14 @@ export async function GET() {
       );
     }
 
-    const {data: chats, error: chatsError} = await supabase
+    const { data: chats, error: chatsError } = await supabase
       .from("Chats")
       .select("id, title")
       .eq("user_id", user?.id);
 
     if (chatsError) {
-      return NextResponse.json(
-        { error: chatsError.message },
-        { status: 500 },
-      );
+      return NextResponse.json({ error: chatsError.message }, { status: 500 });
     }
-
 
     return NextResponse.json(
       {

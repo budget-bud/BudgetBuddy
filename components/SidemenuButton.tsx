@@ -3,12 +3,18 @@ import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import AnalyticsIcon from "@mui/icons-material/Analytics";
 import CategoryIcon from "@mui/icons-material/Category";
 import BarChartIcon from "@mui/icons-material/BarChart";
-import ChatIcon from '@mui/icons-material/Chat';
+import ChatIcon from "@mui/icons-material/Chat";
 // COMPONENTS
 import Link from "next/link";
 
 type SidemenuButtonProps = {
-  button_type: "spendings" | "goals" | "categories" | "plots" | "kpi" | "new_chat";
+  button_type:
+    | "spendings"
+    | "goals"
+    | "categories"
+    | "plots"
+    | "kpi"
+    | "new_chat";
   balance?: number;
 };
 
@@ -59,7 +65,7 @@ const SidemenuButton: React.FC<SidemenuButtonProps> = ({
               Categories
             </div>
           </>
-        )}  
+        )}
         {button_type === "plots" && (
           <>
             <BarChartIcon className="ml-3" />
@@ -73,11 +79,13 @@ const SidemenuButton: React.FC<SidemenuButtonProps> = ({
           </>
         )}
         {button_type === "new_chat" && (
-              <>
-                <ChatIcon className="ml-3" />
-                <div className="w-full ml-[1rem] text-xs sm:text-base">New Chat</div>
-              </>
-            )}
+          <>
+            <ChatIcon className="ml-3" />
+            <div className="w-full ml-[1rem] text-xs sm:text-base">
+              New Chat
+            </div>
+          </>
+        )}
       </Link>
     </div>
   );
