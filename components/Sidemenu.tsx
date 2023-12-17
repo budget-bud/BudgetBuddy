@@ -6,8 +6,11 @@ import ChatHistoryButton from "./ChatHistoryButton";
 import { isNullOrUndefined } from "@/utils/isNullOrUndefined";
 import { useEffect, useState } from "react";
 import { ISidemenuParams } from "@/types/types";
+import { useSidemenuContext } from "./ContextProvider";
+import { Close } from "@mui/icons-material";
 
 const Sidemenu = () => {
+  const { isSidemenuOpen, setIsSidemenuOpen } = useSidemenuContext();
   const [data, setData] = useState<ISidemenuParams>(
     null as unknown as ISidemenuParams,
   );
@@ -24,13 +27,15 @@ const Sidemenu = () => {
     getData();
   }, []);
 
-  //TODO: Implement Sidemenu close/open
-
   if (isNullOrUndefined(data)) {
     return <></>;
   }
   return (
-    <div className="w-[350px] h-screen bg-black flex flex-col items-center">
+    <div
+      className={`md:min-w-[300px] min-w-[100vw] absolute md:relative z-30 transition-all h-screen bg-black flex flex-col items-center md:flex${
+        isSidemenuOpen ? "" : " hidden"
+      }`}
+    >
       <div className="flex w-full justify-center mt-[0.5rem] font-bold text-xl ">
         Budget Buddy
       </div>
@@ -61,6 +66,16 @@ const Sidemenu = () => {
           <ChatHistoryButton key={chat.id} id={chat.id} name={chat.name} />
         ))}
       </div>
+      <button
+        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setIsSidemenuOpen(false);
+        }}
+        className="absolute right-0 top-0 p-3 md:hidden"
+      >
+        <Close />
+      </button>
     </div>
   );
 };
