@@ -41,7 +41,7 @@ const GoalsPage = () => {
           created_at: new Date().toDateString(),
           title: inputForm.title,
           goal_amount: inputForm.goal_amount,
-          category_id: categories.find((c) => c.id == selectedCategory)?.id,
+          category_id: categories.find((c) => c.id == selectedCategory)?.id ?? "",
         };
 
         const response = await fetch(`/api/goals`, {
