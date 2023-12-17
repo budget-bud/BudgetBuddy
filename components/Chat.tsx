@@ -23,7 +23,6 @@ const Chat = () => {
         chatId: chatId === undefined ? null : chatId,
       }),
     }).then((res) => res.json());
-    console.log(response.answer);
 
     setMessages([
       ...messages,
@@ -31,7 +30,6 @@ const Chat = () => {
       { text: response.answer, user: false },
     ]);
   };
-
   const getMessageHistory = async (): Promise<void> => {
     if (chatId === undefined) return;
     const response = await fetch(`/api/chatHistory`, {
@@ -39,12 +37,13 @@ const Chat = () => {
       body: JSON.stringify({ chatId: chatId }),
     }).then((res) => res.json());
 
-    setMessages(response.messages);
+        setMessages(response.messages);
   };
 
   useEffect(() => {
     getMessageHistory();
   }, [chatId]);
+
 
   return (
     <section className="w-full max-h-full p-4 bg-primary_200 rounded-lg flex flex-col flex-grow gap-4">

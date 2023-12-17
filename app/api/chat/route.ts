@@ -1,7 +1,9 @@
 import { isNullOrUndefined } from "@/utils/isNullOrUndefined";
+import { createClient } from "@/utils/supabase/server";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { AIMessage } from "langchain/dist/schema";
 import { PromptTemplate } from "langchain/prompts";
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 const PROMPT_TEMPLATE = `You are a budgeting helper chatbot.
@@ -14,7 +16,17 @@ Question: {question}`;
 
 export async function POST(req: NextRequest) {
   try {
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
+
+ 
+
     const body = await req.json();
+    const history = body.history;
+
+    
+
+
     if (isNullOrUndefined(body.question)) {
       return NextResponse.json(
         { error: "Please provide a question" },
