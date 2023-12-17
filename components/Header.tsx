@@ -7,7 +7,7 @@ import { useSidemenuContext } from "./ContextProvider";
 export default function Header() {
   const { isSidemenuOpen, setIsSidemenuOpen } = useSidemenuContext();
   return (
-    <header className="w-full flex flex-row justify-between md:justify-end bg-slate-500">
+    <header className="flex w-full h-[2.5rem] flex-row justify-between bg-accent-800 md:justify-end md:hidden">
       <button
         onClick={() => setIsSidemenuOpen(!isSidemenuOpen)}
         className="ml-4 md:hidden"

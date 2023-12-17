@@ -119,13 +119,13 @@ export default function Login({
   };
 
   return (
-    <div className="animate-in flex-1 flex flex-col rounded max-h-fit mx-auto container max-w-2xl gap-2 text-black bg-secondary_900 p-6">
+    <div className="animate-in bg-secondary_900 container mx-auto flex max-h-fit max-w-2xl flex-1 flex-col gap-2 rounded p-6 text-background-950">
       <form className="flex flex-col gap-2" action={signIn}>
         <label className="text-xl" htmlFor="name">
           How should we call you?
         </label>
         <input
-          className="rounded-md px-4 py-2 bg-inherit border border-gray-900 mb-6"
+          className="mb-6 rounded-md border border-gray-900 bg-inherit px-4 py-2"
           name="name"
           placeholder="John Doe"
           required
@@ -134,7 +134,7 @@ export default function Login({
           Email
         </label>
         <input
-          className="rounded-md px-4 py-2 bg-inherit border border-gray-900 mb-6"
+          className="mb-6 rounded-md border border-gray-900 bg-inherit px-4 py-2"
           name="email"
           placeholder="username@example.com"
           required
@@ -143,44 +143,44 @@ export default function Login({
           Password
         </label>
         <input
-          className="rounded-md px-4 py-2 bg-inherit border border-gray-900 mb-6"
+          className="mb-6 rounded-md border border-gray-900 bg-inherit px-4 py-2"
           type="password"
           name="password"
           placeholder="••••••••"
           required
         />
-        <button className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2">
+        <button className="mb-2 rounded-md bg-green-700 px-4 py-2 text-foreground">
           Sign In
         </button>
         <button
           formAction={signUp}
-          className="border border-gray-800 rounded-md px-4 py-2 mb-2"
+          className="mb-2 rounded-md border border-gray-800 px-4 py-2"
         >
           Sign Up
         </button>
 
         {searchParams?.message && (
-          <p className="p-4 bg-error_200 rounded text-secondary_900 text-center">
+          <p className="bg-error_200 text-secondary_900 rounded p-4 text-center">
             {searchParams.message}
           </p>
         )}
       </form>
       <form>
-        <div className="flex gap-2 mt-2">
+        <div className="mt-2 flex gap-2">
           <button
-            className="flex-1 p-2 border rounded border-gray-800"
+            className="flex-1 rounded border border-gray-800 p-2"
             formAction={signInWithGoogle}
           >
             <GoogleIcon />
           </button>
           <button
-            className="flex-1 p-2 border rounded border-gray-800"
+            className="flex-1 rounded border border-gray-800 p-2"
             formAction={signInWithAzure}
           >
             <MicrosoftIcon />
           </button>
           <button
-            className="flex-1 p-2 border rounded border-gray-800"
+            className="flex-1 rounded border border-gray-800 p-2"
             formAction={signInWithGitHub}
           >
             <GitHubIcon />

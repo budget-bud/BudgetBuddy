@@ -80,7 +80,7 @@ const EditGoal: React.FC<IEditGoalProps> = ({ goalId, goals, setGoals }) => {
       </Tooltip>
       <Modal open={isModalOpen} onClose={handleClose}>
         <Box sx={style}>
-          <h1 className="bg-slate-500 font-semibold pl-4 text-gray-50 flex flex-row items-center justify-between">
+          <h1 className="flex flex-row items-center justify-between bg-slate-500 pl-4 font-semibold text-gray-50">
             <div className="">Edit goal</div>
             <Tooltip arrow title={"Close"}>
               <IconButton onClick={handleClose} sx={{ color: "white" }}>
@@ -88,7 +88,7 @@ const EditGoal: React.FC<IEditGoalProps> = ({ goalId, goals, setGoals }) => {
               </IconButton>
             </Tooltip>
           </h1>
-          <div className="flex flex-col items-center py-4 space-y-4">
+          <div className="flex flex-col items-center space-y-4 py-4">
             <TextField
               required
               name="title"
@@ -105,9 +105,9 @@ const EditGoal: React.FC<IEditGoalProps> = ({ goalId, goals, setGoals }) => {
               value={editedData.goal_amount}
             />
           </div>
-          <div className="flex justify-end pb-3 mt-[0.5rem] w-full">
+          <div className="mt-[0.5rem] flex w-full justify-end pb-3">
             <button
-              className="text-slate-300 h-[35px] w-[80px] font-bold hover:text-slate-600  bg-slate-500 hover:bg-slate-400 rounded-sm mr-4 px-4"
+              className="mr-4 h-[35px] w-[80px] rounded-sm bg-slate-500  px-4 font-bold text-slate-300 hover:bg-slate-400 hover:text-slate-600"
               onClick={handleEdit}
             >
               Edit

@@ -38,33 +38,33 @@ const Sidemenu = () => {
       <div
         className={`${
           isLoading ? "animate-pulse" : ""
-        } md:min-w-[300px] min-w-[100vw] absolute md:relative z-30 transition-all h-screen bg-black flex flex-col items-center md:flex${
+        } absolute z-30 flex h-screen min-w-[100vw] flex-col items-center bg-primary-800 transition-all md:relative md:min-w-[300px] md:flex${
           isSidemenuOpen ? "" : " hidden"
         }`}
       >
-        <div className="flex w-full justify-center mt-[0.5rem] font-bold text-xl ">
+        <div className="mt-[0.5rem] flex w-full justify-center text-xl font-bold">
           Budget Buddy
         </div>
-        <div className="flex w-full justify-center mt-[2rem]">
-          <div className="flex w-3/4  h-[4rem] justify-center items-center bg-secondary_700 text-black rounded-md ">
+        <div className="mt-[2rem] flex w-full justify-center">
+          <div className="bg-secondary_700 flex h-[4rem] w-3/4 items-center justify-center rounded-md text-background-950 ">
             <span className="w-1/2">
-              <div className="w-[40px] sm:w-[50px] h-[40px] sm:h-[50px] bg-primary_200 rounded-full ml-3">
-                <div className="flex w-full h-full justify-center items-center text-white text-2xl font-bold"></div>
+              <div className="bg-primary_200 ml-3 h-[50px] w-[50px] rounded-full">
+                <div className="flex h-full w-full items-center justify-center text-2xl font-bold text-white"></div>
               </div>
             </span>
-            <span className="w-1/2 font-semibold text-sm sm:text-base"></span>
+            <span className="w-1/2 text-base font-semibold"></span>
           </div>
         </div>
-        <div className="w-full mt-[2rem]">
+        <div className="mt-[2rem] w-full">
           <SidemenuButton button_type={"new_chat"} />
           <SidemenuButton button_type={"spendings"} balance={0} />
           <SidemenuButton button_type={"goals"} />
           <SidemenuButton button_type={"categories"} />
           <SidemenuButton button_type={"plots"} />
         </div>
-        <div className="w-[75%] my-[2rem] flex flex-row items-center">
-          <div className="w-fit whitespace-nowrap mr-3">Chat history</div>
-          <div className="w-full bg-secondary_500 h-0.5"></div>
+        <div className="my-[2rem] flex w-[75%] flex-row items-center">
+          <div className="mr-3 w-fit whitespace-nowrap">Chat history</div>
+          <div className="bg-secondary_500 h-0.5 w-full"></div>
         </div>
       </div>
     );
@@ -81,39 +81,39 @@ const Sidemenu = () => {
 
   return (
     <div
-      className={`md:min-w-[300px] min-w-[100vw] absolute md:relative z-30 transition-all h-screen bg-black flex flex-col items-center md:flex${
+      className={`absolute z-30 flex h-screen min-w-[100vw] flex-col items-center bg-accent-800 transition-all md:relative md:min-w-[300px] md:flex${
         isSidemenuOpen ? "" : " hidden"
       }`}
     >
-      <div className="flex w-full justify-center mt-[0.5rem] font-bold text-xl ">
+      <div className="mt-[0.5rem] flex w-full justify-center text-xl font-bold text-text-100 ">
         Budget Buddy
       </div>
-      <div className="flex w-full justify-center mt-[2rem]">
-        <div className="flex w-3/4  h-[4rem] justify-center items-center bg-secondary_700 text-black rounded-md ">
+      <div className="mt-[2rem] flex w-full justify-center">
+        <div className="flex h-[4rem]  w-3/4 items-center justify-center rounded-md bg-primary-600 text-background-950 ">
           <span className="w-1/2">
-            <div className="w-[40px] sm:w-[50px] h-[40px] sm:h-[50px] bg-primary_200 rounded-full ml-3">
-              <div className="flex w-full h-full justify-center items-center text-white text-2xl font-bold">
+            <div className="ml-3 h-[50px] w-[50px] rounded-full bg-primary-800">
+              <div className="flex h-full w-full items-center justify-center text-2xl font-bold text-text-100">
                 {getInitials(data.name)}
               </div>
             </div>
           </span>
-          <span className="w-1/2 font-semibold text-sm sm:text-base">
-            {data.name}
-          </span>
+          <span className="w-1/2 text-base font-semibold">{data.name}</span>
         </div>
       </div>
-      <div className="w-full mt-[2rem]">
+      <div className="mt-[2rem] w-full">
         <SidemenuButton button_type={"new_chat"} />
         <SidemenuButton button_type={"spendings"} balance={data.balance} />
         <SidemenuButton button_type={"goals"} />
         <SidemenuButton button_type={"categories"} />
         <SidemenuButton button_type={"plots"} />
       </div>
-      <div className="w-[75%] my-[2rem] flex flex-row items-center">
-        <div className="w-fit whitespace-nowrap mr-3">Chat history</div>
-        <div className="w-full bg-secondary_500 h-0.5"></div>
+      <div className="my-[2rem] flex w-[75%] flex-row items-center">
+        <div className="mr-3 w-fit whitespace-nowrap text-text-100">
+          Chat history
+        </div>
+        <div className="h-0.5 w-full bg-text-100"></div>
       </div>
-      <div className="space-y-[1rem] w-full flex flex-col items-center overflow-auto">
+      <div className="flex w-full flex-col items-center space-y-[1rem] overflow-auto">
         {data.chats.map((chat) => (
           <ChatHistoryButton key={chat.id} id={chat.id} name={chat.title} />
         ))}
