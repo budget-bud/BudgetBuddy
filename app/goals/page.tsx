@@ -70,8 +70,12 @@ const GoalsPage = () => {
     }
   };
 
-  const deleteGoal = (id: string) => {
+  const deleteGoal = async (id: string) => {
     setGoals((prevGoal) => prevGoal.filter((goal) => goal.id !== id));
+    await fetch(`/api/goals`, {
+      method: "DELETE",
+      body: JSON.stringify({ id }),
+    });
   };
 
   const handleCategoryChange = (event: SelectChangeEvent) => {
