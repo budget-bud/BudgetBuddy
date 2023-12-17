@@ -1,5 +1,4 @@
 import { createClient } from "@/utils/supabase/server";
-import { ca } from "date-fns/locale";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
