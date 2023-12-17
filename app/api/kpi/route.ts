@@ -21,12 +21,15 @@ export async function GET() {
       return NextResponse.json({ error: allChatErr.message }, { status: 500 });
     }
 
-    const { count: allUsersCount, error: allUsersErr } = await supabase
-      .from("UserInfo")
-      .select("id", { count: "exact", head: true });
+    const { data: allUsers, error: allUsersErr } = await supabase
+      .from("auth_users_view")
+      .select("*");
+
     if (allUsersErr) {
       return NextResponse.json({ error: allUsersErr.message }, { status: 500 });
     }
+
+    const allUsersCount = allUsers[0].count;
 
     const { data: weeklyKPI, error: weeklyKPIErr } =
       await supabase.rpc("get_weekly_kpi");
@@ -39,6 +42,7 @@ export async function GET() {
 
     const { data: dailyKPI, error: dailyKPIErr } =
       await supabase.rpc("get_daily_kpi");
+
     if (dailyKPIErr) {
       return NextResponse.json({ error: dailyKPIErr.message }, { status: 500 });
     }
