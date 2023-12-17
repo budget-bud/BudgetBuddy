@@ -35,12 +35,21 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    const userId = user?.id;
+    if (!userId) {
+      return NextResponse.json({ error: "User not found" }, { status: 500 });
+    }
 
     const { data: transactions, error } = await supabase
       .from("Transactions")
       .insert([
         {
-          user_id: body.user_id,
+          type: body.type,
+          user_id: userId,
           goal_id: body.goal_id,
           category_id: body.category_id,
           origin: body.origin,
@@ -65,11 +74,19 @@ export async function PUT(req: NextRequest) {
     const body = await req.json();
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    const userId = user?.id;
+    if (!userId) {
+      return NextResponse.json({ error: "User not found" }, { status: 500 });
+    }
 
     const { data: transactions, error } = await supabase
       .from("Transactions")
       .update({
-        user_id: body.user_id,
+        user_id: userId,
         goal_id: body.goal_id,
         category_id: body.category_id,
         origin: body.origin,
