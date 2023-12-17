@@ -22,7 +22,7 @@ export default function RootLayout({
             <Sidemenu />
             <div className="flex max-h-screen min-h-screen w-full flex-col items-center">
               <Header />
-              <div className="flex max-h-[calc(100vh-2.5rem)] md:max-h-screen w-full max-w-7xl flex-grow p-3">
+              <div className="flex max-h-[calc(100vh-2.5rem)] w-full max-w-7xl flex-grow p-3 md:max-h-screen">
                 {children}
               </div>
             </div>
