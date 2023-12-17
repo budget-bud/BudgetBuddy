@@ -40,8 +40,8 @@ export interface ICategory2 {
 export interface ITransaction {
   id: number;
   user_id: number;
-  goal_id: number;
-  category_id: number;
+  category_id: ICategory;
+  goal_id: IGoal;
   origin: string;
   place: string;
   movement: number;
@@ -79,3 +79,5 @@ export interface ISidemenuParams {
     id: string;
   }[];
 }
+
+
