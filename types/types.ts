@@ -13,10 +13,11 @@ export interface IGoal {
 }
 
 export interface ICategory {
-  id: string;
+  id: number;
   created_at: string;
   title: string;
   limit: number;
+  totalAmount: number;
 }
 
 export interface IGoals {
@@ -61,7 +62,7 @@ export interface ITransaction {
 }
 
 export interface IEditCategoryProps {
-  categoryId: string;
+  categoryId: number;
   categories: ICategory[];
   setCategories: React.Dispatch<React.SetStateAction<ICategory[]>>;
 }
