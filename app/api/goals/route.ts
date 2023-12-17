@@ -36,17 +36,15 @@ export async function POST(req: NextRequest) {
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
 
-    const { data: goals, error } = await supabase
-      .from("Goals")
-      .insert([
-        {
-          user_id: body.user_id,
-          title: body.title,
-          description: body.description,
-          goal_amount: body.goal_amount,
-          category_id: body.category_id,
-        },
-      ]);
+    const { data: goals, error } = await supabase.from("Goals").insert([
+      {
+        user_id: body.user_id,
+        title: body.title,
+        description: body.description,
+        goal_amount: body.goal_amount,
+        category_id: body.category_id,
+      },
+    ]);
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
@@ -104,4 +102,3 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: (e as Error).message }, { status: 500 });
   }
 }
-

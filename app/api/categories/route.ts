@@ -83,22 +83,22 @@ export async function PUT(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-    try {
-      const body = await req.json();
-      const cookieStore = cookies();
-      const supabase = createClient(cookieStore);
-  
-      const { data: categories, error } = await supabase
-        .from("Categories")
-        .delete()
-        .match({ id: body.id });
-  
-      if (error) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
-      }
-  
-      return NextResponse.json({ categories }, { status: 200 });
-    } catch (e) {
-      return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+  try {
+    const body = await req.json();
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
+
+    const { data: categories, error } = await supabase
+      .from("Categories")
+      .delete()
+      .match({ id: body.id });
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
     }
+
+    return NextResponse.json({ categories }, { status: 200 });
+  } catch (e) {
+    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
   }
+}
