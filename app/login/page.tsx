@@ -35,12 +35,11 @@ export default function Login({
 
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
-    const origin = headers().get("origin");
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "azure",
       options: {
         scopes: "openid profile email",
-        redirectTo: `${origin}/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/callback`,
       },
     });
 
@@ -56,11 +55,10 @@ export default function Login({
 
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
-    const origin = headers().get("origin");
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${origin}/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/callback`,
       },
     });
 
@@ -76,11 +74,10 @@ export default function Login({
 
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
-    const origin = headers().get("origin");
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
-        redirectTo: `${origin}/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/callback`,
       },
     });
 
@@ -94,7 +91,6 @@ export default function Login({
   const signUp = async (formData: FormData) => {
     "use server";
 
-    const origin = headers().get("origin");
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const cookieStore = cookies();
@@ -104,7 +100,7 @@ export default function Login({
       email,
       password,
       options: {
-        emailRedirectTo: `${origin}/auth/callback`,
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
         data: {
           full_name: formData.get("name"),
         },

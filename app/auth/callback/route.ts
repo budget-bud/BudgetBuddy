@@ -13,12 +13,12 @@ export async function GET(request: Request) {
     const supabase = createClient(cookieStore);
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      return NextResponse.redirect(`${origin}${next}`);
+      return NextResponse.redirect(`${window.location.origin}${next}`);
     }
   }
 
   // return the user to an error page with instructions
   return NextResponse.redirect(
-    `${origin}/login?message=Could not authenticate user`,
+    `${window.location.origin}/login?message=Could not authenticate user`,
   );
 }

@@ -19,8 +19,6 @@ export async function middleware(request: NextRequest) {
     // https://supabase.com/docs/guides/auth/auth-helpers/nextjs#managing-session-with-middleware
     await supabase.auth.getSession();
 
-    const { origin } = new URL(request.url);
-
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -30,7 +28,7 @@ export async function middleware(request: NextRequest) {
         request.nextUrl.pathname.startsWith(route),
       )
     ) {
-      return NextResponse.redirect(`${origin}/login`);
+      return NextResponse.redirect(`${window.location.origin}/login`);
     }
 
     if (!user) return response;
