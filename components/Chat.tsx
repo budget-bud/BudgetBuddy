@@ -45,22 +45,25 @@ const Chat = () => {
   }, [chatId]);
 
   return (
-    <section className="w-full max-h-full p-4 bg-primary_200 rounded-lg flex flex-col flex-grow gap-4">
-      <div className="w-full max-h-full flex flex-col flex-grow overflow-y-scroll p-3 gap-3 scrollbar">
+    <section className="flex max-h-full w-full flex-grow flex-col gap-4 rounded-lg bg-secondary-800 p-4">
+      <div className="scrollbar flex max-h-full w-full flex-grow flex-col gap-3 overflow-y-scroll p-3">
         {messages.map((message, index) => (
           <Message key={index} message={message} />
         ))}
       </div>
       <div className="h-[100px] w-full">
-        <div className="chat__input__text">
+        <div className="flex h-full w-full flex-row items-center justify-center gap-4 rounded-[18px] bg-secondary-800 p-4 text-lg text-text-100 md:w-full">
           <input
-            className="chat__input__field"
+            className="h-full w-full rounded-[18px] bg-secondary-700 p-4 text-lg text-text-100 focus:outline-none"
             type="text"
             placeholder="Type a message"
             onChange={(e): void => setInput(e.target.value)}
             value={input}
           />
-          <button className="chat__input__send" onClick={sendMessage}>
+          <button
+            className="h-full w-24 cursor-pointer rounded-[18px] border-none bg-primary-600 text-text-100"
+            onClick={sendMessage}
+          >
             Send
           </button>
         </div>
@@ -74,14 +77,18 @@ export default Chat;
 const Message = ({ message }: { message: IMessage }) => {
   if (message.user)
     return (
-      <div className="message--user">
-        <p className="message--user__text">{message.text}</p>
+      <div className="mb-[10px] flex items-center justify-end gap-[10px]">
+        <p className="text-background rounded-bl-[18px] rounded-br-[7px] rounded-tl-[18px] rounded-tr-[18px] bg-primary-600 p-[10px]">
+          {message.text}
+        </p>
       </div>
     );
   else
     return (
-      <div className="message--system">
-        <p className="message--system__text">{message.text}</p>
+      <div className="mb-[10px] flex items-center justify-start gap-[10px]">
+        <p className="rounded-bl-[7px] rounded-br-[18px] rounded-tl-[18px] rounded-tr-[18px] bg-secondary-500 p-[10px]">
+          {message.text}
+        </p>
       </div>
     );
 };

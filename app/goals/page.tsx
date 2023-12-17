@@ -1,18 +1,12 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import { IGoal } from "@/types/types";
 import { ICategory } from "@/types/types";
 import EditGoal from "@/components/EditGoal";
 
 // COMPONENTS
-import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import { Tooltip } from "@mui/material";
-import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { Doughnut } from "react-chartjs-2";
 import { Chart, ArcElement } from "chart.js";
 Chart.register(ArcElement);
@@ -78,7 +72,7 @@ const GoalsPage = () => {
     });
   };
 
-  const handleCategoryChange = (event: SelectChangeEvent) => {
+  const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(event.target.value as string);
   };
 
@@ -122,81 +116,80 @@ const GoalsPage = () => {
   }, []);
 
   return (
-    <div className="w-full flex flex-col space-y-10">
-      <div className="mt-4 flex flex-row bg-slate-100 items-center justify-between px-3 py-4 rounded-sm">
-        <div className="flex flex-row space-x-10">
-          <TextField
-            name="title"
-            label="Title"
-            onChange={handleFormChange}
-            value={inputForm.title}
-          />
-          <TextField
-            type="number"
-            InputProps={{ inputProps: { min: 0 } }}
-            name="goal_amount"
-            label="Goal amount"
-            onChange={handleFormChange}
-            value={inputForm.goal_amount}
-          />
-          <Box sx={{ minWidth: 200 }}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Category</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={selectedCategory}
-                label="Category"
-                onChange={handleCategoryChange}
-              >
-                {categories.map((c) => (
-                  <MenuItem key={c.id} value={c.id}>
-                    {c.title}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
+    <div className="flex max-h-full w-full flex-grow flex-col gap-4 rounded-lg bg-secondary-800 p-4">
+      <div className="mt-4 flex flex-row items-center justify-between gap-2 rounded-[18px] bg-primary-600 px-3 py-4">
+        <div className="flex flex-1 flex-row flex-wrap gap-2">
+          <div className="flex min-w-[200px] flex-1 flex-col">
+            <label className="text-text-100">Title</label>
+            <input
+              className="h-full w-full rounded-[18px] bg-primary-700 p-4 text-lg text-text-100 focus:outline-none"
+              name="title"
+              placeholder="Title"
+              onChange={handleFormChange}
+              value={inputForm.title}
+            />
+          </div>
+          <div className="flex min-w-[200px] flex-1 flex-col">
+            <label className="text-text-100">Goal amount</label>
+            <input
+              className="h-full w-full rounded-[18px] bg-primary-700 p-4 text-lg text-text-100 focus:outline-none"
+              type="number"
+              min={0}
+              name="goal_amount"
+              placeholder="Goal amount"
+              onChange={handleFormChange}
+              value={inputForm.goal_amount}
+            />
+          </div>
+          <div className="flex min-w-[200px] flex-1 flex-col">
+            <label className="text-text-100">Category</label>
+            <select
+              className="h-full w-full rounded-[18px] bg-primary-700 p-4 text-lg text-text-100 focus:outline-none"
+              id="demo-simple-select"
+              value={selectedCategory}
+              onChange={handleCategoryChange}
+            >
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.title}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
         <button
           type="button"
           onClick={handleAdd}
-          className=" text-slate-300 h-[55px] w-[80px] 
-            font-bold hover:text-slate-700  bg-slate-700 
-            hover:bg-slate-400 rounded-sm"
+          className="h-full max-h-24 w-24 cursor-pointer rounded-[18px] border-none bg-secondary-700 text-text-100"
         >
           Add
         </button>
       </div>
-      <div className="w-full space-y-5 h-full overflow-auto ">
+      <div className="h-full w-full space-y-5 overflow-auto ">
         {goals.map((goal) => (
           <div
             key={goal.id}
-            className="flex flex-row rounded-sm bg-white text-black py-2 px-3 hover:bg-slate-300 justify-between items-center"
+            className="flex flex-row items-center justify-between rounded-[18px] bg-secondary-300 px-3 py-2 text-background-950"
           >
-            <div className=" w-1/4 flex flex-col">
-              <div className="font-bold">{goal.title}</div>
+            <div className="flex flex-col gap-2">
+              <div className="text-center text-xl font-bold">{goal.title}</div>
               <button
                 type="button"
                 onClick={() => handleAddMondey(goal.id)}
-                className=" text-slate-300 h-[55px] w-[150px] 
-                  font-bold hover:text-slate-700  bg-slate-700 
-                hover:bg-slate-400 rounded-sm mt-2"
+                className="min-h-[55px] min-w-[150px] max-w-[250px] cursor-pointer rounded-[18px] border-none bg-secondary-700 text-text-100"
               >
                 Add money
               </button>
               <button
                 type="button"
                 onClick={() => handleDecreaseMondey(goal.id)}
-                className=" text-slate-300 h-[55px] w-[150px] 
-                  font-bold hover:text-slate-700  bg-slate-500 
-                hover:bg-slate-400 rounded-sm mt-2"
+                className="min-h-[55px] min-w-[150px] max-w-[250px] cursor-pointer rounded-[18px] border-none bg-secondary-700 text-text-100"
               >
                 Decrease money
               </button>
             </div>
-            <div className="w-1/4 flex flex-col">
-              <div className="w-1/2">
+            <div className="flex flex-col">
+              <div className="w-[130px] min-w-[130px]">
                 <Doughnut
                   data={{
                     labels: ["Progress", "Remaining"],
@@ -215,9 +208,11 @@ const GoalsPage = () => {
                   }}
                 />
               </div>
-              <div className="font-bold">1000 Ft / {goal.goal_amount} Ft</div>
+              <div className="text-center font-bold">
+                1000 Ft / {goal.goal_amount} Ft
+              </div>
             </div>
-            <div className="flex flex-row justify-end w-1/4">
+            <div className="flex flex-row justify-end">
               <EditGoal goalId={goal.id} goals={goals} setGoals={setGoals} />
               <Tooltip arrow title={"Delete goal"}>
                 <IconButton onClick={() => deleteGoal(goal.id)}>

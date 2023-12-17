@@ -4,7 +4,6 @@ import EditCategory from "@/components/EditCategory";
 import { ICategory } from "@/types/types";
 
 // COMPONENTS
-import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import { Tooltip } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -87,44 +86,54 @@ const CategoriesPage = () => {
 console.log(categories);
 
   return (
-    <div className="w-full flex flex-col space-y-10">
-      <div className="mt-4 flex flex-row bg-slate-100 items-center justify-between px-3 py-4 rounded-sm">
-        <div className=" space-x-10">
-          <TextField
-            name="title"
-            label="Title"
-            onChange={handleFormChange}
-            value={inputForm.title}
-          />
-          <TextField
-            type="number"
-            InputProps={{ inputProps: { min: 0 } }}
-            name="limit"
-            label="Limit"
-            onChange={handleFormChange}
-            value={inputForm.limit}
-          />
+    <div className="flex max-h-full w-full flex-grow flex-col gap-4 rounded-lg bg-secondary-800 p-4">
+      <div className="mt-4 flex flex-row items-center justify-between gap-2 rounded-[18px] bg-primary-600 px-3 py-4">
+        <div className="flex flex-1 flex-row flex-wrap gap-2">
+          <div className="flex min-w-[200px] flex-1 flex-col">
+            <label className="text-text-100">Title</label>
+            <input
+              className="h-full w-full rounded-[18px] bg-primary-700 p-4 text-lg text-text-100 focus:outline-none"
+              name="title"
+              placeholder="Title"
+              onChange={handleFormChange}
+              value={inputForm.title}
+            />
+          </div>
+          <div className="flex min-w-[200px] flex-1 flex-col">
+            <label className="text-text-100">Limit</label>
+            <input
+              className="h-full w-full rounded-[18px] bg-primary-700 p-4 text-lg text-text-100 focus:outline-none"
+              type="number"
+              min={0}
+              name="limit"
+              placeholder="Limit"
+              onChange={handleFormChange}
+              value={inputForm.limit}
+            />
+          </div>
         </div>
         <button
           type="button"
           onClick={handleAdd}
-          className=" text-slate-300 h-[55px] w-[80px] 
-            font-bold hover:text-slate-700  bg-slate-700 
-            hover:bg-slate-400 rounded-sm"
+          className="h-full max-h-24 w-24 cursor-pointer rounded-[18px] border-none bg-secondary-700 text-text-100"
         >
           Add
         </button>
       </div>
-      <div className="w-full space-y-5 h-full overflow-auto">
+      <div className="h-full w-full space-y-5 overflow-auto">
         {categories.map((category) => (
           <div
             key={category.id}
-            className="flex flex-row rounded-sm bg-white text-black py-2 px-3 hover:bg-slate-300 justify-between items-center"
+            className="flex flex-row flex-wrap items-center justify-between rounded-[18px] bg-secondary-300 px-3 py-2 text-background-950"
           >
-            <div className="font-bold w-1/4">{category.title}</div>
+            <div className="w-1/4 font-bold max-lg:w-full max-lg:text-xl">
+              {category.title}
+            </div>
             {/* Read the value from the database, where category.id = the desired id of the category*/}
-            <div className="w-1/4"> { category.totalAmount } / {category.limit} Ft</div>{" "}
-            <div className="w-1/4 flex justify-center">
+            <div className="w-1/4 max-lg:w-1/3">
+              { category.totalAmount } / {category.limit} Ft
+            </div>
+            <div className="flex w-1/4 justify-center max-lg:w-1/3">
               <Box sx={{ width: "100%" }}>
                 <LinearProgress
                   variant="determinate"
@@ -133,7 +142,7 @@ console.log(categories);
                 />
               </Box>
             </div>
-            <div className="flex flex-row justify-end w-1/4">
+            <div className="flex w-1/4 flex-row justify-end max-lg:w-1/3">
               <EditCategory
                 categoryId={category.id}
                 categories={categories}
