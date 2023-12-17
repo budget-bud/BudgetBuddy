@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { ISidemenuParams } from "@/types/types";
 import { useSidemenuContext } from "./ContextProvider";
 import { Close } from "@mui/icons-material";
+import Link from "next/link";
 
 const Sidemenu = () => {
   const { isSidemenuOpen, setIsSidemenuOpen } = useSidemenuContext();
@@ -38,34 +39,30 @@ const Sidemenu = () => {
       <div
         className={`${
           isLoading ? "animate-pulse" : ""
-        } absolute z-30 flex h-screen min-w-[100vw] flex-col items-center bg-primary-800 transition-all md:relative md:min-w-[300px] md:flex${
+        } absolute z-30 flex h-screen min-w-[100vw] flex-col items-center bg-accent-800 transition-all md:relative md:min-w-[300px] md:flex${
           isSidemenuOpen ? "" : " hidden"
         }`}
       >
-        <div className="mt-[0.5rem] flex w-full justify-center text-xl font-bold">
+        <div className="mt-[0.5rem] flex w-full justify-center text-xl font-bold text-text-100 ">
           Budget Buddy
         </div>
-        <div className="mt-[2rem] flex w-full justify-center">
-          <div className="bg-secondary_700 flex h-[4rem] w-3/4 items-center justify-center rounded-md text-background-950 ">
-            <span className="w-1/2">
-              <div className="bg-primary_200 ml-3 h-[50px] w-[50px] rounded-full">
-                <div className="flex h-full w-full items-center justify-center text-2xl font-bold text-white"></div>
-              </div>
-            </span>
-            <span className="w-1/2 text-base font-semibold"></span>
-          </div>
-        </div>
-        <div className="mt-[2rem] w-full">
-          <SidemenuButton button_type={"new_chat"} />
-          <SidemenuButton button_type={"spendings"} balance={0} />
-          <SidemenuButton button_type={"goals"} />
-          <SidemenuButton button_type={"categories"} />
-          <SidemenuButton button_type={"plots"} />
-        </div>
-        <div className="my-[2rem] flex w-[75%] flex-row items-center">
-          <div className="mr-3 w-fit whitespace-nowrap">Chat history</div>
-          <div className="bg-secondary_500 h-0.5 w-full"></div>
-        </div>
+        <div className="mt-[50px]">Sign in to start budgeting!</div>
+        <Link
+          href={"/login"}
+          className="mx-12 mt-6 flex h-12 w-3/4 cursor-pointer items-center justify-center rounded-[18px] border-none bg-primary-600 text-lg font-bold text-text-100 hover:bg-primary-500"
+        >
+          Sign in
+        </Link>
+        <button
+          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsSidemenuOpen(false);
+          }}
+          className="absolute right-0 top-0 p-3 md:hidden"
+        >
+          <Close />
+        </button>
       </div>
     );
   }
