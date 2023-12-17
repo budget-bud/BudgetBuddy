@@ -36,7 +36,7 @@ const KPIPage = () => {
   }, []);
 
   return (
-    <div className="animate-pulse">
+    <div className={isLoading ? "animate-pulse" : ""}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <Card style={{ backgroundColor: "#53b5ed" }}>
