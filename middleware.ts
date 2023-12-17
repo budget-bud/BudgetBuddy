@@ -1,6 +1,14 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/utils/supabase/middleware";
 
+const protectedRoutes = [
+  "/chat",
+  "/plots",
+  "/goals",
+  "/categories",
+  "/transactions",
+];
+
 export async function middleware(request: NextRequest) {
   try {
     // This `try/catch` block is only here for the interactive tutorial.
@@ -11,22 +19,29 @@ export async function middleware(request: NextRequest) {
     // https://supabase.com/docs/guides/auth/auth-helpers/nextjs#managing-session-with-middleware
     await supabase.auth.getSession();
 
+    const { origin } = new URL(request.url);
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (
+      !user &&
+      protectedRoutes.some((route) =>
+        request.nextUrl.pathname.startsWith(route),
+      )
+    ) {
+      return NextResponse.redirect(`${origin}/login`);
+    }
+
     const formattedDate = new Date().toISOString().split("T")[0];
     const url = new URL(request.nextUrl);
     if (url.pathname.includes("_next") || url.pathname.includes("/api"))
       return response;
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) {
-      return response;
-    }
-
     const { error } = await supabase
       .from("UserActivity")
       .insert({
-        userId: user?.id,
+        user_id: user?.id,
         event_date: formattedDate,
         event_type: "visited: " + url.pathname,
       })
