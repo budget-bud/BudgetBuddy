@@ -6,8 +6,11 @@ import ChatHistoryButton from "./ChatHistoryButton";
 import { isNullOrUndefined } from "@/utils/isNullOrUndefined";
 import { useEffect, useState } from "react";
 import { ISidemenuParams } from "@/types/types";
+import { useSidemenuContext } from "./ContextProvider";
+import { Close } from "@mui/icons-material";
 
 const Sidemenu = () => {
+  const { isSidemenuOpen, setIsSidemenuOpen } = useSidemenuContext();
   const [data, setData] = useState<ISidemenuParams>(
     null as unknown as ISidemenuParams,
   );
@@ -24,13 +27,15 @@ const Sidemenu = () => {
     getData();
   }, []);
 
-  //TODO: Implement Sidemenu close/open
-
   if (isNullOrUndefined(data)) {
     return <></>;
   }
   return (
-    <div className="w-[350px] h-screen bg-black flex flex-col items-center">
+    <div
+      className={`md:min-w-[300px] min-w-[100vw] absolute md:relative z-30 transition-all h-screen bg-black flex flex-col items-center md:flex${
+        isSidemenuOpen ? "" : " hidden"
+      }`}
+    >
       <div className="flex w-full justify-center mt-[0.5rem] font-bold text-xl ">
         Budget Buddy
       </div>
@@ -52,18 +57,25 @@ const Sidemenu = () => {
         <SidemenuButton button_type={"categories"} />
         <SidemenuButton button_type={"plots"} />
       </div>
-      <div className="w-[80%] my-[2rem] flex flex-row items-center">
-        <div className="w-[50%] ">Chat history</div>
-        <div className="w-[70%] bg-secondary_500 h-0.5"></div>
+      <div className="w-[75%] my-[2rem] flex flex-row items-center">
+        <div className="w-fit whitespace-nowrap mr-3">Chat history</div>
+        <div className="w-full bg-secondary_500 h-0.5"></div>
       </div>
       <div className="space-y-[1rem] w-full flex flex-col items-center">
         {data.chats.map((chat) => (
           <ChatHistoryButton key={chat.id} id={chat.id} name={chat.name} />
         ))}
       </div>
-      <div className="w-full mt-[2rem]">
-        <SidemenuButton button_type={"kpi"} />
-      </div>
+      <button
+        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setIsSidemenuOpen(false);
+        }}
+        className="absolute right-0 top-0 p-3 md:hidden"
+      >
+        <Close />
+      </button>
     </div>
   );
 };
