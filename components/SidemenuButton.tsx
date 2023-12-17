@@ -59,7 +59,7 @@ const SidemenuButton: React.FC<SidemenuButtonProps> = ({
         )}
         {button_type === "plots" && (
           <>
-            <CategoryIcon className="ml-3" />
+            <BarChartIcon className="ml-3" />
             <div className="w-full ml-[1rem] text-xs sm:text-base">Plots</div>
           </>
         )}

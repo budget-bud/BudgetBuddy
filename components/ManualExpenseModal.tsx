@@ -80,7 +80,7 @@ const ManualExpenseModal = () => {
     <div>
       <Tooltip arrow title={"Add manual expense"}>
         <IconButton onClick={openManualModal} sx={{ mr: "0.5rem" }}>
-          <AttachMoneyIcon />
+          <AttachMoneyIcon className="text-white" />
         </IconButton>
       </Tooltip>
       <Dialog open={isModalOpen} onClose={handleClose} maxWidth="md" fullWidth>
