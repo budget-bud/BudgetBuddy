@@ -79,3 +79,19 @@ export interface ISidemenuParams {
     id: string;
   }[];
 }
+
+export interface IKPI {
+  allTransCount: number;
+  allUsersCount: number;
+  allChatsCount: number;
+  weeklyKPI: {
+    active_users_count: number;
+    average_actions: number;
+  }[];
+  dailyKPI: {
+    event_date: string;
+    active_users_per_day: number;
+    average_events_per_day_per_user: number;
+    events_per_day: number;
+  }[];
+}
