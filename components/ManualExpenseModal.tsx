@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -18,7 +18,7 @@ import {
   InputAdornment,
 } from "@mui/material";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import { IExpenseForm } from "@/types/types";
+import { ICategory2, IExpenseForm, IGoals } from "@/types/types";
 
 const ManualExpenseModal = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,14 +32,8 @@ const ManualExpenseModal = () => {
   });
   const [isCashExpense, setIsCashExpense] = useState(true);
 
-  const categoryOptions = [
-    "category_cash",
-    "category_bank",
-    "Category1",
-    "Category2",
-    "Category3",
-  ];
-  const goalOptions = ["Goal1", "Goal2", "Goal3"]; // Dummy data
+  const [categoryOptions, setCategoryOptions] = useState<ICategory2[]>([]);
+  const [goalOptions, setGoalOptions] = useState<IGoals[]>([]);
 
   const openManualModal = () => {
     setIsModalOpen(true);
@@ -49,8 +43,33 @@ const ManualExpenseModal = () => {
     setIsModalOpen(false);
   };
 
-  const handleAdd = () => {
-    // Your add logic here based on isCashExpense value
+  const handleAdd = async () => {
+    const response = await fetch(`/api/transactions`, {
+      method: "POST",
+      body: JSON.stringify({
+        type: isCashExpense ? "cash" : "bank",
+        goal_id: goalOptions.find((g) => g.title === expenseForm.goal)?.id,
+        category_id: categoryOptions.find(
+          (c) => c.title === expenseForm.category,
+        )?.id,
+        origin: expenseForm.origin,
+        place: expenseForm.place,
+        movement: expenseForm.movement,
+        description: expenseForm.description,
+      }),
+    }).then((res) => res.json());
+    if (response.error) {
+      window.alert(response.error);
+      return;
+    }
+    setExpenseForm({
+      goal: "",
+      category: "category_cash",
+      origin: "",
+      place: "",
+      movement: "",
+      description: "",
+    });
     handleClose();
   };
 
@@ -75,6 +94,24 @@ const ManualExpenseModal = () => {
         prev.category === "category_cash" ? "category_bank" : "category_cash",
     }));
   };
+
+  useEffect(() => {
+    fetch(`/api/categories`, {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setCategoryOptions(res.categories);
+      });
+
+    fetch(`/api/goals`, {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setGoalOptions(res.goals);
+      });
+  }, [expenseForm]);
 
   return (
     <div>
@@ -111,13 +148,13 @@ const ManualExpenseModal = () => {
                     >
                       {fieldName === "category"
                         ? categoryOptions.map((category) => (
-                            <MenuItem key={category} value={category}>
-                              {category.replace(/_/g, " ")}
+                            <MenuItem key={category.id} value={category.title}>
+                              {category.title.replace(/_/g, " ")}
                             </MenuItem>
                           ))
                         : goalOptions.map((goal) => (
-                            <MenuItem key={goal} value={goal}>
-                              {goal}
+                            <MenuItem key={goal.id} value={goal.title}>
+                              {goal.title}
                             </MenuItem>
                           ))}
                     </Select>
