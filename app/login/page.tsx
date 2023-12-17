@@ -119,42 +119,45 @@ export default function Login({
   };
 
   return (
-    <div className="animate-in bg-secondary_900 container mx-auto flex max-h-fit max-w-2xl flex-1 flex-col gap-2 rounded p-6 text-background-950">
-      <form className="flex flex-col gap-2" action={signIn}>
-        <label className="text-xl" htmlFor="name">
+    <div className="animate-in flex max-h-full w-full flex-grow flex-col gap-2 rounded-lg bg-secondary-800 p-4">
+      <form
+        className="m-4 flex flex-col gap-2 rounded-[18px] bg-secondary-300 p-4"
+        action={signIn}
+      >
+        <label className="text-xl text-text-100" htmlFor="name">
           How should we call you?
         </label>
         <input
-          className="mb-6 rounded-md border border-gray-900 bg-inherit px-4 py-2"
+          className="mb-6 rounded-[18px] bg-secondary-200 px-4 py-2 text-background-950 placeholder:text-background-950"
           name="name"
           placeholder="John Doe"
           required
         />
-        <label className="text-xl" htmlFor="email">
+        <label className="text-xl text-text-100" htmlFor="email">
           Email
         </label>
         <input
-          className="mb-6 rounded-md border border-gray-900 bg-inherit px-4 py-2"
+          className="mb-6 rounded-[18px] bg-secondary-200 px-4 py-2 text-background-950 placeholder:text-background-950"
           name="email"
           placeholder="username@example.com"
           required
         />
-        <label className="text-xl" htmlFor="password">
+        <label className="text-xl text-text-100" htmlFor="password">
           Password
         </label>
         <input
-          className="mb-6 rounded-md border border-gray-900 bg-inherit px-4 py-2"
+          className="mb-6 rounded-[18px] bg-secondary-200 px-4 py-2 text-background-950 placeholder:text-background-950"
           type="password"
           name="password"
           placeholder="••••••••"
           required
         />
-        <button className="mb-2 rounded-md bg-green-700 px-4 py-2 text-foreground">
+        <button className="mb-2 rounded-[18px] bg-green-700 px-4 py-2 text-foreground text-text-100">
           Sign In
         </button>
         <button
           formAction={signUp}
-          className="mb-2 rounded-md border border-gray-800 px-4 py-2"
+          className="mb-2 rounded-[18px] bg-secondary-400 px-4 py-2 text-text-100"
         >
           Sign Up
         </button>
@@ -166,21 +169,21 @@ export default function Login({
         )}
       </form>
       <form>
-        <div className="mt-2 flex gap-2">
+        <div className="m-4 flex flex-row gap-2 rounded-[18px] bg-accent-300 p-4">
           <button
-            className="flex-1 rounded border border-gray-800 p-2"
+            className="flex-1 rounded-[18px] bg-accent-200 p-2"
             formAction={signInWithGoogle}
           >
             <GoogleIcon />
           </button>
           <button
-            className="flex-1 rounded border border-gray-800 p-2"
+            className="flex-1 rounded-[18px] bg-accent-200 p-2"
             formAction={signInWithAzure}
           >
             <MicrosoftIcon />
           </button>
           <button
-            className="flex-1 rounded border border-gray-800 p-2"
+            className="flex-1 rounded-[18px] bg-accent-200 p-2"
             formAction={signInWithGitHub}
           >
             <GitHubIcon />
