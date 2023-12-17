@@ -28,15 +28,6 @@ export async function GET() {
       );
     }
 
-    const { data: chats, error: chatsError } = await supabase
-      .from("Chats")
-      .select("id, title")
-      .eq("user_id", user?.id);
-
-    if (chatsError) {
-      return NextResponse.json({ error: chatsError.message }, { status: 500 });
-    }
-
     const balanceAmount =
       isNaN(balance?.[0]?.base_balance + balance?.[0]?.movement) === true
         ? 0
@@ -44,9 +35,7 @@ export async function GET() {
 
     return NextResponse.json(
       {
-        name: user?.user_metadata.full_name ?? "User",
         balance: balanceAmount,
-        chats: chats,
       },
       { status: 200 },
     );
