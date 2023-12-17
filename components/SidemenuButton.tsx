@@ -25,7 +25,7 @@ const SidemenuButton: React.FC<SidemenuButtonProps> = ({
                 rounded-md font-bold"
         href={
           button_type === "spendings"
-            ? "/"
+            ? "/transactions"
             : button_type === "goals"
               ? "/goals"
               : button_type === "categories"
