@@ -1,49 +1,44 @@
 "use client";
-import React, { useState } from "react";
+import { ICategory, IGoal, ITransactionWithFK } from "@/types/types";
+import React, { useEffect, useState } from "react";
 const TransactionsPage = () => {
-  const origins = ["McDonalds", "Burger King", "KFC", "Subway", "Pizza Hut"];
-  const descriptions = ["croissant", "burger", "chicken", "sub", "pizza"];
-  const places = ["Budapest", "New York", "London", "Paris", "Berlin"];
-  const categories = [
-    "Food",
-    "Transport",
-    "Entertainment",
-    "Groceries",
-    "Rent",
-  ];
-  const goals = ["Bicycle", "Car", "House", "Vacation", "Savings"];
-  const dates = [
-    "2023-11-10",
-    "2023-10-10",
-    "2023-09-10",
-    "2023-08-10",
-    "2023-07-10",
-  ];
-
-  function getRandomElement(array: string[]) {
-    return array[Math.floor(Math.random() * array.length)];
-  }
-
-  function getRandomNumber(min: number, max: number) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  const transactions = Array.from({ length: 10 }, () => ({
-    origin: getRandomElement(origins),
-    movement: getRandomNumber(-5000, 5000),
-    description: getRandomElement(descriptions),
-    place: getRandomElement(places),
-    category: getRandomElement(categories),
-    goal: getRandomElement(goals),
-    date: getRandomElement(dates),
-  }));
-
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedGoal, setSelectedGoal] = useState("");
+  const [transactions, setTransactions] = useState<{
+    transactions: [ITransactionWithFK];
+  }>();
+  const [categories, setCategories] = useState<{ categories: [ICategory] }>();
+  const [goals, setGoals] = useState<{ goals: [IGoal] }>();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/transactions")
+      .then((res) => res.json())
+      .then((data) => {
+        setTransactions(data);
+      });
+
+    fetch("/api/categories")
+      .then((res) => res.json())
+      .then((data) => {
+        setCategories(data);
+      });
+
+    fetch("/api/goals")
+      .then((res) => res.json())
+      .then((data) => {
+        setGoals(data);
+        setIsLoading(false);
+      });
+  }, []);
 
   return (
-    <div className="flex-1 flex flex-col gap-6">
+    <div
+      className={`flex-1 flex flex-col gap-6 ${
+        isLoading ? "animate-pulse" : ""
+      }`}
+    >
       <div className="flex max-w-full gap-4">
         <input
           id="searchInput"
@@ -61,9 +56,9 @@ const TransactionsPage = () => {
         >
           <option value="">Select a category</option>
 
-          {categories.map((category) => (
-            <option value={category} key={category}>
-              {category}
+          {categories?.categories.map((category: ICategory) => (
+            <option value={category.title} key={category.title}>
+              {category.title}
             </option>
           ))}
         </select>
@@ -74,9 +69,9 @@ const TransactionsPage = () => {
           onChange={(e) => setSelectedGoal(e.target.value)}
         >
           <option value="">Select a goal</option>
-          {goals.map((goal) => (
-            <option value={goal} key={goal}>
-              {goal}
+          {goals?.goals.map((goal) => (
+            <option value={goal.title} key={goal.title}>
+              {goal.title}
             </option>
           ))}
         </select>
@@ -108,34 +103,42 @@ const TransactionsPage = () => {
           </tr>
         </thead>
         <tbody className="bg-secondary_900 divide-y divide-gray-200">
-          {transactions
-            .filter((transaction) => {
+          {transactions?.transactions
+            .filter((transaction: ITransactionWithFK) => {
               return (
                 (transaction.movement.toString().includes(search) ||
-                  transaction.description
-                    .toLowerCase()
-                    .includes(search.toLowerCase()) ||
-                  transaction.place
-                    .toLowerCase()
-                    .includes(search.toLowerCase()) ||
-                  transaction.origin
-                    .toLowerCase()
-                    .includes(search.toLowerCase()) ||
-                  transaction.category
-                    .toLowerCase()
-                    .includes(search.toLowerCase()) ||
-                  transaction.goal
-                    .toLowerCase()
-                    .includes(search.toLowerCase()) ||
-                  transaction.date
+                  (transaction.description &&
+                    transaction.description
+                      .toLowerCase()
+                      .includes(search.toLowerCase())) ||
+                  (transaction.place &&
+                    transaction.place
+                      .toLowerCase()
+                      .includes(search.toLowerCase())) ||
+                  (transaction.origin &&
+                    transaction.origin
+                      .toLowerCase()
+                      .includes(search.toLowerCase())) ||
+                  (transaction.category_id.title &&
+                    transaction.category_id.title
+                      .toLowerCase()
+                      .includes(search.toLowerCase())) ||
+                  (transaction.goal_id.title &&
+                    transaction.goal_id.title
+                      .toLowerCase()
+                      .includes(search.toLowerCase())) ||
+                  transaction.created_at
                     .toLowerCase()
                     .includes(search.toLowerCase())) &&
                 (selectedCategory === "" ||
-                  transaction.category === selectedCategory) &&
-                (selectedGoal === "" || transaction.goal === selectedGoal)
+                  (transaction.category_id.title &&
+                    transaction.category_id.title === selectedCategory)) &&
+                (selectedGoal === "" ||
+                  (transaction.goal_id.title &&
+                    transaction.goal_id.title === selectedGoal))
               );
             })
-            .map((transaction, index) => (
+            .map((transaction: ITransactionWithFK, index: number) => (
               <tr key={index}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
                   {transaction.origin}
@@ -150,13 +153,13 @@ const TransactionsPage = () => {
                   {transaction.place}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
-                  {transaction.category}
+                  {transaction.category_id.title}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
-                  {transaction.goal}
+                  {transaction.goal_id.title}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
-                  {transaction.date}
+                  {transaction.created_at.split("T")[0]}
                 </td>
               </tr>
             ))}
