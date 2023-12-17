@@ -39,7 +39,7 @@ export default function Login({
       provider: "azure",
       options: {
         scopes: "openid profile email",
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `$/auth/callback`,
       },
     });
 
@@ -58,7 +58,7 @@ export default function Login({
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `/auth/callback`,
       },
     });
 
@@ -77,7 +77,7 @@ export default function Login({
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `/auth/callback`,
       },
     });
 
@@ -100,7 +100,7 @@ export default function Login({
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: `/auth/callback`,
         data: {
           full_name: formData.get("name"),
         },
