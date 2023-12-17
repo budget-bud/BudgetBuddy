@@ -41,7 +41,7 @@ export async function middleware(request: NextRequest) {
     const { error } = await supabase
       .from("UserActivity")
       .insert({
-        userId: user?.id,
+        user_id: user?.id,
         event_date: formattedDate,
         event_type: "visited: " + url.pathname,
       })

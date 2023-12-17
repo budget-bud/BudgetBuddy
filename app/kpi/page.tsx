@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Grid, Card, CardContent, Typography, Paper } from "@mui/material";
 import {
   LineChart,
@@ -15,32 +15,28 @@ import {
   People as PeopleIcon,
   Chat as ChatIcon,
 } from "@mui/icons-material";
+import { IKPI } from "@/types/types";
 
 const KPIPage = () => {
-  // Generate sample data for 1 month
-  const generateDataForMonth = () => {
-    const currentDate = new Date();
-    const data = [];
-
-    for (let i = 0; i < 30; i++) {
-      const date = new Date();
-      date.setDate(currentDate.getDate() - i);
-
-      data.push({
-        date: date.toISOString().split("T")[0],
-        transactions: Math.floor(Math.random() * 1000),
-        users: Math.floor(Math.random() * 2000),
-        chats: Math.floor(Math.random() * 500),
+  const [data, setData] = useState<IKPI>({
+    allTransCount: 0,
+    allUsersCount: 0,
+    allChatsCount: 0,
+    weeklyKPI: [],
+    dailyKPI: [],
+  });
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    fetch("/api/kpi")
+      .then((res) => res.json())
+      .then((data) => {
+        setData(data);
+        setIsLoading(false);
       });
-    }
-
-    return data.reverse();
-  };
-
-  const dataForMonth = generateDataForMonth();
+  }, []);
 
   return (
-    <div>
+    <div className="animate-pulse">
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <Card style={{ backgroundColor: "#53b5ed" }}>
@@ -51,16 +47,15 @@ const KPIPage = () => {
                 gutterBottom
                 style={{ color: "#FFFFFF" }}
               >
-                Transactions
+                All Registered Transactions
               </Typography>
               <Typography variant="h4" style={{ color: "#FFFFFF" }}>
-                {dataForMonth[0]?.transactions || 0}
+                {isLoading == false ? data.allTransCount : 0}
               </Typography>
             </CardContent>
           </Card>
         </Grid>
 
-        {/* Box for Users */}
         <Grid item xs={12} md={4}>
           <Card style={{ backgroundColor: "#53b5ed" }}>
             <CardContent>
@@ -70,16 +65,15 @@ const KPIPage = () => {
                 gutterBottom
                 style={{ color: "#FFFFFF" }}
               >
-                Users
+                All Users
               </Typography>
               <Typography variant="h4" style={{ color: "#FFFFFF" }}>
-                {dataForMonth[0]?.users || 0}
+                {isLoading == false ? data.allUsersCount : 0}
               </Typography>
             </CardContent>
           </Card>
         </Grid>
 
-        {/* Box for Chats */}
         <Grid item xs={12} md={4}>
           <Card style={{ backgroundColor: "#53b5ed" }}>
             <CardContent>
@@ -89,16 +83,49 @@ const KPIPage = () => {
                 gutterBottom
                 style={{ color: "#FFFFFF" }}
               >
-                Chats
+                All Chats Started
               </Typography>
               <Typography variant="h4" style={{ color: "#FFFFFF" }}>
-                {dataForMonth[0]?.chats || 0}
+                {isLoading == false ? data.allChatsCount : 0}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Card style={{ backgroundColor: "#53b5ed" }}>
+            <CardContent>
+              <PeopleIcon style={{ fontSize: 40, color: "#FFFFFF" }} />
+              <Typography
+                variant="h6"
+                gutterBottom
+                style={{ color: "#FFFFFF" }}
+              >
+                Active Users In The Last 7 Days
+              </Typography>
+              <Typography variant="h4" style={{ color: "#FFFFFF" }}>
+                {isLoading == false ? data.weeklyKPI[0].active_users_count : 0}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Card style={{ backgroundColor: "#53b5ed" }}>
+            <CardContent>
+              <PeopleIcon style={{ fontSize: 40, color: "#FFFFFF" }} />
+              <Typography
+                variant="h6"
+                gutterBottom
+                style={{ color: "#FFFFFF" }}
+              >
+                Average Actions In The Last 7 Days
+              </Typography>
+              <Typography variant="h4" style={{ color: "#FFFFFF" }}>
+                {isLoading == false ? data.weeklyKPI[0].average_actions : 0}
               </Typography>
             </CardContent>
           </Card>
         </Grid>
 
-        {/* Line Chart */}
         <Grid item xs={12}>
           <Paper elevation={3} sx={{ p: 2 }}>
             <Typography
@@ -123,27 +150,27 @@ const KPIPage = () => {
               </span>
             </Typography>
             <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={dataForMonth}>
-                <XAxis dataKey="date" />
+              <LineChart data={data.dailyKPI}>
+                <XAxis dataKey="event_date" />
                 <YAxis />
                 <Tooltip />
                 <Legend />
                 <Line
-                  dataKey="transactions"
+                  dataKey="active_users_per_day"
                   type="monotone"
-                  name="Transactions"
+                  name="Active Users"
                   stroke="#8884d8"
                 />
                 <Line
-                  dataKey="users"
+                  dataKey="average_events_per_day_per_user"
                   type="monotone"
-                  name="Users"
+                  name="Average Events per User"
                   stroke="#82ca9d"
                 />
                 <Line
-                  dataKey="chats"
+                  dataKey="events_per_day"
                   type="monotone"
-                  name="Chats"
+                  name="Events per Day"
                   stroke="#ffc658"
                 />
               </LineChart>
