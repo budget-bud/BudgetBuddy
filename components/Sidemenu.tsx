@@ -107,7 +107,7 @@ const Sidemenu = () => {
         <div className="w-fit whitespace-nowrap mr-3">Chat history</div>
         <div className="w-full bg-secondary_500 h-0.5"></div>
       </div>
-      <div className="space-y-[1rem] w-full flex flex-col items-center">
+      <div className="space-y-[1rem] w-full flex flex-col items-center overflow-auto">
         {data.chats.map((chat) => (
           <ChatHistoryButton key={chat.id} id={chat.id} name={chat.title} />
         ))}
