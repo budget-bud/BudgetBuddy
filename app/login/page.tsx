@@ -1,7 +1,7 @@
 import GitHubIcon from "@mui/icons-material/GitHub";
 import GoogleIcon from "@mui/icons-material/Google";
 import MicrosoftIcon from "@mui/icons-material/Microsoft";
-import { cookies } from "next/headers";
+import { headers, cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -35,11 +35,12 @@ export default function Login({
 
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
+    const origin = headers().get("origin");
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "azure",
       options: {
         scopes: "openid profile email",
-        redirectTo: `https://budgetbuddy-ai.netlify.app/auth/callback`,
+        redirectTo: `${origin}/auth/callback`,
       },
     });
 
@@ -55,10 +56,11 @@ export default function Login({
 
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
+    const origin = headers().get("origin");
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `https://budgetbuddy-ai.netlify.app/auth/callback`,
+        redirectTo: `${origin}/auth/callback`,
       },
     });
 
@@ -74,10 +76,11 @@ export default function Login({
 
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
+    const origin = headers().get("origin");
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
-        redirectTo: `https://budgetbuddy-ai.netlify.app/auth/callback`,
+        redirectTo: `${origin}/auth/callback`,
       },
     });
 
@@ -91,6 +94,7 @@ export default function Login({
   const signUp = async (formData: FormData) => {
     "use server";
 
+    const origin = headers().get("origin");
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const cookieStore = cookies();
@@ -100,7 +104,7 @@ export default function Login({
       email,
       password,
       options: {
-        emailRedirectTo: `https://budgetbuddy-ai.netlify.app/auth/callback`,
+        emailRedirectTo: `${origin}/auth/callback`,
         data: {
           full_name: formData.get("name"),
         },
