@@ -1,9 +1,11 @@
 import { createClient } from "@/utils/supabase/server";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { registerActivity } from "@/utils/registerActivity";
 
 export async function GET() {
   try {
+    registerActivity("KPI page visited");
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
 

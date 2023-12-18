@@ -4,6 +4,7 @@ import OpenAI from "openai";
 import { cookies, headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { IMessage } from "@/types/types";
+import { registerActivity } from "@/utils/registerActivity";
 
 const SYSTEM_PROMPT: IMessage = {
   content: `You are a budgeting helper chatbot.
@@ -293,6 +294,8 @@ const availableFunctions: { [key: string]: number } = {
 };
 export async function POST(req: NextRequest) {
   try {
+    registerActivity("Chatbot asked question");
+
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
 
@@ -446,6 +449,7 @@ async function useTool(
   answer: string | null,
 ) {
   if (chatCompletion.choices[0].message.function_call !== null) {
+    registerActivity("Chatbot used tool");
     const functionName = chatCompletion.choices[0].message.function_call?.name;
     if (functionName) {
       const functionId: number = availableFunctions[functionName];
