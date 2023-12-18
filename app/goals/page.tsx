@@ -13,6 +13,7 @@ Chart.register(ArcElement);
 
 // MUI ICONS
 import DeleteIcon from "@mui/icons-material/Delete";
+import GoalAmount from "@/components/GoalAmount";
 
 const GoalsPage = () => {
   const [goals, setGoals] = useState<IGoal[]>([]);
@@ -21,7 +22,7 @@ const GoalsPage = () => {
     title: "",
     goal_amount: 0,
   });
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(0);
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -31,7 +32,6 @@ const GoalsPage = () => {
     if (String(inputForm.goal_amount)[0] != "-") {
       if (inputForm.title !== "" && inputForm.goal_amount !== 0) {
         const newGoal = {
-          id: String(Date.now()), // You may want to generate a unique id here
           created_at: new Date().toDateString(),
           title: inputForm.title,
           goal_amount: inputForm.goal_amount,
@@ -49,13 +49,13 @@ const GoalsPage = () => {
           return;
         }
 
-        setGoals((prevCat) => [...prevCat, newGoal]);
-
+        setGoals((prevCat) => [...prevCat, response.goals[response.goals.length - 1]]);
+        console.log(response.goals[response.goals.length - 1]);
         setInputForm({
           title: "",
           goal_amount: 0,
         });
-        setSelectedCategory("");
+        setSelectedCategory(0);
       } else {
         window.alert("Something is missing!");
       }
@@ -64,7 +64,7 @@ const GoalsPage = () => {
     }
   };
 
-  const deleteGoal = async (id: string) => {
+  const deleteGoal = async (id: number) => {
     setGoals((prevGoal) => prevGoal.filter((goal) => goal.id !== id));
     await fetch(`/api/goals`, {
       method: "DELETE",
@@ -73,21 +73,7 @@ const GoalsPage = () => {
   };
 
   const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setSelectedCategory(event.target.value as string);
-  };
-
-  const handleAddMondey = (goalId: string) => {
-    console.log(
-      goalId +
-        " no functionality yet, update the amount in the database by + as many Forints as you wish based on the id of selected goal",
-    );
-  };
-
-  const handleDecreaseMondey = (goalId: string) => {
-    console.log(
-      goalId +
-        " no functionality yet, update the amount in the database by - as many Forints as you wish based on the id of selected goal",
-    );
+    setSelectedCategory(event.target.value as unknown as number);
   };
 
   const calculateProgress = (current: number, total: number) => {
@@ -149,6 +135,7 @@ const GoalsPage = () => {
               value={selectedCategory}
               onChange={handleCategoryChange}
             >
+              <option value={0}>Select a category</option>
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.title}
@@ -173,20 +160,11 @@ const GoalsPage = () => {
           >
             <div className="flex flex-col gap-2">
               <div className="text-center text-xl font-bold">{goal.title}</div>
-              <button
-                type="button"
-                onClick={() => handleAddMondey(goal.id)}
-                className="min-h-[55px] min-w-[150px] max-w-[250px] cursor-pointer rounded-[18px] border-none bg-secondary-700 text-text-100"
-              >
-                Add money
-              </button>
-              <button
-                type="button"
-                onClick={() => handleDecreaseMondey(goal.id)}
-                className="min-h-[55px] min-w-[150px] max-w-[250px] cursor-pointer rounded-[18px] border-none bg-secondary-700 text-text-100"
-              >
-                Decrease money
-              </button>
+              <GoalAmount
+                goalId={goal.id}
+                goals={goals}
+                setGoals={setGoals}
+              />
             </div>
             <div className="flex flex-col">
               <div className="w-[130px] min-w-[130px]">
@@ -197,7 +175,7 @@ const GoalsPage = () => {
                       {
                         // here also % should be calculated based on the amount that is currently replaced by 1000
                         // current, total
-                        data: calculateProgress(1000, goal.goal_amount),
+                        data: calculateProgress(goal.totalAmount, goal.goal_amount),
                         backgroundColor: ["#003366", "#d1d1d1"],
                       },
                     ],
@@ -209,7 +187,7 @@ const GoalsPage = () => {
                 />
               </div>
               <div className="text-center font-bold">
-                1000 Ft / {goal.goal_amount} Ft
+                {goal.totalAmount} / {goal.goal_amount} Ft
               </div>
             </div>
             <div className="flex flex-row justify-end">
