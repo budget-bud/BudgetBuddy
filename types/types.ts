@@ -1,6 +1,6 @@
 export interface IMessage {
-  text: string;
-  user: boolean;
+  content: string;
+  role: "user" | "system" | "assistant";
 }
 
 export interface IGoal {
