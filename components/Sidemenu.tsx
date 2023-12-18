@@ -9,6 +9,8 @@ import { ISidemenuParams } from "@/types/types";
 import { useSidemenuContext } from "./ContextProvider";
 import { Close } from "@mui/icons-material";
 import Link from "next/link";
+import ManualExpenseModal from "./ManualExpenseModal";
+import AuthButton from "./AuthButton";
 
 const Sidemenu = () => {
   const { isSidemenuOpen, setIsSidemenuOpen } = useSidemenuContext();
@@ -103,6 +105,8 @@ const Sidemenu = () => {
         <SidemenuButton button_type={"goals"} />
         <SidemenuButton button_type={"categories"} />
         <SidemenuButton button_type={"plots"} />
+        <ManualExpenseModal />
+        {/* <AuthButton /> */}
       </div>
       <div className="my-[2rem] flex w-[75%] flex-row items-center">
         <div className="mr-3 w-fit whitespace-nowrap text-text-100">
