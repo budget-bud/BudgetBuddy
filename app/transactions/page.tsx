@@ -2,6 +2,28 @@
 import { ICategory, IGoal, ITransactionWithFK } from "@/types/types";
 import React, { useEffect, useState } from "react";
 
+// COMPONENTS
+import TextField from "@mui/material/TextField";
+import IconButton from "@mui/material/IconButton";
+import { Tooltip, Modal, Box } from "@mui/material";
+import { IEditCategoryProps } from "@/types/types";
+
+// MUI ICONS
+import EditIcon from "@mui/icons-material/Edit";
+import CloseIcon from "@mui/icons-material/Close";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 280,
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  borderRadius: 1,
+  overflow: "hidden",
+};
+
 const TransactionsPage = () => {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -13,7 +35,8 @@ const TransactionsPage = () => {
   const [goals, setGoals] = useState<{ goals: [IGoal] }>();
   const [isLoading, setIsLoading] = useState(true);
 
-  const [selectedTransactionID,setSelectedTransactionID] = useState<number>(0);
+  const [selectedTransaction,setSelectedTransaction] = useState<ITransactionWithFK>();
+  const [isEditOpen,setIsEditOpen] = useState(false);
   const [editedData, setEditedData] = useState({
     origin: "",
     movement: 0,
@@ -63,29 +86,49 @@ const TransactionsPage = () => {
   }
 
   
-  const editTransaction = async (id: number) => {
-    if (selectedTransactionID === 0) {
-      setSelectedTransactionID(id);
-      const trs = transactions?.transactions.find((trs) => trs.id === id);
-      if (trs) {
-        setEditedData({
-          origin: trs.origin,
-          movement: trs.movement,
-          description: trs.description || "", // Add this line
-          place: trs.place || "", // Add this line
-        });
-      }
-    } else {
-      setSelectedTransactionID(0);
+  const openEditTransaction = (t : ITransactionWithFK) => {
+    setSelectedTransaction(t);
+    setIsEditOpen(true);
+    if (t) {
+      setEditedData({
+        origin: t.origin,
+        movement: t.movement,
+        description: t.description,
+        place: t.place
+      });
     }
   };
 
-  const handleInputChange = ( e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, key: string,) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,key: string,) => {
     const value = key === "movement" ? Number(e.target.value) : e.target.value;
     setEditedData((prevData) => ({
       ...prevData,
       [key]: value,
     }));
+  };
+
+  const handleClose = () => {
+    setIsEditOpen(false);
+  };
+
+  // itt nem jó
+  const handleEdit = async () => {
+    setTransactions((prevTransactions) =>
+    prevTransactions?.transactions[0].map((t : ITransactionWithFK) =>
+        t.id === selectedTransaction?.id
+          ? { ...t, origin: editedData.origin, movement: editedData.movement, description:editedData.description, place:editedData.place }
+          : t,
+      ),
+    );
+   /* await fetch(`/api/transactions`, {
+      method: "PUT",
+      body: JSON.stringify({
+        id: categoryId,
+        title: editedData.title,
+        limit: editedData.limit,
+      }),
+    });*/
+    setIsEditOpen(false);
   };
 
   return (
@@ -198,88 +241,32 @@ const TransactionsPage = () => {
                 className="relative h-[55px] transition-all hover:h-[100px]"
                 key={index}
               >
-                {selectedTransactionID == transaction.id ?
-                  (
-                    <>
-                      <td>
-                        <input
-                          id="editInput1"
-                          type="text"
-                          value={editedData.origin}
-                          onChange={(e) => handleInputChange(e, e.target.value)}
-                          className="max-h-12 w-[80%] rounded-md bg-primary-600 p-6 text-background-950 max-lg:min-w-full"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          id="editInput2"
-                          type="number"
-                          value={editedData.movement}
-                          onChange={(e) => handleInputChange(e, e.target.value)}
-                          className="max-h-12 w-[80%] rounded-md bg-primary-600 p-6 text-background-950 max-lg:min-w-full"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          id="editInput3"
-                          type="text"
-                          value={editedData.description}
-                          onChange={(e) => handleInputChange(e, e.target.value)}
-                          className="max-h-12 w-[80%] rounded-md bg-primary-600 p-6 text-background-950 max-lg:min-w-full"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          id="editInpu4"
-                          type="text"
-                          value={editedData.place}
-                          onChange={(e) => handleInputChange(e, e.target.value)}
-                          className="max-h-12 w-[80%] rounded-md bg-primary-600 p-6 text-background-950 max-lg:min-w-full"
-                        />
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950  max-md:hidden">
-                        {transaction.category_id !== null && transaction.category_id.title}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950  max-md:hidden">
-                        {transaction.goal_id !== null && transaction.goal_id.title}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
-                        {transaction.created_at.split("T")[0]}
-                      </td>
-                    </>
-                  ) :
-                  (
-                    <>
-                      <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
-                        {transaction.origin}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
-                        {transaction.movement}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950  max-lg:hidden">
-                        {transaction.description}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
-                        {transaction.place}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950  max-md:hidden">
-                        {transaction.category_id !== null && transaction.category_id.title}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950  max-md:hidden">
-                        {transaction.goal_id !== null && transaction.goal_id.title}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
-                        {transaction.created_at.split("T")[0]}
-                      </td>
-                    </>
-                  )
-                }
+                <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
+                  {transaction.origin}
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
+                  {transaction.movement}
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950  max-lg:hidden">
+                  {transaction.description}
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
+                  {transaction.place}
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950  max-md:hidden">
+                  {transaction.category_id !== null && transaction.category_id.title}
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950  max-md:hidden">
+                  {transaction.goal_id !== null && transaction.goal_id.title}
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
+                  {transaction.created_at.split("T")[0]}
+                </td>
                 <div className="absolute bottom-1 right-1 flex h-full w-full items-end justify-end gap-2 opacity-0 hover:opacity-100">
-                <button className={`h-10 w-20 cursor-pointer rounded-[18px] border-none bg-primary-600 text-text-100 ${
-                  selectedTransactionID != 0 && selectedTransactionID!= transaction.id ? 'invisible' : 'visible'}`}
-                  onClick={() => editTransaction(transaction.id)}
+                <button className={`h-10 w-20 cursor-pointer rounded-[18px] border-none bg-primary-600 text-text-100`}
+                  onClick={() => openEditTransaction(transaction)}
                 >
-                    {selectedTransactionID == transaction.id ? selectedTransactionID == 0 ? "Edit" : "Save" : "Edit"}
+                    Edit
                   </button>
                   <button className="h-10 w-20 cursor-pointer rounded-[18px] border-none bg-primary-600 text-text-100"
                     onClick={() => deleteTransaction(transaction.id)}
@@ -291,6 +278,55 @@ const TransactionsPage = () => {
             ))}
         </tbody>
       </table>
+      <Modal open={isEditOpen} onClose={handleClose}>
+        <Box sx={style}>
+          <h1 className="flex flex-row items-center justify-between bg-slate-500 pl-4 font-semibold text-gray-50">
+            <div className="">Edit category</div>
+            <Tooltip arrow title={"Close"}>
+              <IconButton onClick={handleClose} sx={{ color: "white" }}>
+                <CloseIcon />
+              </IconButton>
+            </Tooltip>
+          </h1>
+          <div className="flex flex-col items-center space-y-4 py-4">
+            <TextField
+              required
+              name="origin"
+              label="Origin"
+              onChange={(e) => handleInputChange(e, "origin")}
+              value={editedData.origin}
+            />
+            <TextField
+              required
+              type="number"
+              name="movement"
+              label="Movement"
+              onChange={(e) => handleInputChange(e, "movement")}
+              value={editedData.movement}
+            />
+            <TextField
+              name="description"
+              label="Description"
+              onChange={(e) => handleInputChange(e, "description")}
+              value={editedData.description}
+            />
+            <TextField
+              name="place"
+              label="Place"
+              onChange={(e) => handleInputChange(e, "place")}
+              value={editedData.place}
+            />
+          </div>
+          <div className="mt-[0.5rem] flex w-full justify-end pb-3">
+            <button
+              className="mr-4 h-[35px] w-[80px] rounded-sm bg-slate-500  px-4 font-bold text-slate-300 hover:bg-slate-400 hover:text-slate-600"
+              onClick={handleEdit}
+            >
+              Edit
+            </button>
+          </div>
+        </Box>
+      </Modal>
     </div>
   );
 };
