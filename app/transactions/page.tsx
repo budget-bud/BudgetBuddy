@@ -178,7 +178,7 @@ const TransactionsPage = () => {
 
   return (
     <div
-      className={`flex max-h-full w-full flex-grow flex-col gap-4 rounded-lg bg-secondary-800 p-4 ${
+      className={`scrollbar flex max-h-full w-full flex-grow flex-col gap-4 overflow-y-scroll rounded-lg bg-secondary-800 p-4 ${
         isLoading ? "animate-pulse" : ""
       }`}
     >
