@@ -10,7 +10,6 @@ import { useSidemenuContext } from "./ContextProvider";
 import { Close } from "@mui/icons-material";
 import Link from "next/link";
 import ManualExpenseModal from "./ManualExpenseModal";
-import AuthButton from "./AuthButton";
 
 const Sidemenu = () => {
   const { isSidemenuOpen, setIsSidemenuOpen } = useSidemenuContext();
