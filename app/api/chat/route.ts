@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
     // console.log(response.lc_kwargs.content);
 
     // check if chat exists
-    if (!body.chatId) {
+    if (body.chatId === null) {
       console.log("chat does not exist");
       const conversation = {
         messages: [
