@@ -14,7 +14,6 @@ export default function Header() {
       >
         <Menu />
       </button>
-      {/* <ManualExpenseModal /> */}
     </header>
   );
 }
