@@ -6,44 +6,52 @@ const TransactionsPage = () => {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedGoal, setSelectedGoal] = useState("");
-  const [transactions, setTransactions] = useState<ITransactionWithFK[]>([]);
+  const [transactions, setTransactions] = useState<{
+    transactions: [ITransactionWithFK];
+  }>();
   const [categories, setCategories] = useState<ICategory[]>([]);
-  const [goals, setGoals] = useState<IGoal[]>([]);
+  const [goals, setGoals] = useState<{ goals: [IGoal] }>();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([
-      fetch("/api/transactions")
-        .then((res) => res.json())
-        .then((data) => {
-          setTransactions(data.transactions);
-        }),
+    fetch("/api/transactions")
+      .then((res) => res.json())
+      .then((data) => {
+        setTransactions(data);
+      });
 
-      fetch("/api/categories")
-        .then((res) => res.json())
-        .then((data) => {
-          setCategories(data.categories);
-        }),
+    fetch("/api/categories")
+      .then((res) => res.json())
+      .then((data) => {
+        setCategories(data.categories);
+      });
 
-      fetch("/api/goals")
-        .then((res) => res.json())
-        .then((data) => {
-          setGoals(data.goals);
-        }),
-    ]).then(() => setIsLoading(false));
+    fetch("/api/goals")
+      .then((res) => res.json())
+      .then((data) => {
+        setGoals(data);
+        setIsLoading(false);
+      });
   }, []);
 
   const deleteTransaction = async (id : number) => {
-    setTransactions((prevTran) => ({
-      transactions: (prevTran?.transactions ?? []).filter(
-        (transaction) => transaction.id !== id
-      ),
-    }) as { transactions: [ITransactionWithFK] } | undefined);
-
-    await fetch(`/api/transactions/`, {
-      method: "DELETE",
-      body: JSON.stringify({ id }),
-    });
+    if(window.confirm("Are you sure you want to delete this transaction?")){
+      const response = await fetch(`/api/transactions/`, {
+        method: "DELETE",
+        body: JSON.stringify({ id }),
+      }).then((res) => res.json());
+      if (response.error) {
+        window.alert(response.error);
+        return;
+      }
+      else{
+        setTransactions((prevTran) => ({
+          transactions: (prevTran?.transactions ?? []).filter(
+            (transaction) => transaction.id !== id
+          ),
+        }) as { transactions: [ITransactionWithFK] } | undefined);
+      }
+    }
   }
 
   return (
@@ -82,7 +90,7 @@ const TransactionsPage = () => {
           onChange={(e) => setSelectedGoal(e.target.value)}
         >
           <option value="">Select a goal</option>
-          {goals.map((goal) => (
+          {goals?.goals.map((goal) => (
             <option value={goal.title} key={goal.title}>
               {goal.title}
             </option>
@@ -116,7 +124,7 @@ const TransactionsPage = () => {
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200 bg-secondary-200">
-          {transactions
+          {transactions?.transactions
             .filter((transaction: ITransactionWithFK) => {
               return (
                 (transaction.movement.toString().includes(search) ||
@@ -178,7 +186,7 @@ const TransactionsPage = () => {
                 <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
                   {transaction.created_at.split("T")[0]}
                 </td>
-                <td className="absolute bottom-1 right-1 flex h-full w-full items-end justify-end gap-2 opacity-0 hover:opacity-100">
+                <div className="absolute bottom-1 right-1 flex h-full w-full items-end justify-end gap-2 opacity-0 hover:opacity-100">
                   <button className=" h-10 w-20 cursor-pointer rounded-[18px] border-none bg-primary-600 text-text-100">
                     Edit
                   </button>
@@ -187,7 +195,7 @@ const TransactionsPage = () => {
                   >
                     Delete
                   </button>
-                </td>
+                </div>
               </tr>
             ))}
         </tbody>
