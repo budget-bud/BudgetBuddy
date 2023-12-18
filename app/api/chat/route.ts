@@ -65,11 +65,16 @@ export async function POST(req: NextRequest) {
         ],
       };
       console.log(conversation);
-      const { error } = await supabase.from("Chats").insert({
-        user_id: user?.id,
-        title: body.question.substring(0, 20),
-        conversation: conversation,
-      });
+      const { data, error } = await supabase
+        .from("Chats")
+        .insert({
+          user_id: user?.id,
+          title: body.question.substring(0, 20),
+          conversation: conversation,
+        })
+        .select("id");
+
+      body.chatId = data?.[data.length - 1].id;
 
       if (error) {
         console.log(error);
@@ -121,8 +126,6 @@ export async function POST(req: NextRequest) {
         title: chatData[0].title,
         conversation: conversation,
       });
-
-      console.log("chat", chatData);
 
       if (error) {
         console.log(error);
