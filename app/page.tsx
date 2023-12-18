@@ -11,7 +11,7 @@ export default function Index() {
       </h2>
       <div className="flex flex-wrap justify-center gap-4">
         <div className="flex min-w-[350px] max-w-[600px] flex-1 flex-col items-center justify-center gap-4">
-          <div className="flex h-[150px] w-full items-center justify-center rounded-[18px] bg-secondary-300 p-4 text-lg text-background-950">
+          <div className="flex h-[150px] w-full items-center justify-center rounded-[18px] bg-secondary-300 p-4 text-lg text-background-950 hover:bg-secondary-200">
             <a
               className="flex h-full w-full flex-col items-center justify-center gap-2"
               href="/chat"
@@ -22,7 +22,7 @@ export default function Index() {
           </div>
         </div>
         <div className="flex min-w-[350px] max-w-[600px] flex-1 flex-col items-center justify-center gap-4">
-          <div className="flex h-[150px] w-full items-center justify-center rounded-[18px] bg-secondary-300 p-4 text-lg text-background-950">
+          <div className="flex h-[150px] w-full items-center justify-center rounded-[18px] bg-secondary-300 p-4 text-lg text-background-950 hover:bg-secondary-200">
             <a
               className="flex h-full w-full flex-col items-center justify-center gap-2"
               href="/transactions"
@@ -35,7 +35,7 @@ export default function Index() {
           </div>
         </div>
         <div className="flex min-w-[350px] max-w-[600px] flex-1 flex-col items-center justify-center gap-4">
-          <div className="flex h-[150px] w-full items-center justify-center rounded-[18px] bg-secondary-300 p-4 text-lg text-background-950">
+          <div className="flex h-[150px] w-full items-center justify-center rounded-[18px] bg-secondary-300 p-4 text-lg text-background-950 hover:bg-secondary-200">
             <a
               className="flex h-full w-full flex-col items-center justify-center gap-2"
               href="/goals"
@@ -46,7 +46,7 @@ export default function Index() {
           </div>
         </div>
         <div className="flex min-w-[350px] max-w-[600px] flex-1 flex-col items-center justify-center gap-4">
-          <div className="flex h-[150px] w-full items-center justify-center rounded-[18px] bg-secondary-300 p-4 text-lg text-background-950">
+          <div className="flex h-[150px] w-full items-center justify-center rounded-[18px] bg-secondary-300 p-4 text-lg text-background-950 hover:bg-secondary-200">
             <a
               className="flex h-full w-full flex-col items-center justify-center gap-2"
               href="/categories"
@@ -59,7 +59,7 @@ export default function Index() {
           </div>
         </div>
         <div className="flex min-w-[350px] max-w-[600px] flex-1 flex-col items-center justify-center gap-4">
-          <div className="flex h-[150px] w-full items-center justify-center rounded-[18px] bg-secondary-300 p-4 text-lg text-background-950">
+          <div className="flex h-[150px] w-full items-center justify-center rounded-[18px] bg-secondary-300 p-4 text-lg text-background-950 hover:bg-secondary-200">
             <a
               className="flex h-full w-full flex-col items-center justify-center gap-2"
               href="/categories"
@@ -70,7 +70,7 @@ export default function Index() {
           </div>
         </div>
         <div className="flex min-w-[350px] max-w-[600px] flex-1 flex-col items-center justify-center gap-4">
-          <div className="flex h-[150px] w-full items-center justify-center rounded-[18px] bg-secondary-300 p-4 text-lg text-background-950">
+          <div className="flex h-[150px] w-full items-center justify-center rounded-[18px] bg-secondary-300 p-4 text-lg text-background-950 hover:bg-secondary-200">
             <a className="flex h-full w-full flex-col items-center justify-center gap-2">
               <h1 className="text-center text-2xl font-bold">Add expense</h1>
               <p className="text-center">
