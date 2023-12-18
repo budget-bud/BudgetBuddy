@@ -56,7 +56,7 @@ const EditGoal: React.FC<IEditGoalProps> = ({ goalId, goals, setGoals }) => {
     }));
   };
 
-  const handleEdit = () => {
+  const handleEdit = async () => {
     setGoals((prevGoals) =>
       prevGoals.map((goal) =>
         goal.id === goalId
@@ -68,6 +68,15 @@ const EditGoal: React.FC<IEditGoalProps> = ({ goalId, goals, setGoals }) => {
           : goal,
       ),
     );
+
+    fetch(`/api/goals`, {
+      method: "PUT",
+      body: JSON.stringify({
+        id: goalId,
+        title: editedData.title,
+        goal_amount: editedData.goal_amount,
+      }),
+    });
     setIsModalOpen(false);
   };
 
