@@ -23,7 +23,6 @@ const CategoriesPage = () => {
     if (String(inputForm.limit)[0] != "-") {
       if (inputForm.title !== "" && inputForm.limit !== 0) {
         const newCategory = {
-          id: String(Date.now()), // You may want to generate a unique id here
           created_at: new Date().toDateString(),
           title: inputForm.title,
           limit: inputForm.limit,
@@ -37,7 +36,10 @@ const CategoriesPage = () => {
           window.alert(response.error);
           return;
         }
-        setCategories((prevCat) => [...prevCat, newCategory]);
+        setCategories((prevCat) => [
+          ...prevCat,
+          response.categories[response.categories.length - 1],
+        ]);
 
         setInputForm({
           title: "",
@@ -55,10 +57,14 @@ const CategoriesPage = () => {
     setInputForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const deleteCategory = (id: string) => {
+  const deleteCategory = async (id: number) => {
     setCategories((prevCat) =>
       prevCat.filter((category) => category.id !== id),
     );
+    await fetch(`/api/categories`, {
+      method: "DELETE",
+      body: JSON.stringify({ id }),
+    });
   };
 
   const calculateProgress = (limit: number) => {
@@ -79,6 +85,8 @@ const CategoriesPage = () => {
         setCategories(res.categories);
       });
   }, []);
+
+  console.log(categories);
 
   return (
     <div className="flex max-h-full w-full flex-grow flex-col gap-4 rounded-lg bg-secondary-800 p-4">
@@ -126,7 +134,7 @@ const CategoriesPage = () => {
             </div>
             {/* Read the value from the database, where category.id = the desired id of the category*/}
             <div className="w-1/4 max-lg:w-1/3">
-              1000 Ft / {category.limit} Ft
+              {category.totalAmount} / {category.limit} Ft
             </div>
             <div className="flex w-1/4 justify-center max-lg:w-1/3">
               <Box sx={{ width: "100%" }}>

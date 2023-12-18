@@ -4,19 +4,21 @@ export interface IMessage {
 }
 
 export interface IGoal {
-  id: string;
+  id: number;
   user_id?: string;
   created_at: string;
   title: string;
   goal_amount: number;
   category_id: string;
+  totalAmount: number;
 }
 
 export interface ICategory {
-  id: string;
+  id: number;
   created_at: string;
   title: string;
   limit: number;
+  totalAmount: number;
 }
 
 export interface IGoals {
@@ -61,13 +63,13 @@ export interface ITransaction {
 }
 
 export interface IEditCategoryProps {
-  categoryId: string;
+  categoryId: number;
   categories: ICategory[];
   setCategories: React.Dispatch<React.SetStateAction<ICategory[]>>;
 }
 
 export interface IEditGoalProps {
-  goalId: string;
+  goalId: number;
   goals: IGoal[];
   setGoals: React.Dispatch<React.SetStateAction<IGoal[]>>;
 }

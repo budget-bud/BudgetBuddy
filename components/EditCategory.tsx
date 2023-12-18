@@ -59,7 +59,7 @@ const EditCategory: React.FC<IEditCategoryProps> = ({
     }));
   };
 
-  const handleEdit = () => {
+  const handleEdit = async () => {
     setCategories((prevCategories) =>
       prevCategories.map((category) =>
         category.id === categoryId
@@ -67,6 +67,14 @@ const EditCategory: React.FC<IEditCategoryProps> = ({
           : category,
       ),
     );
+    await fetch(`/api/categories`, {
+      method: "PUT",
+      body: JSON.stringify({
+        id: categoryId,
+        title: editedData.title,
+        limit: editedData.limit,
+      }),
+    });
     setIsModalOpen(false);
   };
 
