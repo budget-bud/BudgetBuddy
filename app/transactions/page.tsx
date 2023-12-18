@@ -140,29 +140,40 @@ const TransactionsPage = () => {
               );
             })
             .map((transaction: ITransactionWithFK, index: number) => (
-              <tr key={index}>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-background-950">
+              <tr
+                className="relative h-[55px] transition-all hover:h-[100px]"
+                key={index}
+              >
+                <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
                   {transaction.origin}
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-background-950">
+                <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
                   {transaction.movement}
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-background-950">
+                <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950  max-lg:hidden">
                   {transaction.description}
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-background-950">
+                <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
                   {transaction.place}
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-background-950">
+                <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950  max-md:hidden">
                   {transaction.category_id !== null &&
                     transaction.category_id.title}
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-background-950">
+                <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950  max-md:hidden">
                   {transaction.goal_id !== null && transaction.goal_id.title}
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-background-950">
+                <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
                   {transaction.created_at.split("T")[0]}
                 </td>
+                <div className="absolute bottom-1 right-1 flex h-full w-full items-end justify-end gap-2 opacity-0 hover:opacity-100">
+                  <button className=" h-10 w-20 cursor-pointer rounded-[18px] border-none bg-primary-600 text-text-100">
+                    Edit
+                  </button>
+                  <button className="h-10 w-20 cursor-pointer rounded-[18px] border-none bg-primary-600 text-text-100">
+                    Delete
+                  </button>
+                </div>
               </tr>
             ))}
         </tbody>
