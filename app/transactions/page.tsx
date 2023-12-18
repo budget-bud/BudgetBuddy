@@ -6,12 +6,13 @@ import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import { Tooltip, Modal, Box } from "@mui/material";
-import { IEditCategoryProps } from "@/types/types";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 // MUI ICONS
-import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
-import { isNullOrUndefined } from "@/utils/isNullOrUndefined";
 
 const style = {
   position: "absolute",
@@ -39,11 +40,14 @@ const TransactionsPage = () => {
   const [selectedTransaction, setSelectedTransaction] =
     useState<ITransactionWithFK>();
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [editingCategory, setEditingCategory] = useState("");
   const [editedData, setEditedData] = useState({
     origin: "",
     movement: 0,
     description: "",
     place: "",
+    category: "",
+    goal: "",
   });
 
   useEffect(() => {
@@ -98,7 +102,10 @@ const TransactionsPage = () => {
         movement: t.movement,
         description: t.description,
         place: t.place,
+        category: t.category_id?.title,
+        goal: t.goal_id?.title,
       });
+      setEditingCategory(t.category_id?.title);
     }
   };
 
@@ -117,7 +124,6 @@ const TransactionsPage = () => {
     setIsEditOpen(false);
   };
 
-  // itt nem jó
   const handleEdit = async () => {
     if (!selectedTransaction) return;
     if (!transactions) return;
@@ -128,7 +134,11 @@ const TransactionsPage = () => {
       movement: editedData.movement,
       description: editedData.description,
       place: editedData.place,
+      category: editingCategory,
+      goal: editedData.goal,
     };
+
+    console.log(editingCategory);
 
     const newTransactions = transactions.transactions.map((t) =>
       t.id === selectedTransaction.id ? newTransaction : t,
@@ -136,15 +146,22 @@ const TransactionsPage = () => {
 
     setTransactions({ transactions: newTransactions });
 
-    /* await fetch(`/api/transactions`, {
+    await fetch(`/api/transactions`, {
       method: "PUT",
       body: JSON.stringify({
-        id: categoryId,
-        title: editedData.title,
-        limit: editedData.limit,
+        id: selectedTransaction.id,
+        origin: editedData.origin,
+        place: editedData.place,
+        movement: editedData.movement,
+        description: editedData.description,
+        category_id: categories.find((c) => c.title === editingCategory)?.id,
       }),
-    });*/
+    });
     setIsEditOpen(false);
+  };
+
+  const handleCategoryChange = (event: SelectChangeEvent) => {
+    setEditingCategory(event.target.value as string);
   };
 
   return (
@@ -335,6 +352,26 @@ const TransactionsPage = () => {
               onChange={(e) => handleInputChange(e, "place")}
               value={editedData.place}
             />
+            <Box sx={{ minWidth: 120 }}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Category</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="category"
+                  name="category"
+                  value={editingCategory}
+                  label="Category"
+                  onChange={handleCategoryChange}
+                >
+                  {categories.map((category) => (
+                    <MenuItem key={category.id} value={category.title}>
+                      {" "}
+                      {category.title}{" "}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
           </div>
           <div className="mt-[0.5rem] flex w-full justify-end pb-3">
             <button
