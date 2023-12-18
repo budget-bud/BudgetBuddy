@@ -13,10 +13,11 @@ const Chat = () => {
 
   const initialMessages: IMessage[] = [
     {
-      content: "Hello! :) \nHow can I help you today!\nI can query all of your data stored in the app.",
+      content:
+        "Hello! :) \nHow can I help you today!\nI can query all of your data stored in the app.",
       role: "assistant",
     },
-  ]
+  ];
 
   const [input, setInput] = useState<string>("");
   const [messages, setMessages] = useState<IMessage[]>(initialMessages);
@@ -73,7 +74,7 @@ const Chat = () => {
     <section className="flex max-h-full w-full flex-grow flex-col gap-4 rounded-lg bg-secondary-800 p-4">
       <div className="scrollbar flex max-h-full w-full flex-grow flex-col gap-3 overflow-y-scroll p-3">
         {messages.map((message, index) => (
-          <Message key={index} message={message} isResponding={isResponding}/>
+          <Message key={index} message={message} isResponding={isResponding} />
         ))}
         {isResponding && <RespondPlaceholder />}
       </div>
@@ -100,7 +101,7 @@ const Chat = () => {
 
 export default Chat;
 
-const Message = ({ message }: { message: IMessage, isResponding: boolean }) => {
+const Message = ({ message }: { message: IMessage; isResponding: boolean }) => {
   if (message.role == "user")
     return (
       <div className="mb-[10px] flex items-center justify-end gap-[10px]">
@@ -127,4 +128,4 @@ const RespondPlaceholder = () => {
       </p>
     </div>
   );
-}
+};
