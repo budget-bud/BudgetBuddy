@@ -315,7 +315,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
@@ -333,7 +332,6 @@ export async function POST(req: NextRequest) {
         functions: functions,
         function_call: "auto",
       });
-
 
       let answer = chatCompletion.choices[0].message.content;
 
@@ -401,12 +399,9 @@ export async function POST(req: NextRequest) {
         function_call: "auto",
       });
 
-
-
       let answer = chatCompletion.choices[0].message.content;
 
       answer = await useTool(chatCompletion, openai, question, answer);
-
 
       const conversation = {
         messages: [
