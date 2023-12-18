@@ -4,12 +4,13 @@ export interface IMessage {
 }
 
 export interface IGoal {
-  id: string;
+  id: number;
   user_id?: string;
   created_at: string;
   title: string;
   goal_amount: number;
   category_id: string;
+  totalAmount: number;
 }
 
 export interface ICategory {
@@ -68,7 +69,7 @@ export interface IEditCategoryProps {
 }
 
 export interface IEditGoalProps {
-  goalId: string;
+  goalId: number;
   goals: IGoal[];
   setGoals: React.Dispatch<React.SetStateAction<IGoal[]>>;
 }
