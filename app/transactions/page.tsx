@@ -41,6 +41,7 @@ const TransactionsPage = () => {
     useState<ITransactionWithFK>();
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState("");
+  const [editingGoal, setEditingGoal] = useState("");
   const [editedData, setEditedData] = useState({
     origin: "",
     movement: 0,
@@ -51,6 +52,10 @@ const TransactionsPage = () => {
   });
 
   useEffect(() => {
+    refetch();
+  }, []);
+
+  const refetch = () => {
     fetch("/api/transactions")
       .then((res) => res.json())
       .then((data) => {
@@ -69,7 +74,7 @@ const TransactionsPage = () => {
         setGoals(data);
         setIsLoading(false);
       });
-  }, []);
+  };
 
   const deleteTransaction = async (id: number) => {
     if (window.confirm("Are you sure you want to delete this transaction?")) {
@@ -106,6 +111,7 @@ const TransactionsPage = () => {
         goal: t.goal_id?.title,
       });
       setEditingCategory(t.category_id?.title);
+      setEditingGoal(t.goal_id?.title);
     }
   };
 
@@ -135,7 +141,7 @@ const TransactionsPage = () => {
       description: editedData.description,
       place: editedData.place,
       category: editingCategory,
-      goal: editedData.goal,
+      goal: editingGoal,
     };
 
     console.log(editingCategory);
@@ -155,13 +161,19 @@ const TransactionsPage = () => {
         movement: editedData.movement,
         description: editedData.description,
         category_id: categories.find((c) => c.title === editingCategory)?.id,
+        goal_id: goals?.goals.find((g) => g.title === editingGoal)?.id,
       }),
     });
+    refetch();
     setIsEditOpen(false);
   };
 
   const handleCategoryChange = (event: SelectChangeEvent) => {
     setEditingCategory(event.target.value as string);
+  };
+
+  const handleGoalChange = (event: SelectChangeEvent) => {
+    setEditingGoal(event.target.value as string);
   };
 
   return (
@@ -352,7 +364,7 @@ const TransactionsPage = () => {
               onChange={(e) => handleInputChange(e, "place")}
               value={editedData.place}
             />
-            <Box sx={{ minWidth: 120 }}>
+            <Box sx={{ width: 222 }}>
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Category</InputLabel>
                 <Select
@@ -367,6 +379,26 @@ const TransactionsPage = () => {
                     <MenuItem key={category.id} value={category.title}>
                       {" "}
                       {category.title}{" "}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+            <Box sx={{ width: 222 }}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Goal</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="goal"
+                  name="goal"
+                  value={editingGoal}
+                  label="Goal"
+                  onChange={handleGoalChange}
+                >
+                  {goals?.goals.map((goal) => (
+                    <MenuItem key={goal.id} value={goal.title}>
+                      {" "}
+                      {goal.title}{" "}
                     </MenuItem>
                   ))}
                 </Select>
