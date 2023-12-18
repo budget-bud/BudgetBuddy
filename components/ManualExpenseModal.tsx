@@ -1,22 +1,35 @@
 import React, { useEffect, useState } from "react";
+import LocalAtmIcon from "@mui/icons-material/LocalAtm";
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Button,
   TextField,
-  Switch,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
   SelectChangeEvent,
-  Grid,
   InputAdornment,
+  Box,
+  IconButton,
+  Modal,
+  Tooltip,
+  Typography,
 } from "@mui/material";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { ICategory2, IExpenseForm, IGoals } from "@/types/types";
+import CloseIcon from "@mui/icons-material/Close";
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "#fff",
+  borderRadius: 4,
+  padding: "20px",
+  overflow: "hidden",
+};
 
 const ManualExpenseModal = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -125,89 +138,139 @@ const ManualExpenseModal = () => {
           <div className="ml-[1rem] w-full text-base">Add expense</div>
         </div>
       </div>
-      <Dialog open={isModalOpen} onClose={handleClose} maxWidth="md" fullWidth>
-        <DialogTitle>Add new expense</DialogTitle>
-        <DialogContent>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <label>Expense Type:</label>
-              <Switch
-                checked={isCashExpense}
-                onChange={handleToggleExpenseType}
-              />
+      <Modal open={isModalOpen} onClose={handleClose}>
+        <Box sx={style}>
+          <h1 className="flex items-center justify-between bg-slate-500 pl-4 font-semibold text-gray-50">
+            <div className="">Add new expense</div>
+            <Tooltip arrow title={"Close"}>
+              <IconButton onClick={handleClose} sx={{ color: "white" }}>
+                <CloseIcon />
+              </IconButton>
+            </Tooltip>
+          </h1>
+
+          <div className="flex flex-col items-center space-y-2 py-2">
+            <IconButton
+              onClick={handleToggleExpenseType}
+              size="large"
+              sx={{
+                backgroundColor: "transparent",
+                "&:hover": {
+                  backgroundColor: "transparent",
+                },
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
               {isCashExpense ? (
-                <span>Cash Expense</span>
+                <LocalAtmIcon sx={{ color: "black", fontSize: "4rem" }} />
               ) : (
-                <span>Bank Transaction</span>
+                <AccountBalanceIcon sx={{ color: "black", fontSize: "4rem" }} />
               )}
-            </Grid>
-            {Object.keys(expenseForm).map((fieldName) => (
-              <Grid item xs={6} key={fieldName}>
-                {fieldName === "category" || fieldName === "goal" ? (
-                  <FormControl fullWidth>
-                    <InputLabel>{fieldName.replace(/_/g, " ")}</InputLabel>
-                    <Select
-                      name={fieldName}
-                      value={expenseForm[fieldName]}
-                      onChange={handleSelectChange(fieldName)}
-                    >
-                      {fieldName === "category"
-                        ? categoryOptions.map((category) => (
-                            <MenuItem key={category.id} value={category.title}>
-                              {category.title.replace(/_/g, " ")}
-                            </MenuItem>
-                          ))
-                        : goalOptions.map((goal) => (
-                            <MenuItem key={goal.id} value={goal.title}>
-                              {goal.title}
-                            </MenuItem>
-                          ))}
-                    </Select>
-                  </FormControl>
-                ) : fieldName === "movement" ? (
-                  <TextField
-                    name={fieldName}
-                    label={fieldName.replace(/_/g, " ")}
-                    onChange={handleInputChange(fieldName)}
-                    value={expenseForm[fieldName as keyof IExpenseForm]}
-                    fullWidth
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          {parseFloat(expenseForm[fieldName]) < 0 ? "-" : "+"}
-                        </InputAdornment>
-                      ),
-                      endAdornment: (
-                        <InputAdornment position="end">USD</InputAdornment>
-                      ),
-                    }}
-                  />
-                ) : (
-                  <TextField
-                    name={fieldName}
-                    label={fieldName.replace(/_/g, " ")}
-                    onChange={handleInputChange(fieldName)}
-                    value={expenseForm[fieldName as keyof IExpenseForm]}
-                    fullWidth
-                    multiline={fieldName === "description"}
-                    rows={fieldName === "description" ? 4 : 1}
-                  />
-                )}
-              </Grid>
-            ))}
-          </Grid>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Close</Button>
-          <Button
-            onClick={handleAdd}
-            variant="contained"
-            style={{ backgroundColor: "#2196F3", color: "#fff" }}
-          >
-            Add Transaction
-          </Button>
-        </DialogActions>
-      </Dialog>
+              <Typography
+                variant="h6"
+                style={{ color: "black", marginTop: "4px" }}
+              >
+                {isCashExpense ? "Cash Expense" : "Bank Transaction"}
+              </Typography>
+            </IconButton>
+          </div>
+
+          <div className="flex flex-col space-y-2 py-2">
+            <div className="flex space-x-4">
+              <FormControl fullWidth required>
+                <InputLabel>Category</InputLabel>
+                <Select
+                  name="category"
+                  value={expenseForm.category}
+                  onChange={handleSelectChange("category")}
+                >
+                  {categoryOptions.map((category) => (
+                    <MenuItem key={category.id} value={category.title}>
+                      {category.title.replace(/_/g, " ")}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <FormControl fullWidth required>
+                <InputLabel>Goal</InputLabel>
+                <Select
+                  name="goal"
+                  value={expenseForm.goal}
+                  onChange={handleSelectChange("goal")}
+                >
+                  {goalOptions.map((goal) => (
+                    <MenuItem key={goal.id} value={goal.title}>
+                      {goal.title}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </div>
+
+            <div className="flex space-x-4">
+              <TextField
+                name="movement"
+                label="Movement"
+                onChange={handleInputChange("movement")}
+                value={expenseForm.movement}
+                fullWidth
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      {parseFloat(expenseForm.movement) < 0 ? "-" : "+"}
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">USD</InputAdornment>
+                  ),
+                }}
+                required
+              />
+
+              <TextField
+                name="origin"
+                label="Origin"
+                onChange={handleInputChange("origin")}
+                value={expenseForm.origin}
+                fullWidth
+                required
+              />
+
+              <TextField
+                name="place"
+                label="Place"
+                onChange={handleInputChange("place")}
+                value={expenseForm.place}
+                fullWidth
+                required
+              />
+            </div>
+
+            <TextField
+              name="description"
+              label="Description"
+              onChange={handleInputChange("description")}
+              value={expenseForm.description}
+              fullWidth
+              multiline
+              rows={4}
+              required
+            />
+          </div>
+          <div className="mt-[0.5rem] flex w-full justify-end pb-3">
+            <Button
+              onClick={handleAdd}
+              variant="contained"
+              style={{ backgroundColor: "#64748B", color: "#fff" }}
+            >
+              Add Transaction
+            </Button>
+          </div>
+        </Box>
+      </Modal>
     </>
   );
 };
