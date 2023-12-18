@@ -37,10 +37,11 @@ export async function GET() {
       return NextResponse.json({ error: chatsError.message }, { status: 500 });
     }
 
+    const lastBalance = balance?.[balance.length - 1];
     const balanceAmount =
-      isNaN(balance?.[0]?.base_balance + balance?.[0]?.movement) === true
+      isNaN(lastBalance?.base_balance + lastBalance?.movement) === true
         ? 0
-        : balance?.[0]?.base_balance + balance?.[0]?.movement;
+        : lastBalance?.base_balance + lastBalance?.movement;
 
     return NextResponse.json(
       {
