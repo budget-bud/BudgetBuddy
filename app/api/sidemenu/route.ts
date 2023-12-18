@@ -39,9 +39,7 @@ export async function GET() {
 
     const lastBalance = balance?.[balance.length - 1];
     const balanceAmount =
-      isNaN(lastBalance?.base_balance + lastBalance?.movement) === true
-        ? 0
-        : lastBalance?.base_balance + lastBalance?.movement;
+      isNaN(lastBalance?.base_balance) === true ? 0 : lastBalance?.base_balance;
 
     return NextResponse.json(
       {
