@@ -14,6 +14,12 @@ const TransactionsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [selectedTransactionID,setSelectedTransactionID] = useState<number>(0);
+  const [editedData, setEditedData] = useState({
+    origin: "",
+    movement: 0,
+    description:"",
+    place:""
+  });
 
   useEffect(() => {
     fetch("/api/transactions")
@@ -56,10 +62,31 @@ const TransactionsPage = () => {
     }
   }
 
-  const editTransaction = async (id : number) => {
-    selectedTransactionID == 0 ? setSelectedTransactionID(id) : setSelectedTransactionID(0)
-    
-  }
+  
+  const editTransaction = async (id: number) => {
+    if (selectedTransactionID === 0) {
+      setSelectedTransactionID(id);
+      const trs = transactions?.transactions.find((trs) => trs.id === id);
+      if (trs) {
+        setEditedData({
+          origin: trs.origin,
+          movement: trs.movement,
+          description: trs.description || "", // Add this line
+          place: trs.place || "", // Add this line
+        });
+      }
+    } else {
+      setSelectedTransactionID(0);
+    }
+  };
+
+  const handleInputChange = ( e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, key: string,) => {
+    const value = key === "movement" ? Number(e.target.value) : e.target.value;
+    setEditedData((prevData) => ({
+      ...prevData,
+      [key]: value,
+    }));
+  };
 
   return (
     <div
@@ -132,7 +159,7 @@ const TransactionsPage = () => {
         </thead>
         <tbody className="divide-y divide-gray-200 bg-secondary-200">
           {transactions?.transactions
-            .filter((transaction: ITransactionWithFK) => {
+            ?.filter((transaction: ITransactionWithFK) => {
               return (
                 (transaction.movement.toString().includes(search) ||
                   (transaction.description &&
@@ -174,34 +201,42 @@ const TransactionsPage = () => {
                 {selectedTransactionID == transaction.id ?
                   (
                     <>
-                      <input
-                        id="editInput1"
-                        type="text"
-                        value={transaction.origin}
-                        //onChange={(e) => setSearch(e.target.value)}
-                        className="max-h-12 flex-1 rounded-md bg-primary-600 p-6 text-background-950 max-lg:min-w-full"
-                      />
-                      <input
-                        id="editInput2"
-                        type="text"
-                        value={transaction.movement}
-                        //onChange={(e) => setSearch(e.target.value)}
-                        className="max-h-12 flex-1 rounded-md bg-primary-600 p-6 text-background-950 max-lg:min-w-full"
-                      />
-                      <input
-                        id="editInput3"
-                        type="text"
-                        value={transaction.description}
-                        //onChange={(e) => setSearch(e.target.value)}
-                        className="max-h-12 flex-1 rounded-md bg-primary-600 p-6 text-background-950 max-lg:min-w-full"
-                      />
-                      <input
-                        id="editInpu4"
-                        type="text"
-                        value={transaction.place}
-                        //onChange={(e) => setSearch(e.target.value)}
-                        className="max-h-12 flex-1 rounded-md bg-primary-600 p-6 text-background-950 max-lg:min-w-full"
-                      />
+                      <td>
+                        <input
+                          id="editInput1"
+                          type="text"
+                          value={editedData.origin}
+                          onChange={(e) => handleInputChange(e, e.target.value)}
+                          className="max-h-12 w-[80%] rounded-md bg-primary-600 p-6 text-background-950 max-lg:min-w-full"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          id="editInput2"
+                          type="number"
+                          value={editedData.movement}
+                          onChange={(e) => handleInputChange(e, e.target.value)}
+                          className="max-h-12 w-[80%] rounded-md bg-primary-600 p-6 text-background-950 max-lg:min-w-full"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          id="editInput3"
+                          type="text"
+                          value={editedData.description}
+                          onChange={(e) => handleInputChange(e, e.target.value)}
+                          className="max-h-12 w-[80%] rounded-md bg-primary-600 p-6 text-background-950 max-lg:min-w-full"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          id="editInpu4"
+                          type="text"
+                          value={editedData.place}
+                          onChange={(e) => handleInputChange(e, e.target.value)}
+                          className="max-h-12 w-[80%] rounded-md bg-primary-600 p-6 text-background-950 max-lg:min-w-full"
+                        />
+                      </td>
                       <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950  max-md:hidden">
                         {transaction.category_id !== null && transaction.category_id.title}
                       </td>
