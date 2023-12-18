@@ -120,11 +120,11 @@ const TransactionsPage = () => {
                     transaction.origin
                       .toLowerCase()
                       .includes(search.toLowerCase())) ||
-                  (transaction.category_id.title &&
+                  (transaction.category_id &&
                     transaction.category_id.title
                       .toLowerCase()
                       .includes(search.toLowerCase())) ||
-                  (transaction.goal_id.title &&
+                  (transaction.goal_id &&
                     transaction.goal_id.title
                       .toLowerCase()
                       .includes(search.toLowerCase())) ||
@@ -132,10 +132,10 @@ const TransactionsPage = () => {
                     .toLowerCase()
                     .includes(search.toLowerCase())) &&
                 (selectedCategory === "" ||
-                  (transaction.category_id.title &&
+                  (transaction.category_id && 
                     transaction.category_id.title === selectedCategory)) &&
                 (selectedGoal === "" ||
-                  (transaction.goal_id.title &&
+                  (transaction.goal_id &&
                     transaction.goal_id.title === selectedGoal))
               );
             })
@@ -154,10 +154,10 @@ const TransactionsPage = () => {
                   {transaction.place}
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 text-sm text-background-950">
-                  {transaction.category_id.title}
+                  {transaction.category_id !== null && transaction.category_id.title}
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 text-sm text-background-950">
-                  {transaction.goal_id.title}
+                  {transaction.goal_id !== null && transaction.goal_id.title}
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 text-sm text-background-950">
                   {transaction.created_at.split("T")[0]}
