@@ -11,6 +11,7 @@ import { IEditCategoryProps } from "@/types/types";
 // MUI ICONS
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
+import { isNullOrUndefined } from "@/utils/isNullOrUndefined";
 
 const style = {
   position: "absolute",
@@ -29,19 +30,20 @@ const TransactionsPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedGoal, setSelectedGoal] = useState("");
   const [transactions, setTransactions] = useState<{
-    transactions: [ITransactionWithFK];
+    transactions: ITransactionWithFK[];
   }>();
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [goals, setGoals] = useState<{ goals: [IGoal] }>();
   const [isLoading, setIsLoading] = useState(true);
 
-  const [selectedTransaction,setSelectedTransaction] = useState<ITransactionWithFK>();
-  const [isEditOpen,setIsEditOpen] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<ITransactionWithFK>();
+  const [isEditOpen, setIsEditOpen] = useState(false);
   const [editedData, setEditedData] = useState({
     origin: "",
     movement: 0,
-    description:"",
-    place:""
+    description: "",
+    place: "",
   });
 
   useEffect(() => {
@@ -65,8 +67,8 @@ const TransactionsPage = () => {
       });
   }, []);
 
-  const deleteTransaction = async (id : number) => {
-    if(window.confirm("Are you sure you want to delete this transaction?")){
+  const deleteTransaction = async (id: number) => {
+    if (window.confirm("Are you sure you want to delete this transaction?")) {
       const response = await fetch(`/api/transactions/`, {
         method: "DELETE",
         body: JSON.stringify({ id }),
@@ -74,19 +76,20 @@ const TransactionsPage = () => {
       if (response.error) {
         window.alert(response.error);
         return;
-      }
-      else{
-        setTransactions((prevTran) => ({
-          transactions: (prevTran?.transactions ?? []).filter(
-            (transaction) => transaction.id !== id
-          ),
-        }) as { transactions: [ITransactionWithFK] } | undefined);
+      } else {
+        setTransactions(
+          (prevTran) =>
+            ({
+              transactions: (prevTran?.transactions ?? []).filter(
+                (transaction) => transaction.id !== id,
+              ),
+            }) as { transactions: [ITransactionWithFK] } | undefined,
+        );
       }
     }
-  }
+  };
 
-  
-  const openEditTransaction = (t : ITransactionWithFK) => {
+  const openEditTransaction = (t: ITransactionWithFK) => {
     setSelectedTransaction(t);
     setIsEditOpen(true);
     if (t) {
@@ -94,12 +97,15 @@ const TransactionsPage = () => {
         origin: t.origin,
         movement: t.movement,
         description: t.description,
-        place: t.place
+        place: t.place,
       });
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,key: string,) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    key: string,
+  ) => {
     const value = key === "movement" ? Number(e.target.value) : e.target.value;
     setEditedData((prevData) => ({
       ...prevData,
@@ -113,14 +119,24 @@ const TransactionsPage = () => {
 
   // itt nem jó
   const handleEdit = async () => {
-    setTransactions((prevTransactions) =>
-    prevTransactions?.transactions[0].map((t : ITransactionWithFK) =>
-        t.id === selectedTransaction?.id
-          ? { ...t, origin: editedData.origin, movement: editedData.movement, description:editedData.description, place:editedData.place }
-          : t,
-      ),
+    if (!selectedTransaction) return;
+    if (!transactions) return;
+
+    const newTransaction = {
+      ...selectedTransaction,
+      origin: editedData.origin,
+      movement: editedData.movement,
+      description: editedData.description,
+      place: editedData.place,
+    };
+
+    const newTransactions = transactions.transactions.map((t) =>
+      t.id === selectedTransaction.id ? newTransaction : t,
     );
-   /* await fetch(`/api/transactions`, {
+
+    setTransactions({ transactions: newTransactions });
+
+    /* await fetch(`/api/transactions`, {
       method: "PUT",
       body: JSON.stringify({
         id: categoryId,
@@ -254,7 +270,8 @@ const TransactionsPage = () => {
                   {transaction.place}
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950  max-md:hidden">
-                  {transaction.category_id !== null && transaction.category_id.title}
+                  {transaction.category_id !== null &&
+                    transaction.category_id.title}
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950  max-md:hidden">
                   {transaction.goal_id !== null && transaction.goal_id.title}
@@ -263,12 +280,14 @@ const TransactionsPage = () => {
                   {transaction.created_at.split("T")[0]}
                 </td>
                 <div className="absolute bottom-1 right-1 flex h-full w-full items-end justify-end gap-2 opacity-0 hover:opacity-100">
-                <button className={`h-10 w-20 cursor-pointer rounded-[18px] border-none bg-primary-600 text-text-100`}
-                  onClick={() => openEditTransaction(transaction)}
-                >
+                  <button
+                    className={`h-10 w-20 cursor-pointer rounded-[18px] border-none bg-primary-600 text-text-100`}
+                    onClick={() => openEditTransaction(transaction)}
+                  >
                     Edit
                   </button>
-                  <button className="h-10 w-20 cursor-pointer rounded-[18px] border-none bg-primary-600 text-text-100"
+                  <button
+                    className="h-10 w-20 cursor-pointer rounded-[18px] border-none bg-primary-600 text-text-100"
                     onClick={() => deleteTransaction(transaction.id)}
                   >
                     Delete
