@@ -6,7 +6,7 @@ import { useRefreshSidemenuContext } from "./ContextProvider";
 export default function AuthButton() {
   const router = useRouter();
   const { refreshSidemenu } = useRefreshSidemenuContext();
-  
+
   const signOut = async () => {
     const response = await fetch("/api/logout", {
       method: "POST",

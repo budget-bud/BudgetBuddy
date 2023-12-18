@@ -6,7 +6,10 @@ import ChatHistoryButton from "./ChatHistoryButton";
 import { isNullOrUndefined } from "@/utils/isNullOrUndefined";
 import { useEffect, useState } from "react";
 import { ISidemenuParams } from "@/types/types";
-import { useRefreshSidemenuContext, useSidemenuContext } from "./ContextProvider";
+import {
+  useRefreshSidemenuContext,
+  useSidemenuContext,
+} from "./ContextProvider";
 import { Close } from "@mui/icons-material";
 import Link from "next/link";
 import ManualExpenseModal from "./ManualExpenseModal";
@@ -35,7 +38,7 @@ const Sidemenu = () => {
   };
 
   useEffect(() => {
-    getData();    
+    getData();
   }, [refreshSidemenuValue]);
 
   if (isNullOrUndefined(data)) {

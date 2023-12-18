@@ -50,7 +50,9 @@ export const useSidemenuContext = (): ISidemenuOpenContext => {
 export const useRefreshSidemenuContext = (): IRefreshSidemenuContext => {
   const context = useContext(RefreshSidemenuContext);
   if (!context) {
-    throw new Error("useRefreshSidemenuContext must be used within a ContextProvider");
+    throw new Error(
+      "useRefreshSidemenuContext must be used within a ContextProvider",
+    );
   }
   return context;
 };
