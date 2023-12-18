@@ -132,7 +132,7 @@ const TransactionsPage = () => {
                     .toLowerCase()
                     .includes(search.toLowerCase())) &&
                 (selectedCategory === "" ||
-                  (transaction.category_id && 
+                  (transaction.category_id &&
                     transaction.category_id.title === selectedCategory)) &&
                 (selectedGoal === "" ||
                   (transaction.goal_id &&
@@ -154,7 +154,8 @@ const TransactionsPage = () => {
                   {transaction.place}
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 text-sm text-background-950">
-                  {transaction.category_id !== null && transaction.category_id.title}
+                  {transaction.category_id !== null &&
+                    transaction.category_id.title}
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 text-sm text-background-950">
                   {transaction.goal_id !== null && transaction.goal_id.title}

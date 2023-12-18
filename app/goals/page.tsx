@@ -49,7 +49,10 @@ const GoalsPage = () => {
           return;
         }
 
-        setGoals((prevCat) => [...prevCat, response.goals[response.goals.length - 1]]);
+        setGoals((prevCat) => [
+          ...prevCat,
+          response.goals[response.goals.length - 1],
+        ]);
         console.log(response.goals[response.goals.length - 1]);
         setInputForm({
           title: "",
@@ -160,11 +163,7 @@ const GoalsPage = () => {
           >
             <div className="flex flex-col gap-2">
               <div className="text-center text-xl font-bold">{goal.title}</div>
-              <GoalAmount
-                goalId={goal.id}
-                goals={goals}
-                setGoals={setGoals}
-              />
+              <GoalAmount goalId={goal.id} goals={goals} setGoals={setGoals} />
             </div>
             <div className="flex flex-col">
               <div className="w-[130px] min-w-[130px]">
@@ -175,7 +174,10 @@ const GoalsPage = () => {
                       {
                         // here also % should be calculated based on the amount that is currently replaced by 1000
                         // current, total
-                        data: calculateProgress(goal.totalAmount, goal.goal_amount),
+                        data: calculateProgress(
+                          goal.totalAmount,
+                          goal.goal_amount,
+                        ),
                         backgroundColor: ["#003366", "#d1d1d1"],
                       },
                     ],

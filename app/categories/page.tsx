@@ -36,7 +36,10 @@ const CategoriesPage = () => {
           window.alert(response.error);
           return;
         }
-        setCategories((prevCat) => [...prevCat, response.categories[response.categories.length - 1]]);
+        setCategories((prevCat) => [
+          ...prevCat,
+          response.categories[response.categories.length - 1],
+        ]);
 
         setInputForm({
           title: "",
@@ -83,7 +86,7 @@ const CategoriesPage = () => {
       });
   }, []);
 
-console.log(categories);
+  console.log(categories);
 
   return (
     <div className="flex max-h-full w-full flex-grow flex-col gap-4 rounded-lg bg-secondary-800 p-4">
@@ -131,7 +134,7 @@ console.log(categories);
             </div>
             {/* Read the value from the database, where category.id = the desired id of the category*/}
             <div className="w-1/4 max-lg:w-1/3">
-              { category.totalAmount } / {category.limit} Ft
+              {category.totalAmount} / {category.limit} Ft
             </div>
             <div className="flex w-1/4 justify-center max-lg:w-1/3">
               <Box sx={{ width: "100%" }}>

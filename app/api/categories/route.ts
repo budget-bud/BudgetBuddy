@@ -80,28 +80,28 @@ export async function POST(req: NextRequest) {
       ])
       .select("*");
 
-      const categoriesWithT = await Promise.all(
-        categories?.map(async (category) => {
-          const { data: transactions, error: transactionsError } = await supabase
-            .from("Transactions")
-            .select("movement")
-            .eq("user_id", user?.id)
-            .eq("category_id", category.id);
-  
-          const totalAmount = transactions?.reduce((acc, curr) => {
-            return acc + curr.movement;
-          }, 0);
-  
-          if (transactionsError) {
-            return NextResponse.json(
-              { error: transactionsError.message },
-              { status: 500 },
-            );
-          }
-  
-          return { ...category, totalAmount };
-        }) || [],
-      );
+    const categoriesWithT = await Promise.all(
+      categories?.map(async (category) => {
+        const { data: transactions, error: transactionsError } = await supabase
+          .from("Transactions")
+          .select("movement")
+          .eq("user_id", user?.id)
+          .eq("category_id", category.id);
+
+        const totalAmount = transactions?.reduce((acc, curr) => {
+          return acc + curr.movement;
+        }, 0);
+
+        if (transactionsError) {
+          return NextResponse.json(
+            { error: transactionsError.message },
+            { status: 500 },
+          );
+        }
+
+        return { ...category, totalAmount };
+      }) || [],
+    );
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });

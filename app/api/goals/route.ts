@@ -24,7 +24,6 @@ export async function GET() {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-
     const goalsWithT = await Promise.all(
       goals?.map(async (goal) => {
         const { data: transactions, error: transactionsError } = await supabase
@@ -48,8 +47,6 @@ export async function GET() {
       }) || [],
     );
 
-
-
     return NextResponse.json({ goals: goalsWithT }, { status: 200 });
   } catch (e) {
     return NextResponse.json({ error: (e as Error).message }, { status: 500 });
@@ -70,15 +67,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 500 });
     }
 
-    const { data: goals, error } = await supabase.from("Goals").insert([
-      {
-        user_id: userId,
-        title: body.title,
-        description: body.description,
-        goal_amount: body.goal_amount,
-        category_id: body.category_id,
-      },
-    ]).select("*");
+    const { data: goals, error } = await supabase
+      .from("Goals")
+      .insert([
+        {
+          user_id: userId,
+          title: body.title,
+          description: body.description,
+          goal_amount: body.goal_amount,
+          category_id: body.category_id,
+        },
+      ])
+      .select("*");
 
     const goalsWithT = await Promise.all(
       goals?.map(async (goal) => {
