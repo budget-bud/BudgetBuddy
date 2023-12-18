@@ -17,7 +17,7 @@ const Chat = () => {
   const sendMessage = async (): Promise<void> => {
     if (input.length === 0) return;
 
-    setMessages([...messages, { text: input, user: true }]);
+    setMessages([...messages, { content: input, role: "user" }]);
     setInput("");
 
     const response = await fetch(`/api/chat`, {
@@ -35,8 +35,8 @@ const Chat = () => {
 
     setMessages([
       ...messages,
-      { text: input, user: true },
-      { text: response.answer, user: false },
+      { content: input, role: "user" },
+      { content: response.answer, role: "assistant" },
     ]);
     if (chatId === undefined) {
       refreshSidemenu();
@@ -88,19 +88,19 @@ const Chat = () => {
 export default Chat;
 
 const Message = ({ message }: { message: IMessage }) => {
-  if (message.user)
+  if (message.role == "user")
     return (
       <div className="mb-[10px] flex items-center justify-end gap-[10px]">
-        <p className="text-background rounded-bl-[18px] rounded-br-[7px] rounded-tl-[18px] rounded-tr-[18px] bg-primary-600 p-[10px]">
-          {message.text}
+        <p className="text-background whitespace-pre-wrap rounded-bl-[18px] rounded-br-[7px] rounded-tl-[18px] rounded-tr-[18px] bg-primary-600 p-[10px]">
+          {message.content}
         </p>
       </div>
     );
   else
     return (
       <div className="mb-[10px] flex items-center justify-start gap-[10px]">
-        <p className="rounded-bl-[7px] rounded-br-[18px] rounded-tl-[18px] rounded-tr-[18px] bg-secondary-500 p-[10px]">
-          {message.text}
+        <p className="whitespace-pre-wrap rounded-bl-[7px] rounded-br-[18px] rounded-tl-[18px] rounded-tr-[18px] bg-secondary-500 p-[10px]">
+          {message.content}
         </p>
       </div>
     );
