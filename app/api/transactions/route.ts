@@ -1,9 +1,12 @@
+import { registerActivity } from "@/utils/registerActivity";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
   try {
+    registerActivity("Transactions page visited");
+
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
 
@@ -32,6 +35,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
+    registerActivity("Transaction created");
     const body = await req.json();
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
@@ -86,6 +90,7 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
+    registerActivity("Transaction updated");
     const body = await req.json();
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
@@ -123,6 +128,7 @@ export async function PUT(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
+    registerActivity("Transaction deleted");
     const body = await req.json();
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
