@@ -1,27 +1,25 @@
-import { createClient } from "@/utils/supabase/server";
-import Link from "next/link";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+"use client";
 import { SupervisedUserCircleRounded } from "@mui/icons-material";
+import { useRouter } from "next/navigation";
+import { useRefreshSidemenuContext } from "./ContextProvider";
 
-export default async function AuthButton() {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+export default function AuthButton() {
+  const router = useRouter();
+  const { refreshSidemenu } = useRefreshSidemenuContext();
+  
   const signOut = async () => {
-    "use server";
-
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-    await supabase.auth.signOut();
-    return redirect("/login");
+    const response = await fetch("/api/logout", {
+      method: "POST",
+    }).then((res) => res.json());
+    if (response.error) {
+      window.alert(response.error);
+      return;
+    }
+    refreshSidemenu();
+    router.push("/login");
   };
 
-  return user ? (
+  return (
     <div className="flex w-full justify-center" onClick={signOut}>
       <div
         className="mt-[1rem] flex h-[2rem] w-3/4 
@@ -34,12 +32,5 @@ export default async function AuthButton() {
         <div className="ml-[1rem] w-full text-base">Log out</div>
       </div>
     </div>
-  ) : (
-    <Link
-      href="/login"
-      className="bg-btn-background hover:bg-btn-background-hover flex rounded-md px-3 py-2 no-underline"
-    >
-      Login
-    </Link>
   );
 }
