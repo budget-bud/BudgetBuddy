@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, ChangeEvent } from "react";
-import { IGoal } from "@/types/types";
+import { IGoal, ITransactionWithFK } from "@/types/types";
 import { ICategory } from "@/types/types";
 import EditGoal from "@/components/EditGoal";
 
@@ -14,10 +14,12 @@ Chart.register(ArcElement);
 // MUI ICONS
 import DeleteIcon from "@mui/icons-material/Delete";
 import GoalAmount from "@/components/GoalAmount";
+import SidemenuButton from "@/components/SidemenuButton";
 
 const GoalsPage = () => {
   const [goals, setGoals] = useState<IGoal[]>([]);
   const [categories, setCategories] = useState<ICategory[]>([]);
+  const [transactions, setTransactions] = useState<ITransactionWithFK[]>([]);
   const [inputForm, setInputForm] = useState({
     title: "",
     goal_amount: 0,
@@ -53,7 +55,6 @@ const GoalsPage = () => {
           ...prevCat,
           response.goals[response.goals.length - 1],
         ]);
-        console.log(response.goals[response.goals.length - 1]);
         setInputForm({
           title: "",
           goal_amount: 0,
@@ -102,7 +103,40 @@ const GoalsPage = () => {
       .then((res) => {
         setGoals(res.goals);
       });
+
+    fetch(`/api/transactions`, {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setTransactions(res.transactions);
+      });
   }, []);
+
+  const canDelete = (id: number) => {
+    const transaction = transactions.find(
+      (t) => t.goal_id && t.goal_id.id == id,
+    );
+    if (transaction) {
+      return false;
+    }
+    return true;
+  };
+
+  if (categories.length === 0) {
+    return (
+      <div className="flex max-h-full w-full flex-grow flex-col gap-4 rounded-lg bg-secondary-800 p-4">
+        <div className="mt-4 flex flex-row items-center justify-between gap-2 rounded-[18px] bg-primary-600 px-3 py-4">
+          <div className="flex flex-1 flex-row flex-wrap gap-2">
+            <div className="flex min-w-[200px] flex-1 flex-col">
+              <h1 className="text-4xl">Please create a category first!</h1>
+              <SidemenuButton button_type="categories" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex max-h-full w-full flex-grow flex-col gap-4 rounded-lg bg-secondary-800 p-4">
@@ -194,11 +228,17 @@ const GoalsPage = () => {
             </div>
             <div className="flex flex-row justify-end">
               <EditGoal goalId={goal.id} goals={goals} setGoals={setGoals} />
-              <Tooltip arrow title={"Delete goal"}>
-                <IconButton onClick={() => deleteGoal(goal.id)}>
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
+              {canDelete(goal.id) && (
+                <Tooltip arrow title={"Delete goal"}>
+                  <IconButton onClick={() => {
+                    if (window.confirm("Are you sure you want to delete this goal?")) {
+                      deleteGoal(goal.id);
+                    }
+                  }}>
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+              )}
             </div>
           </div>
         ))}
