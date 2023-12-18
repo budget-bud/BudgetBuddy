@@ -6,32 +6,31 @@ const TransactionsPage = () => {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedGoal, setSelectedGoal] = useState("");
-  const [transactions, setTransactions] = useState<{
-    transactions: [ITransactionWithFK];
-  }>();
+  const [transactions, setTransactions] = useState<ITransactionWithFK[]>([]);
   const [categories, setCategories] = useState<ICategory[]>([]);
-  const [goals, setGoals] = useState<{ goals: [IGoal] }>();
+  const [goals, setGoals] = useState<IGoal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/transactions")
-      .then((res) => res.json())
-      .then((data) => {
-        setTransactions(data);
-      });
+    Promise.all([
+      fetch("/api/transactions")
+        .then((res) => res.json())
+        .then((data) => {
+          setTransactions(data.transactions);
+        }),
 
-    fetch("/api/categories")
-      .then((res) => res.json())
-      .then((data) => {
-        setCategories(data.categories);
-      });
+      fetch("/api/categories")
+        .then((res) => res.json())
+        .then((data) => {
+          setCategories(data.categories);
+        }),
 
-    fetch("/api/goals")
-      .then((res) => res.json())
-      .then((data) => {
-        setGoals(data);
-        setIsLoading(false);
-      });
+      fetch("/api/goals")
+        .then((res) => res.json())
+        .then((data) => {
+          setGoals(data.goals);
+        }),
+    ]).then(() => setIsLoading(false));
   }, []);
 
   const deleteTransaction = async (id : number) => {
@@ -83,7 +82,7 @@ const TransactionsPage = () => {
           onChange={(e) => setSelectedGoal(e.target.value)}
         >
           <option value="">Select a goal</option>
-          {goals?.goals.map((goal) => (
+          {goals.map((goal) => (
             <option value={goal.title} key={goal.title}>
               {goal.title}
             </option>
@@ -117,7 +116,7 @@ const TransactionsPage = () => {
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200 bg-secondary-200">
-          {transactions?.transactions
+          {transactions
             .filter((transaction: ITransactionWithFK) => {
               return (
                 (transaction.movement.toString().includes(search) ||
@@ -179,7 +178,7 @@ const TransactionsPage = () => {
                 <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
                   {transaction.created_at.split("T")[0]}
                 </td>
-                <div className="absolute bottom-1 right-1 flex h-full w-full items-end justify-end gap-2 opacity-0 hover:opacity-100">
+                <td className="absolute bottom-1 right-1 flex h-full w-full items-end justify-end gap-2 opacity-0 hover:opacity-100">
                   <button className=" h-10 w-20 cursor-pointer rounded-[18px] border-none bg-primary-600 text-text-100">
                     Edit
                   </button>
@@ -188,7 +187,7 @@ const TransactionsPage = () => {
                   >
                     Delete
                   </button>
-                </div>
+                </td>
               </tr>
             ))}
         </tbody>

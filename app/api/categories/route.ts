@@ -119,8 +119,6 @@ export async function PUT(req: NextRequest) {
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
 
-    console.log(body);
-
     const { data: categories, error } = await supabase
       .from("Categories")
       .update({
@@ -146,8 +144,6 @@ export async function DELETE(req: NextRequest) {
     const body = await req.json();
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
-
-    console.log(body);
 
     const { data: categories, error } = await supabase
       .from("Categories")

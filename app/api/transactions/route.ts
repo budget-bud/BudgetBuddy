@@ -56,6 +56,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const startBalance = balance[balance.length - 1]?.base_balance || 0;
+
     const { data: transactions, error } = await supabase
       .from("Transactions")
       .insert([
@@ -68,9 +70,7 @@ export async function POST(req: NextRequest) {
           place: body.place,
           movement: body.movement,
           description: body.description,
-          base_balance: balance[0].base_balance
-            ? balance[0].base_balance + body.movement
-            : body.movement,
+          base_balance: startBalance + parseInt(body.movement),
         },
       ]);
 

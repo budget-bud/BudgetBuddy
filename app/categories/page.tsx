@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import EditCategory from "@/components/EditCategory";
-import { ICategory } from "@/types/types";
+import { ICategory, IGoal, ITransactionWithFK } from "@/types/types";
 
 // COMPONENTS
 import IconButton from "@mui/material/IconButton";
@@ -13,6 +13,8 @@ import LinearProgress from "@mui/material/LinearProgress";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const CategoriesPage = () => {
+  const [transactions, setTransactions] = useState<ITransactionWithFK[]>([]);
+  const [goals, setGoals] = useState<IGoal[]>([]);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [inputForm, setInputForm] = useState({
     title: "",
@@ -84,9 +86,37 @@ const CategoriesPage = () => {
       .then((res) => {
         setCategories(res.categories);
       });
+    fetch(`/api/transactions`, {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setTransactions(res.transactions);
+      });
+    fetch(`/api/goals`, {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setGoals(res.goals);
+      });
   }, []);
 
-  console.log(categories);
+  const canDelete = (id: number) => {
+    //check if the category is used in a transaction or goal
+    let canDelete = true;
+    transactions.forEach((transaction) => {
+      if (transaction.category_id && transaction.category_id.id == id) {
+        canDelete = false;
+      }
+    });
+    goals.forEach((goal) => {
+      if (goal.category_id == id) {
+        canDelete = false;
+      }
+    });
+    return canDelete;
+  };
 
   return (
     <div className="flex max-h-full w-full flex-grow flex-col gap-4 rounded-lg bg-secondary-800 p-4">
@@ -151,11 +181,24 @@ const CategoriesPage = () => {
                 categories={categories}
                 setCategories={setCategories}
               />
-              <Tooltip arrow title={"Delete category"}>
-                <IconButton onClick={() => deleteCategory(category.id)}>
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
+              {canDelete(category.id) && (
+                <Tooltip arrow title={"Delete category"}>
+                  <IconButton
+                    onClick={() => {
+                      if (
+                        window.confirm(
+                          "Are you sure you want to delete this category?",
+                        )
+                      ) {
+                        deleteCategory(category.id);
+                      }
+                    }}
+                  >
+                    {" "}
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+              )}
             </div>
           </div>
         ))}

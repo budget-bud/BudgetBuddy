@@ -68,10 +68,6 @@ const FinancialDashboard = () => {
       .then((data) => setCategories(data.categories));
   }, []);
 
-  console.log(goals);
-  console.log(transactions);
-  console.log(categories);
-
   const priceOfGoals = (goals: IGoal[]) => {
     const priceOfGoalElements: number[] = [];
     goals.forEach((goal) => {
@@ -81,13 +77,7 @@ const FinancialDashboard = () => {
     return priceOfGoalElements;
   };
 
-  const calculateProgressForGoal = (
-    goals: IGoal[],
-    transactions: ITransaction[],
-  ) => {
-    console.log("goals", goals);
-    console.log("transactions", transactions);
-
+  const calculateProgressForGoal = (goals: IGoal[]) => {
     const values: number[] = [];
     const valuesInPercent: number[] = [];
 
@@ -112,7 +102,7 @@ const FinancialDashboard = () => {
     return values;
   };
 
-  const progressForGoal = calculateProgressForGoal(goals, transactions);
+  const progressForGoal = calculateProgressForGoal(goals);
   const currentBalance = progressForGoal[0];
 
   const createGoalAnnotations = (
