@@ -2,6 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { SupervisedUserCircleRounded } from "@mui/icons-material";
 
 export default async function AuthButton() {
   const cookieStore = cookies();
@@ -21,13 +22,17 @@ export default async function AuthButton() {
   };
 
   return user ? (
-    <div className="flex items-center gap-4">
-      Hey, {user.email}!
-      <form action={signOut}>
-        <button className="bg-btn-background hover:bg-btn-background-hover rounded-md px-4 py-2 no-underline">
-          Logout
-        </button>
-      </form>
+    <div className="flex w-full justify-center" onClick={signOut}>
+      <div
+        className="mt-[1rem] flex h-[2rem] w-3/4 
+          cursor-pointer items-center 
+          rounded-md bg-secondary-300 
+          font-bold 
+          text-background-950 hover:bg-secondary-200"
+      >
+        <SupervisedUserCircleRounded className="ml-3" />
+        <div className="ml-[1rem] w-full text-base">Log out</div>
+      </div>
     </div>
   ) : (
     <Link

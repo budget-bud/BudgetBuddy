@@ -6,8 +6,6 @@ import {
   DialogActions,
   Button,
   TextField,
-  IconButton,
-  Tooltip,
   Switch,
   FormControl,
   InputLabel,
@@ -111,15 +109,22 @@ const ManualExpenseModal = () => {
       .then((res) => {
         setGoalOptions(res.goals);
       });
-  }, [expenseForm]);
+  }, [isModalOpen]);
 
   return (
-    <div>
-      <Tooltip arrow title={"Add manual expense"}>
-        <IconButton onClick={openManualModal} sx={{ mr: "0.5rem" }}>
-          <AttachMoneyIcon className="text-white" />
-        </IconButton>
-      </Tooltip>
+    <>
+      <div className="flex w-full justify-center" onClick={openManualModal}>
+        <div
+          className="mt-[1rem] flex h-[2rem] w-3/4 
+          cursor-pointer items-center 
+          rounded-md bg-secondary-300 
+          font-bold 
+          text-background-950 hover:bg-secondary-200"
+        >
+          <AttachMoneyIcon className="ml-3" />
+          <div className="ml-[1rem] w-full text-base">Add expense</div>
+        </div>
+      </div>
       <Dialog open={isModalOpen} onClose={handleClose} maxWidth="md" fullWidth>
         <DialogTitle>Add new expense</DialogTitle>
         <DialogContent>
@@ -203,7 +208,7 @@ const ManualExpenseModal = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 };
 
