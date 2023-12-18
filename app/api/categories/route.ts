@@ -1,3 +1,4 @@
+import { registerActivity } from "@/utils/registerActivity";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -6,6 +7,8 @@ export async function GET() {
   try {
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
+
+    registerActivity("Categories page visited");
 
     const {
       data: { user },
@@ -55,6 +58,8 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
+    registerActivity("Category created");
+
     const body = await req.json();
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
@@ -115,6 +120,8 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
+    registerActivity("Category updated");
+
     const body = await req.json();
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
@@ -140,6 +147,7 @@ export async function PUT(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
+  registerActivity("Category deleted");
   try {
     const body = await req.json();
     const cookieStore = cookies();

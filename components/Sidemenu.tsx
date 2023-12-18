@@ -6,13 +6,18 @@ import ChatHistoryButton from "./ChatHistoryButton";
 import { isNullOrUndefined } from "@/utils/isNullOrUndefined";
 import { useEffect, useState } from "react";
 import { ISidemenuParams } from "@/types/types";
-import { useSidemenuContext } from "./ContextProvider";
+import {
+  useRefreshSidemenuContext,
+  useSidemenuContext,
+} from "./ContextProvider";
 import { Close } from "@mui/icons-material";
 import Link from "next/link";
 import ManualExpenseModal from "./ManualExpenseModal";
+import AuthButton from "./AuthButton";
 
 const Sidemenu = () => {
   const { isSidemenuOpen, setIsSidemenuOpen } = useSidemenuContext();
+  const { refreshSidemenuValue } = useRefreshSidemenuContext();
   const [data, setData] = useState<ISidemenuParams>(
     null as unknown as ISidemenuParams,
   );
@@ -25,6 +30,7 @@ const Sidemenu = () => {
     setIsLoading(false);
     if (response.error) {
       console.error(response.error);
+      setData(null as unknown as ISidemenuParams);
       return;
     }
 
@@ -33,7 +39,7 @@ const Sidemenu = () => {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [refreshSidemenuValue]);
 
   if (isNullOrUndefined(data)) {
     return (
@@ -105,7 +111,7 @@ const Sidemenu = () => {
         <SidemenuButton button_type={"categories"} />
         <SidemenuButton button_type={"plots"} />
         <ManualExpenseModal />
-        {/* <AuthButton /> */}
+        <AuthButton />
       </div>
       <div className="my-[2rem] flex w-[75%] flex-row items-center">
         <div className="mr-3 w-fit whitespace-nowrap text-text-100">

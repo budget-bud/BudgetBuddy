@@ -33,27 +33,6 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(`${origin}/login`);
     }
 
-    if (!user) return response;
-
-    const formattedDate = new Date().toISOString().split("T")[0];
-    const url = new URL(request.nextUrl);
-    if (url.pathname.includes("_next") || url.pathname.includes("/api"))
-      return response;
-
-    const { error } = await supabase
-      .from("UserActivity")
-      .insert({
-        user_id: user?.id,
-        event_date: formattedDate,
-        event_type: "visited: " + url.pathname,
-      })
-      .select();
-
-    if (error) {
-      console.error("Activity registration failed:", error);
-      return response;
-    }
-
     return response;
   } catch (e) {
     // If you are here, a Supabase client could not be created!
