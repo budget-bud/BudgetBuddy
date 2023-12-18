@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import { Bar, Doughnut, Line } from "react-chartjs-2";
-import {  ITransaction, ICategory, IGoal } from "@/types/types";
+import { ITransaction, ICategory, IGoal } from "@/types/types";
 import { subWeeks, formatISO } from "date-fns";
 import {
   Chart as ChartJS,
@@ -36,42 +36,41 @@ ChartJS.register(
   annotationPlugin,
 );
 
-
 const FinancialDashboard = () => {
-  
   const [goals, setGoals] = React.useState<IGoal[]>([]);
   const [transactions, setTransactions] = React.useState<ITransaction[]>([]);
   const [categories, setCategories] = React.useState<ICategory[]>([]);
 
   const removeTime = (date: string) => {
     return date.split("T")[0];
-  }
+  };
 
-  
   useEffect(() => {
     fetch("/api/goals")
       .then((res) => res.json())
       .then((data) => setGoals(data.goals));
-  
+
     fetch("/api/transactions")
       .then((res) => res.json())
-      .then((data) => setTransactions(data.transactions.map((t: ITransaction) => {
-        return {
-          ...t,
-          created_at: removeTime(t.created_at)
-        }
-      }
-      )));
-  
+      .then((data) =>
+        setTransactions(
+          data.transactions.map((t: ITransaction) => {
+            return {
+              ...t,
+              created_at: removeTime(t.created_at),
+            };
+          }),
+        ),
+      );
+
     fetch("/api/categories")
       .then((res) => res.json())
       .then((data) => setCategories(data.categories));
   }, []);
-  
+
   console.log(goals);
   console.log(transactions);
   console.log(categories);
-  
 
   const priceOfGoals = (goals: IGoal[]) => {
     const priceOfGoalElements: number[] = [];
@@ -86,7 +85,6 @@ const FinancialDashboard = () => {
     goals: IGoal[],
     transactions: ITransaction[],
   ) => {
-
     console.log("goals", goals);
     console.log("transactions", transactions);
 
@@ -98,8 +96,6 @@ const FinancialDashboard = () => {
       valuesInPercent.push(goal.totalAmount / goal.goal_amount);
     });
 
-
-
     return [values, valuesInPercent];
   };
 
@@ -108,19 +104,15 @@ const FinancialDashboard = () => {
     categories: ICategory[],
   ) => {
     const values: number[] = [];
-    
+
     categories.forEach((category) => {
       values.push(category.totalAmount);
-    }
-    );
+    });
 
     return values;
   };
 
-  const progressForGoal = calculateProgressForGoal(
-    goals,
-    transactions,
-  );
+  const progressForGoal = calculateProgressForGoal(goals, transactions);
   const currentBalance = progressForGoal[0];
 
   const createGoalAnnotations = (
