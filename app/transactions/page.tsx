@@ -34,6 +34,19 @@ const TransactionsPage = () => {
       });
   }, []);
 
+  const deleteTransaction = async (id : number) => {
+    setTransactions((prevTran) => ({
+      transactions: (prevTran?.transactions ?? []).filter(
+        (transaction) => transaction.id !== id
+      ),
+    }) as { transactions: [ITransactionWithFK] } | undefined);
+
+    await fetch(`/api/transactions/`, {
+      method: "DELETE",
+      body: JSON.stringify({ id }),
+    });
+  }
+
   return (
     <div
       className={`flex max-h-full w-full flex-grow flex-col gap-4 rounded-lg bg-secondary-800 p-4 ${
@@ -170,7 +183,9 @@ const TransactionsPage = () => {
                   <button className=" h-10 w-20 cursor-pointer rounded-[18px] border-none bg-primary-600 text-text-100">
                     Edit
                   </button>
-                  <button className="h-10 w-20 cursor-pointer rounded-[18px] border-none bg-primary-600 text-text-100">
+                  <button className="h-10 w-20 cursor-pointer rounded-[18px] border-none bg-primary-600 text-text-100"
+                    onClick={() => deleteTransaction(transaction.id)}
+                  >
                     Delete
                   </button>
                 </div>
