@@ -35,6 +35,7 @@ interface Expense {
 
 const AddCashExpenseModal = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [expensesArray, setExpensesArray] = useState<Expense[]>([]);
   const [expenseForm, setExpenseForm] = useState({
     amount: "",
@@ -49,7 +50,6 @@ const AddCashExpenseModal = () => {
 
   const openCashModal = () => {
     setIsModalOpen(!isModalOpen);
-    console.log(isModalOpen);
   };
 
   const handleClose = () => {
@@ -74,8 +74,6 @@ const AddCashExpenseModal = () => {
         description: "",
         origin: "",
       });
-
-      console.log(expensesArray);
     } else {
       window.alert("Something is missing!");
     }

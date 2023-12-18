@@ -9,7 +9,7 @@ export interface IGoal {
   created_at: string;
   title: string;
   goal_amount: number;
-  category_id: string;
+  category_id: number;
   totalAmount: number;
 }
 
