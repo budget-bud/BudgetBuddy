@@ -230,11 +230,17 @@ const GoalsPage = () => {
               <EditGoal goalId={goal.id} goals={goals} setGoals={setGoals} />
               {canDelete(goal.id) && (
                 <Tooltip arrow title={"Delete goal"}>
-                  <IconButton onClick={() => {
-                    if (window.confirm("Are you sure you want to delete this goal?")) {
-                      deleteGoal(goal.id);
-                    }
-                  }}>
+                  <IconButton
+                    onClick={() => {
+                      if (
+                        window.confirm(
+                          "Are you sure you want to delete this goal?",
+                        )
+                      ) {
+                        deleteGoal(goal.id);
+                      }
+                    }}
+                  >
                     <DeleteIcon />
                   </IconButton>
                 </Tooltip>
