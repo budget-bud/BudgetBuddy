@@ -13,6 +13,8 @@ const TransactionsPage = () => {
   const [goals, setGoals] = useState<{ goals: [IGoal] }>();
   const [isLoading, setIsLoading] = useState(true);
 
+  const [selectedTransactionID,setSelectedTransactionID] = useState<number>(0);
+
   useEffect(() => {
     fetch("/api/transactions")
       .then((res) => res.json())
@@ -52,6 +54,11 @@ const TransactionsPage = () => {
         }) as { transactions: [ITransactionWithFK] } | undefined);
       }
     }
+  }
+
+  const editTransaction = async (id : number) => {
+    selectedTransactionID == 0 ? setSelectedTransactionID(id) : setSelectedTransactionID(0)
+    
   }
 
   return (
@@ -164,31 +171,80 @@ const TransactionsPage = () => {
                 className="relative h-[55px] transition-all hover:h-[100px]"
                 key={index}
               >
-                <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
-                  {transaction.origin}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
-                  {transaction.movement}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950  max-lg:hidden">
-                  {transaction.description}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
-                  {transaction.place}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950  max-md:hidden">
-                  {transaction.category_id !== null &&
-                    transaction.category_id.title}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950  max-md:hidden">
-                  {transaction.goal_id !== null && transaction.goal_id.title}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
-                  {transaction.created_at.split("T")[0]}
-                </td>
+                {selectedTransactionID == transaction.id ?
+                  (
+                    <>
+                      <input
+                        id="editInput1"
+                        type="text"
+                        value={transaction.origin}
+                        //onChange={(e) => setSearch(e.target.value)}
+                        className="max-h-12 flex-1 rounded-md bg-primary-600 p-6 text-background-950 max-lg:min-w-full"
+                      />
+                      <input
+                        id="editInput2"
+                        type="text"
+                        value={transaction.movement}
+                        //onChange={(e) => setSearch(e.target.value)}
+                        className="max-h-12 flex-1 rounded-md bg-primary-600 p-6 text-background-950 max-lg:min-w-full"
+                      />
+                      <input
+                        id="editInput3"
+                        type="text"
+                        value={transaction.description}
+                        //onChange={(e) => setSearch(e.target.value)}
+                        className="max-h-12 flex-1 rounded-md bg-primary-600 p-6 text-background-950 max-lg:min-w-full"
+                      />
+                      <input
+                        id="editInpu4"
+                        type="text"
+                        value={transaction.place}
+                        //onChange={(e) => setSearch(e.target.value)}
+                        className="max-h-12 flex-1 rounded-md bg-primary-600 p-6 text-background-950 max-lg:min-w-full"
+                      />
+                      <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950  max-md:hidden">
+                        {transaction.category_id !== null && transaction.category_id.title}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950  max-md:hidden">
+                        {transaction.goal_id !== null && transaction.goal_id.title}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
+                        {transaction.created_at.split("T")[0]}
+                      </td>
+                    </>
+                  ) :
+                  (
+                    <>
+                      <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
+                        {transaction.origin}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
+                        {transaction.movement}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950  max-lg:hidden">
+                        {transaction.description}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
+                        {transaction.place}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950  max-md:hidden">
+                        {transaction.category_id !== null && transaction.category_id.title}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950  max-md:hidden">
+                        {transaction.goal_id !== null && transaction.goal_id.title}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
+                        {transaction.created_at.split("T")[0]}
+                      </td>
+                    </>
+                  )
+                }
                 <div className="absolute bottom-1 right-1 flex h-full w-full items-end justify-end gap-2 opacity-0 hover:opacity-100">
-                  <button className=" h-10 w-20 cursor-pointer rounded-[18px] border-none bg-primary-600 text-text-100">
-                    Edit
+                <button className={`h-10 w-20 cursor-pointer rounded-[18px] border-none bg-primary-600 text-text-100 ${
+                  selectedTransactionID != 0 && selectedTransactionID!= transaction.id ? 'invisible' : 'visible'}`}
+                  onClick={() => editTransaction(transaction.id)}
+                >
+                    {selectedTransactionID == transaction.id ? selectedTransactionID == 0 ? "Edit" : "Save" : "Edit"}
                   </button>
                   <button className="h-10 w-20 cursor-pointer rounded-[18px] border-none bg-primary-600 text-text-100"
                     onClick={() => deleteTransaction(transaction.id)}
