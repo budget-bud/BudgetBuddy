@@ -2,8 +2,12 @@
 import { IMessage } from "@/types/types";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useRefreshSidemenuContext } from "./ContextProvider";
 
 const Chat = () => {
+  const router = useRouter();
+  const { refreshSidemenu } = useRefreshSidemenuContext();
   const pathname = usePathname();
   const chatId = pathname.split("/")[2];
 
@@ -24,11 +28,20 @@ const Chat = () => {
       }),
     }).then((res) => res.json());
 
+    if (response.error) {
+      window.alert(response.error);
+      return;
+    }
+
     setMessages([
       ...messages,
       { text: input, user: true },
       { text: response.answer, user: false },
     ]);
+    if (chatId === undefined) {
+      refreshSidemenu();
+      router.push(`/chat/${response.chatId}`);
+    }
   };
   const getMessageHistory = async (): Promise<void> => {
     if (chatId === undefined) return;
