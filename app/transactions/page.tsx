@@ -144,8 +144,6 @@ const TransactionsPage = () => {
       goal: editingGoal,
     };
 
-    console.log(editingCategory);
-
     const newTransactions = transactions.transactions.map((t) =>
       t.id === selectedTransaction.id ? newTransaction : t,
     );

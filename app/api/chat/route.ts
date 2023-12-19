@@ -215,11 +215,8 @@ const createCategory = async (
     .select("*");
 
   if (error) {
-    console.log(error);
     return "Sorry, I couldn't create this category.";
   }
-
-  console.log(categories);
 
   return (
     "I successfully created the category: " +
@@ -237,8 +234,6 @@ const createGoal = async (
 ) => {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
-
-  console.log(category_name);
 
   const {
     data: { user },
@@ -261,17 +256,11 @@ const createGoal = async (
     .eq("user_id", userId)
     .eq("title", category_name);
 
-  console.log(categories);
-
   if (categoriesError || categories.length === 0) {
-    console.log(categoriesError);
     return "Sorry, I couldn't create this goal.";
   }
 
-  console.log(categories);
   const categoryId = categories[0].id;
-
-  console.log(categoryId);
 
   const { data: goals, error } = await supabase
     .from("Goals")
@@ -287,11 +276,8 @@ const createGoal = async (
     .select("*");
 
   if (error) {
-    console.log(error);
     return "Sorry, I couldn't create this goal.";
   }
-
-  console.log(goals);
 
   return (
     "I successfully created the goal: " +
@@ -349,7 +335,6 @@ const createTransaction = async (
       .eq("title", goal_name);
 
     if (goalsError || goals.length === 0) {
-      console.log(goalsError);
       return "Sorry, I couldn't create this transaction.";
     }
     goalId = goals[0].id;
@@ -363,7 +348,6 @@ const createTransaction = async (
       .eq("title", category_name);
 
     if (categoriesError || categories.length === 0) {
-      console.log(categoriesError);
       return "Sorry, I couldn't create this transaction.";
     }
 
@@ -387,10 +371,7 @@ const createTransaction = async (
     ])
     .select("*");
 
-  console.log(transactions);
-
   if (error) {
-    console.log(error);
     return "Sorry, I couldn't create this transaction.";
   }
 
@@ -819,12 +800,10 @@ async function useTool(
   answer: string | null,
 ) {
   if (chatCompletion.choices[0].message.function_call !== null) {
-    console.log(chatCompletion.choices[0]);
     registerActivity("Chatbot used tool");
     const functionName = chatCompletion.choices[0].message.function_call?.name;
     if (functionName) {
       const functionId: number = availableFunctions[functionName];
-      console.log(functionId);
 
       const args = JSON.parse(
         chatCompletion.choices[0].message.function_call?.arguments as string,
@@ -833,8 +812,6 @@ async function useTool(
       const function_res = await functions[functionId].function({
         ...args,
       });
-
-      console.log(function_res.result);
 
       const results: IMessage = {
         content: JSON.stringify(function_res.result),
