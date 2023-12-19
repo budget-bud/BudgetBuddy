@@ -29,7 +29,6 @@ const Sidemenu = () => {
     }).then((res) => res.json());
     setIsLoading(false);
     if (response.error) {
-      console.error(response.error);
       setData(null as unknown as ISidemenuParams);
       return;
     }
