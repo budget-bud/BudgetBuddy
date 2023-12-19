@@ -14,7 +14,7 @@ const Chat = () => {
   const initialMessages: IMessage[] = [
     {
       content:
-        "Hello! :) \nHow can I help you today!\nI can query all of your data stored in the app.",
+        "Hello! :) \nHow can I help you today?\nI can query all of your data stored in the app.",
       role: "assistant",
     },
   ];

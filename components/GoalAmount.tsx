@@ -1,5 +1,6 @@
 import { IGoal } from "@/types/types";
 import { useState } from "react";
+import { useRefreshSidemenuContext } from "./ContextProvider";
 
 interface IGoalAmountProps {
   goalId: number;
@@ -8,6 +9,7 @@ interface IGoalAmountProps {
 }
 
 const GoalAmount = ({ goalId, goals, setGoals }: IGoalAmountProps) => {
+  const { refreshSidemenu } = useRefreshSidemenuContext();
   const [amount, setAmount] = useState(0);
 
   const handleAddMoney = async (goalId: number) => {
@@ -39,6 +41,7 @@ const GoalAmount = ({ goalId, goals, setGoals }: IGoalAmountProps) => {
         window.alert(response.error);
         return;
       }
+      refreshSidemenu();
     }
   };
 
@@ -71,6 +74,7 @@ const GoalAmount = ({ goalId, goals, setGoals }: IGoalAmountProps) => {
         window.alert(response.error);
         return;
       }
+      refreshSidemenu();
     }
   };
 
