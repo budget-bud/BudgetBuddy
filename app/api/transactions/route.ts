@@ -137,7 +137,7 @@ export async function DELETE(req: NextRequest) {
       .from("Transactions")
       .delete()
       .match({ id: body.id })
-      .select("*, goal_id ( * ), category_id ( * )")
+      .select("*, goal_id ( * ), category_id ( * )");
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
