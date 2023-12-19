@@ -19,6 +19,7 @@ import {
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { ICategory2, IExpenseForm, IGoals } from "@/types/types";
 import CloseIcon from "@mui/icons-material/Close";
+import { useRefreshSidemenuContext } from "./ContextProvider";
 const style = {
   position: "absolute",
   top: "50%",
@@ -32,6 +33,7 @@ const style = {
 };
 
 const ManualExpenseModal = () => {
+  const { refreshSidemenu } = useRefreshSidemenuContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expenseForm, setExpenseForm] = useState<IExpenseForm>({
     goal: "",
@@ -81,6 +83,8 @@ const ManualExpenseModal = () => {
       movement: "",
       description: "",
     });
+
+    refreshSidemenu();
     handleClose();
   };
 
