@@ -179,7 +179,7 @@ const ManualExpenseModal = () => {
 
           <div className="flex flex-col space-y-2 py-2">
             <div className="flex space-x-4">
-              <FormControl fullWidth required>
+              <FormControl fullWidth>
                 <InputLabel>Category</InputLabel>
                 <Select
                   name="category"
@@ -194,7 +194,7 @@ const ManualExpenseModal = () => {
                 </Select>
               </FormControl>
 
-              <FormControl fullWidth required>
+              <FormControl fullWidth>
                 <InputLabel>Goal</InputLabel>
                 <Select
                   name="goal"
@@ -218,13 +218,9 @@ const ManualExpenseModal = () => {
                 value={expenseForm.movement}
                 fullWidth
                 InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      {parseFloat(expenseForm.movement) < 0 ? "-" : "+"}
-                    </InputAdornment>
-                  ),
+                  startAdornment: (<></>),
                   endAdornment: (
-                    <InputAdornment position="end">USD</InputAdornment>
+                    <InputAdornment position="end">HUF</InputAdornment>
                   ),
                 }}
                 required
@@ -245,7 +241,6 @@ const ManualExpenseModal = () => {
                 onChange={handleInputChange("place")}
                 value={expenseForm.place}
                 fullWidth
-                required
               />
             </div>
 
@@ -257,7 +252,6 @@ const ManualExpenseModal = () => {
               fullWidth
               multiline
               rows={4}
-              required
             />
           </div>
           <div className="mt-[0.5rem] flex w-full justify-end pb-3">

@@ -117,7 +117,7 @@ const KPIPage = () => {
                 gutterBottom
                 style={{ color: "#FFFFFF" }}
               >
-                Average Actions In The Last 7 Days
+                Average Actions/User In The Last 7 Days
               </Typography>
               <Typography variant="h4" style={{ color: "#FFFFFF" }}>
                 {isLoading == false ? data.weeklyKPI[0].average_actions : 0}
@@ -144,7 +144,7 @@ const KPIPage = () => {
               </span>
               <br />
               <span style={{ fontSize: "0.8em", color: "#757575" }}>
-                Transactions, Users, and Chats
+                Active Users, Average Actions per User, Actions per Day
                 <br />
                 Over the Last Month
               </span>
@@ -164,13 +164,13 @@ const KPIPage = () => {
                 <Line
                   dataKey="average_events_per_day_per_user"
                   type="monotone"
-                  name="Average Events per User"
+                  name="Average Actions per User"
                   stroke="#82ca9d"
                 />
                 <Line
                   dataKey="events_per_day"
                   type="monotone"
-                  name="Events per Day"
+                  name="Actions per Day"
                   stroke="#ffc658"
                 />
               </LineChart>

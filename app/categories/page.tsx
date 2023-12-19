@@ -69,13 +69,11 @@ const CategoriesPage = () => {
     });
   };
 
-  const calculateProgress = (limit: number) => {
-    // Change 1000 to the value read from the db.
-    if (limit < 1000) {
+  const calculateProgress = (category: ICategory) => {
+    if (category.totalAmount >= category.limit) {
       return 100;
-    } else {
-      return (1000 / limit) * 100;
     }
+    return (category.totalAmount / category.limit) * 100;
   };
 
   useEffect(() => {
@@ -171,7 +169,7 @@ const CategoriesPage = () => {
                 <LinearProgress
                   variant="determinate"
                   //Pass to the function the value, read from the database
-                  value={calculateProgress(category.limit)}
+                  value={calculateProgress(category)}
                 />
               </Box>
             </div>
