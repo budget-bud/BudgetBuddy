@@ -42,7 +42,11 @@ const Chat = () => {
     if (response.error) {
       setMessages([
         ...messages,
-        { content: "Sorry the service is not available right now. Please try again later.", role: "assistant" },
+        {
+          content:
+            "Sorry the service is not available right now. Please try again later.",
+          role: "assistant",
+        },
       ]);
       setIsResponding(false);
       return;
