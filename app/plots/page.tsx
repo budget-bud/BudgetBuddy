@@ -82,7 +82,7 @@ const FinancialDashboard = () => {
     const valuesInPercent: number[] = [];
 
     goals.forEach((goal) => {
-      values.push(goal.totalAmount);
+      values.push(-goal.totalAmount);
       valuesInPercent.push(goal.totalAmount / goal.goal_amount);
     });
 
