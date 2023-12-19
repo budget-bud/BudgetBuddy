@@ -40,7 +40,15 @@ const Chat = () => {
     }).then((res) => res.json());
 
     if (response.error) {
-      window.alert(response.error);
+      setMessages([
+        ...messages,
+        {
+          content:
+            "Sorry the service is not available right now. Please try again later.",
+          role: "assistant",
+        },
+      ]);
+      setIsResponding(false);
       return;
     }
 
@@ -51,7 +59,7 @@ const Chat = () => {
       { content: input, role: "user" },
       { content: response.answer, role: "assistant" },
     ]);
-    if (chatId === undefined) {
+    if (chatId === undefined && response.chatId !== undefined) {
       refreshSidemenu();
       router.push(`/chat/${response.chatId}`);
     }
