@@ -222,7 +222,7 @@ const ManualExpenseModal = () => {
                 value={expenseForm.movement}
                 fullWidth
                 InputProps={{
-                  startAdornment: (<></>),
+                  startAdornment: <></>,
                   endAdornment: (
                     <InputAdornment position="end">HUF</InputAdornment>
                   ),
