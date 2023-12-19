@@ -207,7 +207,7 @@ const GoalsPage = () => {
                     datasets: [
                       {
                         data: calculateProgress(
-                          goal.totalAmount,
+                          goal.totalAmount * -1,
                           goal.goal_amount,
                         ),
                         backgroundColor: ["#003366", "#d1d1d1"],
@@ -221,7 +221,7 @@ const GoalsPage = () => {
                 />
               </div>
               <div className="text-center font-bold">
-                {goal.totalAmount} / {goal.goal_amount} Ft
+                {goal.totalAmount * -1} / {goal.goal_amount} Ft
               </div>
             </div>
             <div className="flex flex-row justify-end">
