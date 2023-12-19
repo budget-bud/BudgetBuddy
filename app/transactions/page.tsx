@@ -2,36 +2,179 @@
 import { ICategory, IGoal, ITransactionWithFK } from "@/types/types";
 import React, { useEffect, useState } from "react";
 
+// COMPONENTS
+import TextField from "@mui/material/TextField";
+import IconButton from "@mui/material/IconButton";
+import { Tooltip, Modal, Box } from "@mui/material";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+
+// MUI ICONS
+import CloseIcon from "@mui/icons-material/Close";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 280,
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  borderRadius: 1,
+  overflow: "hidden",
+};
+
 const TransactionsPage = () => {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedGoal, setSelectedGoal] = useState("");
-  const [transactions, setTransactions] = useState<ITransactionWithFK[]>([]);
+  const [transactions, setTransactions] = useState<{
+    transactions: ITransactionWithFK[];
+  }>();
   const [categories, setCategories] = useState<ICategory[]>([]);
-  const [goals, setGoals] = useState<IGoal[]>([]);
+  const [goals, setGoals] = useState<{ goals: [IGoal] }>();
   const [isLoading, setIsLoading] = useState(true);
 
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<ITransactionWithFK>();
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [editingCategory, setEditingCategory] = useState("");
+  const [editingGoal, setEditingGoal] = useState("");
+  const [editedData, setEditedData] = useState({
+    origin: "",
+    movement: 0,
+    description: "",
+    place: "",
+    category: "",
+    goal: "",
+  });
+
   useEffect(() => {
-    Promise.all([
-      fetch("/api/transactions")
-        .then((res) => res.json())
-        .then((data) => {
-          setTransactions(data.transactions);
-        }),
-
-      fetch("/api/categories")
-        .then((res) => res.json())
-        .then((data) => {
-          setCategories(data.categories);
-        }),
-
-      fetch("/api/goals")
-        .then((res) => res.json())
-        .then((data) => {
-          setGoals(data.goals);
-        }),
-    ]).then(() => setIsLoading(false));
+    refetch();
   }, []);
+
+  const refetch = () => {
+    fetch("/api/transactions")
+      .then((res) => res.json())
+      .then((data) => {
+        setTransactions(data);
+      });
+
+    fetch("/api/categories")
+      .then((res) => res.json())
+      .then((data) => {
+        setCategories(data.categories);
+      });
+
+    fetch("/api/goals")
+      .then((res) => res.json())
+      .then((data) => {
+        setGoals(data);
+        setIsLoading(false);
+      });
+  };
+
+  const deleteTransaction = async (id: number) => {
+    if (window.confirm("Are you sure you want to delete this transaction?")) {
+      const response = await fetch(`/api/transactions/`, {
+        method: "DELETE",
+        body: JSON.stringify({ id }),
+      }).then((res) => res.json());
+      if (response.error) {
+        window.alert(response.error);
+        return;
+      } else {
+        setTransactions(
+          (prevTran) =>
+            ({
+              transactions: (prevTran?.transactions ?? []).filter(
+                (transaction) => transaction.id !== id,
+              ),
+            }) as { transactions: [ITransactionWithFK] } | undefined,
+        );
+      }
+    }
+  };
+
+  const openEditTransaction = (t: ITransactionWithFK) => {
+    setSelectedTransaction(t);
+    setIsEditOpen(true);
+    if (t) {
+      setEditedData({
+        origin: t.origin,
+        movement: t.movement,
+        description: t.description,
+        place: t.place,
+        category: t.category_id?.title,
+        goal: t.goal_id?.title,
+      });
+      setEditingCategory(t.category_id?.title);
+      setEditingGoal(t.goal_id?.title);
+    }
+  };
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    key: string,
+  ) => {
+    const value = key === "movement" ? Number(e.target.value) : e.target.value;
+    setEditedData((prevData) => ({
+      ...prevData,
+      [key]: value,
+    }));
+  };
+
+  const handleClose = () => {
+    setIsEditOpen(false);
+  };
+
+  const handleEdit = async () => {
+    if (!selectedTransaction) return;
+    if (!transactions) return;
+
+    const newTransaction = {
+      ...selectedTransaction,
+      origin: editedData.origin,
+      movement: editedData.movement,
+      description: editedData.description,
+      place: editedData.place,
+      category: editingCategory,
+      goal: editingGoal,
+    };
+
+    console.log(editingCategory);
+
+    const newTransactions = transactions.transactions.map((t) =>
+      t.id === selectedTransaction.id ? newTransaction : t,
+    );
+
+    setTransactions({ transactions: newTransactions });
+
+    await fetch(`/api/transactions`, {
+      method: "PUT",
+      body: JSON.stringify({
+        id: selectedTransaction.id,
+        origin: editedData.origin,
+        place: editedData.place,
+        movement: editedData.movement,
+        description: editedData.description,
+        category_id: categories.find((c) => c.title === editingCategory)?.id,
+        goal_id: goals?.goals.find((g) => g.title === editingGoal)?.id,
+      }),
+    });
+    refetch();
+    setIsEditOpen(false);
+  };
+
+  const handleCategoryChange = (event: SelectChangeEvent) => {
+    setEditingCategory(event.target.value as string);
+  };
+
+  const handleGoalChange = (event: SelectChangeEvent) => {
+    setEditingGoal(event.target.value as string);
+  };
 
   return (
     <div
@@ -69,7 +212,7 @@ const TransactionsPage = () => {
           onChange={(e) => setSelectedGoal(e.target.value)}
         >
           <option value="">Select a goal</option>
-          {goals.map((goal) => (
+          {goals?.goals.map((goal) => (
             <option value={goal.title} key={goal.title}>
               {goal.title}
             </option>
@@ -103,8 +246,8 @@ const TransactionsPage = () => {
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200 bg-secondary-200">
-          {transactions
-            .filter((transaction: ITransactionWithFK) => {
+          {transactions?.transactions
+            ?.filter((transaction: ITransactionWithFK) => {
               return (
                 (transaction.movement.toString().includes(search) ||
                   (transaction.description &&
@@ -165,18 +308,113 @@ const TransactionsPage = () => {
                 <td className="whitespace-nowrap px-6 py-4 align-top text-sm text-background-950">
                   {transaction.created_at.split("T")[0]}
                 </td>
-                <td className="absolute bottom-1 right-1 flex h-full w-full items-end justify-end gap-2 opacity-0 hover:opacity-100">
-                  <button className=" h-10 w-20 cursor-pointer rounded-[18px] border-none bg-primary-600 text-text-100">
+                <div className="absolute bottom-1 right-1 flex h-full w-full items-end justify-end gap-2 opacity-0 hover:opacity-100">
+                  <button
+                    className={`h-10 w-20 cursor-pointer rounded-[18px] border-none bg-primary-600 text-text-100`}
+                    onClick={() => openEditTransaction(transaction)}
+                  >
                     Edit
                   </button>
-                  <button className="h-10 w-20 cursor-pointer rounded-[18px] border-none bg-primary-600 text-text-100">
+                  <button
+                    className="h-10 w-20 cursor-pointer rounded-[18px] border-none bg-primary-600 text-text-100"
+                    onClick={() => deleteTransaction(transaction.id)}
+                  >
                     Delete
                   </button>
-                </td>
+                </div>
               </tr>
             ))}
         </tbody>
       </table>
+      <Modal open={isEditOpen} onClose={handleClose}>
+        <Box sx={style}>
+          <h1 className="flex flex-row items-center justify-between bg-slate-500 pl-4 font-semibold text-gray-50">
+            <div className="">Edit category</div>
+            <Tooltip arrow title={"Close"}>
+              <IconButton onClick={handleClose} sx={{ color: "white" }}>
+                <CloseIcon />
+              </IconButton>
+            </Tooltip>
+          </h1>
+          <div className="flex flex-col items-center space-y-4 py-4">
+            <TextField
+              required
+              name="origin"
+              label="Origin"
+              onChange={(e) => handleInputChange(e, "origin")}
+              value={editedData.origin}
+            />
+            <TextField
+              required
+              type="number"
+              name="movement"
+              label="Movement"
+              onChange={(e) => handleInputChange(e, "movement")}
+              value={editedData.movement}
+            />
+            <TextField
+              name="description"
+              label="Description"
+              onChange={(e) => handleInputChange(e, "description")}
+              value={editedData.description}
+            />
+            <TextField
+              name="place"
+              label="Place"
+              onChange={(e) => handleInputChange(e, "place")}
+              value={editedData.place}
+            />
+            <Box sx={{ width: 222 }}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Category</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="category"
+                  name="category"
+                  value={editingCategory}
+                  label="Category"
+                  onChange={handleCategoryChange}
+                >
+                  {categories.map((category) => (
+                    <MenuItem key={category.id} value={category.title}>
+                      {" "}
+                      {category.title}{" "}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+            <Box sx={{ width: 222 }}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Goal</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="goal"
+                  name="goal"
+                  value={editingGoal}
+                  label="Goal"
+                  onChange={handleGoalChange}
+                >
+                  {goals?.goals.map((goal) => (
+                    <MenuItem key={goal.id} value={goal.title}>
+                      {" "}
+                      {goal.title}{" "}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+          </div>
+          <div className="mt-[0.5rem] flex w-full justify-end pb-3">
+            <button
+              className="mr-4 h-[35px] w-[80px] rounded-sm bg-slate-500  px-4 font-bold text-slate-300 hover:bg-slate-400 hover:text-slate-600"
+              onClick={handleEdit}
+            >
+              Edit
+            </button>
+          </div>
+        </Box>
+      </Modal>
     </div>
   );
 };
