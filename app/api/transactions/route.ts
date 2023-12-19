@@ -136,7 +136,8 @@ export async function DELETE(req: NextRequest) {
     const { data: transactions, error } = await supabase
       .from("Transactions")
       .delete()
-      .match({ id: body.id });
+      .match({ id: body.id })
+      .select("*, goal_id ( * ), category_id ( * )")
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
