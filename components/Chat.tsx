@@ -63,7 +63,7 @@ const Chat = () => {
       body: JSON.stringify({ chatId: chatId }),
     }).then((res) => res.json());
 
-    setMessages(response.messages);
+    setMessages(initialMessages.concat(response.messages));
   };
 
   useEffect(() => {

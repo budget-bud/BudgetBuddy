@@ -206,8 +206,6 @@ const GoalsPage = () => {
                     labels: ["Progress", "Remaining"],
                     datasets: [
                       {
-                        // here also % should be calculated based on the amount that is currently replaced by 1000
-                        // current, total
                         data: calculateProgress(
                           goal.totalAmount,
                           goal.goal_amount,

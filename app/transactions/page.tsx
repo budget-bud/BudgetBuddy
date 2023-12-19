@@ -192,7 +192,7 @@ const TransactionsPage = () => {
           placeholder="Search for transactions here..."
         />
         <select
-          className="max-w-24 max-h-12 flex-1 rounded-lg bg-primary-600 p-6 text-background-950"
+          className="max-w-24 max-h-12 flex-1 rounded-lg bg-primary-600 text-background-950"
           id="categorySelect"
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
@@ -206,7 +206,7 @@ const TransactionsPage = () => {
           ))}
         </select>
         <select
-          className="max-w-24 max-h-12 flex-1 rounded-lg bg-primary-600 p-6 text-background-950"
+          className="max-w-24 max-h-12 flex-1 rounded-lg bg-primary-600 text-background-950"
           id="goalSelect"
           value={selectedGoal}
           onChange={(e) => setSelectedGoal(e.target.value)}

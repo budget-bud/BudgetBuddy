@@ -6,6 +6,10 @@ export const registerActivity = async (activity: string) => {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
+  if (process.env.NODE_ENV === "development") {
+    return;
+  }
+
   const {
     data: { user },
     error: userErr,

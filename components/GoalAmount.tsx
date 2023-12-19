@@ -33,7 +33,7 @@ const GoalAmount = ({ goalId, goals, setGoals }: IGoalAmountProps) => {
           goal_id: goalId,
           category_id: goal.category_id,
           origin: goal.title,
-          movement: amount,
+          movement: -amount,
           description: "Money added to goal",
         }),
       }).then((res) => res.json());
@@ -66,7 +66,7 @@ const GoalAmount = ({ goalId, goals, setGoals }: IGoalAmountProps) => {
           goal_id: goalId,
           category_id: goal.category_id,
           origin: goal.title,
-          movement: -amount,
+          movement: amount,
           desription: "Money decreased from goal",
         }),
       }).then((res) => res.json());

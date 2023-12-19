@@ -119,12 +119,11 @@ const getTransactionsByCategory = async (param: string) => {
     .match({ user_id: user?.id })
     .eq("title", param);
 
-  if (categoriesError) {
-    return NextResponse.json(
-      { error: categoriesError.message },
-      { status: 500 },
-    );
+  if (categoriesError || categories.length === 0) {
+    return "Sorry, I couldn't find any transactions for this category.";
   }
+
+  console.log("c", categories);
 
   const categoryId = categories[0].id;
 
@@ -160,8 +159,8 @@ const getTransactionsByGoal = async (param: string) => {
     .match({ user_id: user?.id })
     .eq("title", param);
 
-  if (goalsError) {
-    return NextResponse.json({ error: goalsError.message }, { status: 500 });
+  if (goalsError || goals.length === 0) {
+    return "Sorry, I couldn't find any transactions for this goal.";
   }
 
   const goalId = goals[0].id;
@@ -449,10 +448,12 @@ async function useTool(
   answer: string | null,
 ) {
   if (chatCompletion.choices[0].message.function_call !== null) {
+    console.log(chatCompletion.choices[0]);
     registerActivity("Chatbot used tool");
     const functionName = chatCompletion.choices[0].message.function_call?.name;
     if (functionName) {
       const functionId: number = availableFunctions[functionName];
+      console.log(functionId);
 
       const args = JSON.parse(
         chatCompletion.choices[0].message.function_call?.arguments as string,
